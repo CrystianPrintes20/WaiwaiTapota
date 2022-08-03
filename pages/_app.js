@@ -1,5 +1,5 @@
 import "../styles/scss/style.scss";
-import Layout from "../layout/Layout";
+import Layout from "../src/layout/Layout";
 
 function MyApp({ Component, pageProps }) {
   return (
