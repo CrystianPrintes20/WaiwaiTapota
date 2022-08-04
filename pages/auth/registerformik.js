@@ -1,5 +1,4 @@
 import React from "react";
-import Head from "next/head";
 import RegisterformikAll from "../../src/components/auth/registerformik/RegisterformikAll"
 import {
   Button,
@@ -42,9 +41,8 @@ const RegisterFormik = () => {
   });
   return (
     <div>
-      <Head />
       <RegisterformikAll />
-      <Container fluid className="h-100">
+      <Container fluid className="h-100 py-5">
         <Row className="justify-content-center align-items-center h-100">
           <Col lg="6" className="loginContainer">
             {/* <AuthLogo /> */}

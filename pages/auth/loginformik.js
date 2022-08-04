@@ -1,5 +1,4 @@
 import React from "react";
-import Head from "next/head";
 import LoginformikAll from "../../src/components/auth/loginformik/LoginformikAll"
 import {
     Button,
@@ -34,9 +33,8 @@ const LoginFormik = () => {
     });
     return (
         <div>
-            <Head/>
             <LoginformikAll />
-                <Container fluid className="h-100" style={{ width: "390px" }}>
+                <Container fluid className="h-100 py-5" style={{ width: "500px" }}>
                     <Row className="justify-content-center align-items-center h-100">
                         <Col lg="12" className="loginContainer">
                             {/* <AuthLogo /> */}
