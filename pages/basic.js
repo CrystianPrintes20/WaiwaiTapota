@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Components from "../components/basic/AllComponents";
+import Components from "../src/components/basic/AllComponents";
 
 export default function Basic() {
   return (

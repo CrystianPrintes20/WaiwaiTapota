@@ -3,14 +3,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
+  Row,
+  Col,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  Container,
   NavbarBrand,
+  Navbar,
   Nav,
   NavItem,
-  Container,
   NavLink,
+  NavbarToggler,
+  Collapse,
 } from "reactstrap";
 import logo from "../../assets/images/logos/white-text.png";
 
@@ -24,7 +30,8 @@ const Header = () => {
         <Container className="po-relative">
           <Navbar className="navbar-expand-lg h6-nav-bar">
             <NavbarBrand href="/">
-              <Image src={logo} alt="wrapkit" />
+              {/* <Image src={logo} alt="wrapkit" /> */}
+              <img src="http://via.placeholder.com/80x80"></img>
             </NavbarBrand>
             <NavbarToggler onClick={toggle}>
               <span className="ti-menu"></span>
@@ -35,8 +42,8 @@ const Header = () => {
               className="hover-dropdown ml-auto"
               id="h6-info"
             >
-              <Nav navbar className="ml-auto">
-                <NavItem>
+              <Nav navbar className="ml-auto mt-2 mt-lg-0">
+                <NavItem >
                   <Link href="/">
                     <a
                       className={
@@ -45,7 +52,7 @@ const Header = () => {
                           : "nav-link"
                       }
                     >
-                      Custom Components
+                     Home
                     </a>
                   </Link>
                 </NavItem>
@@ -58,18 +65,46 @@ const Header = () => {
                           : "nav-link"
                       }
                     >
-                      Basic-Components
+                      About Me
                     </a>
                   </Link>
                 </NavItem>
+                <NavItem>
+                  <NavLink href="#">Lorem Ipsum</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="#">Lorem Ipsum</NavLink>
+                </NavItem>
+           {/*      <UncontrolledDropdown nav inNavbar>
+                  <DropdownToggle nav>
+                    Sign in/Sign up <i className="fa fa-angle-down m-l-5"></i>
+                  </DropdownToggle>
+                  <DropdownMenu className="b-none animated fadeInUp">
+                    <DropdownItem>Sign in</DropdownItem>
+                    <DropdownItem divider />
+                    <DropdownItem>Sign up</DropdownItem>
+                    
+                  </DropdownMenu>
+                </UncontrolledDropdown> */}
+                
               </Nav>
+  
               <div className="act-buttons">
                 <NavLink
                   href="https://wrappixel.com/templates/nextkit-nextjs-free-uikit"
-                  className="btn btn-light font-14"
+                  className="btn btn-outline-light font-14"
                   target="_blank"
                 >
-                  Download Free
+                  Sign in
+                </NavLink>
+              </div>
+              <div className="act-buttons">
+                <NavLink
+                  href="https://wrappixel.com/templates/nextkit-nextjs-free-uikit"
+                  className="btn btn-danger font-14"
+                  target="_blank"
+                >
+                  Sign up
                 </NavLink>
               </div>
             </Collapse>

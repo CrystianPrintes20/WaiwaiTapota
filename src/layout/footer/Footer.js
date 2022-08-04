@@ -8,32 +8,33 @@ const Footer = () => {
     <div className="footer4 b-t spacer">
       <Container>
         <Row>
-          <Col lg="3" md="6" className="m-b-30">
+          <Col lg="4" md="6" className="m-b-30">
             <h5 className="m-b-20">Address</h5>
-            <p>71 Amsteroum Avenue Cronish Night, NY 35098</p>
+            <p>Universidade Federal do Oeste do Pará<br/>
+            Reitoria: Rua Vera Paz, s/n (Unidade Tapajós) Bairro Salé, Santarém, Pará, Brasil</p>
           </Col>
-          <Col lg="3" md="6" className="m-b-30">
+          {/* <Col lg="3" md="6" className="m-b-30">
             <h5 className="m-b-20">Phone</h5>
             <p>
               Reception : +205 123 4567 <br />
               Office : +207 235 7890
             </p>
-          </Col>
-          <Col lg="3" md="6" className="m-b-30">
+          </Col> */}
+          <Col lg="4" md="6" className="m-b-30">
             <h5 className="m-b-20">Email</h5>
             <p>
               Office :
               <Link href="#">
-                <a className="link">info@wrappixel.com</a>
+                <a className="link">reitoria@ufopa.edu.br</a>
               </Link>
               <br />
               Site :
               <Link href="https://www.wrappixel.com">
-                <a className="link">wrappixel.com</a>
+                <a className="link">http://www.ufopa.edu.br/ufopa/</a>
               </Link>
             </p>
           </Col>
-          <Col lg="3" md="6">
+          <Col lg="4" md="6">
             <h5 className="m-b-20">Social</h5>
             <div className="round-social light">
               <Link href="#">
@@ -71,7 +72,7 @@ const Footer = () => {
                 <div className="m-t-10 m-b-10 copyright">
                   All Rights Reserved by{" "}
                   <Link href="https://www.wrappixel.com">
-                    <a className="link">wrappixel.com</a>
+                    <a className="link">UFOPA - CAMPUS ORIXIMINÁ</a>
                   </Link>
                 </div>
                 <div className="links ml-auto m-t-10 m-b-10">

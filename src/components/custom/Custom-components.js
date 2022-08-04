@@ -21,8 +21,8 @@ const CustomComponents = () => {
   return (
     <div>
       <Banner2 />
-      <HeaderComponent />
-      <BannerComponent />
+     {/*  <HeaderComponent /> */}
+     {/*  <BannerComponent />
       <FormBannerComponent />
       <FeatureComponent />
       <PortfolioComponent />
@@ -32,7 +32,7 @@ const CustomComponents = () => {
       <BlogComponent />
       <C2aComponent />
       <ContactComponent />
-      <CallToAction />
+      <CallToAction /> */}
     </div>
   );
 };
