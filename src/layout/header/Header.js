@@ -90,22 +90,31 @@ const Header = () => {
               </Nav>
   
               <div className="act-buttons">
-                <NavLink
-                  href="https://wrappixel.com/templates/nextkit-nextjs-free-uikit"
-                  className="btn btn-outline-light font-14"
-                  target="_blank"
-                >
-                  Sign in
-                </NavLink>
+                <Link href="/auth/loginformik">
+                    <a
+                      className={
+                        router.pathname == "/auth/loginformik"
+                          ? "text-white nav-link btn btn-outline-light font-14"
+                          : "nav-link btn btn-outline-light font-14"
+                      }
+                    >
+                      Sign In
+                    </a>
+                  </Link>
               </div>
+
               <div className="act-buttons">
-                <NavLink
-                  href="https://wrappixel.com/templates/nextkit-nextjs-free-uikit"
-                  className="btn btn-danger font-14"
-                  target="_blank"
-                >
-                  Sign up
-                </NavLink>
+                <Link href="/auth/registerformik">
+                    <a
+                      className={
+                        router.pathname == "/auth/registerformik"
+                          ? "text-white nav-link btn btn-danger font-14"
+                          : "nav-link btn btn-danger font-14"
+                      }
+                    >
+                      Sign up
+                    </a>
+                  </Link>
               </div>
             </Collapse>
           </Navbar>
