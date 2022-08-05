@@ -1,5 +1,4 @@
 import React from "react";
-import RegisterformikAll from "../../src/components/auth/registerformik/RegisterformikAll"
 import {
   Button,
   Label,
@@ -15,7 +14,8 @@ import * as Yup from "yup";
 
 import Link from "next/link";
 import Image from "next/image";
-//import AuthLogo from "../../src/layouts/logo/AuthLogo";
+import AuthLogo from "../../src/assets/images/logos/ufopa.png";
+
 const RegisterFormik = () => {
   const initialValues = {
     UserName: "",
@@ -40,12 +40,17 @@ const RegisterFormik = () => {
     ),
   });
   return (
-    <div>
-      <RegisterformikAll />
+    <div className="loginBox">
       <Container fluid className="h-100 py-5">
         <Row className="justify-content-center align-items-center h-100">
           <Col lg="6" className="loginContainer">
-            {/* <AuthLogo /> */}
+            <div className="p-4 d-flex justify-content-center gap-2">
+              <Link href="/">
+                <a className="d-flex align-items-center gap-2">
+                  <Image src={AuthLogo} alt="authLogo" height={150} width={150} />
+                </a>
+              </Link>
+            </div>
             <Card>
               <CardBody className="p-4 m-1">
                 <h4 className="mb-0 fw-bold">Cadastro</h4>
@@ -155,7 +160,7 @@ const RegisterFormik = () => {
                         <Button type="submit" color="primary" className="me-2">
                           Cadastrar
                         </Button>
-                        <Button type="reset" color="secondary" className= "mx-3">
+                        <Button type="reset" color="secondary" className="mx-3">
                           Cancelar
                         </Button>
                       </FormGroup>

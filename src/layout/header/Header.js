@@ -65,7 +65,7 @@ const Header = () => {
                           : "nav-link"
                       }
                     >
-                      About Me
+                      Lorem Ipsum
                     </a>
                   </Link>
                 </NavItem>

@@ -11,7 +11,7 @@ import img5 from "../../../assets/images/features/feature30/feature-img.jpg";
 const FeatureComponent = () => {
   return (
     <div>
-      <div className="spacer bg-light">
+   {/*    <div className="spacer bg-light">
         <Container>
           <Row className="justify-content-center">
             <Col md="7" className="text-center">
@@ -24,7 +24,7 @@ const FeatureComponent = () => {
             </Col>
           </Row>
         </Container>
-      </div>
+      </div> */}
       <div className="spacer feature4">
         <Container>
           <Row className="justify-content-center">
@@ -32,7 +32,7 @@ const FeatureComponent = () => {
               <span className="label label-danger label-rounded">
                 Feature 1
               </span>
-              <h2 className="title">Awesome with Extra Ordinary Flexibility</h2>
+              <h2 className="title">Where does it come from?</h2>
               <h6 className="subtitle">
                 You can relay on our amazing features list and also our customer
                 services will be great experience for you without doubt and in
@@ -47,7 +47,7 @@ const FeatureComponent = () => {
                   <div className="icon-round bg-light-info">
                     <i className="fa fa-star"></i>
                   </div>
-                  <h5 className="font-medium">Instant Solutions</h5>
+                  <h5 className="font-medium">Lorem ipsum</h5>
                   <p className="m-t-20">
                     You can relay on our amazing features list and also our
                     customer services will be great experience. Lorem ipsum
@@ -66,7 +66,7 @@ const FeatureComponent = () => {
                   <div className="icon-round bg-light-info">
                     <i className="fa fa-check-circle"></i>
                   </div>
-                  <h5 className="font-medium">Powerful Techniques </h5>
+                  <h5 className="font-medium">Lorem ipsum </h5>
                   <p className="m-t-20">
                     You can relay on our amazing features list and also our
                     customer services will be great experience. Lorem ipsum
@@ -82,7 +82,7 @@ const FeatureComponent = () => {
           </Row>
         </Container>
       </div>
-      <div className="bg-light spacer feature20 up">
+     {/*  <div className="bg-light spacer feature20 up">
         <Container>
           <Row className="justify-content-center">
             <Col md="7" className="text-center">
@@ -254,7 +254,7 @@ const FeatureComponent = () => {
             </Col>
           </Row>
         </Container>
-      </div>
+      </div> */}
     </div>
   );
 };

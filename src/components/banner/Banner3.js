@@ -21,17 +21,7 @@ const Banner3 = () => {
                             Preencha as informações abaixo para realizar o seu cadastro!
                             {/* <br /> Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book */}
                         </h4>
-                        {/* <a
-                            href="https://wrappixel.com/templates/nextkit-nextjs-free-uikit"
-                            className="btn btn-danger m-r-20 btn-md m-t-30 "
-                        >
-                            Download Free
-                        </a> */}
-                        {/* <Link href="/#coming">
-              <a className="btn btn-md m-t-30  btn-outline-light ">
-                Upgrade To Pro
-              </a>
-            </Link> */}
+                
                     </Col>
 
                 </Row>

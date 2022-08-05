@@ -1,5 +1,4 @@
 import "../styles/scss/style.scss";
-import Layout from "../src/layout/Layout";
 import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
@@ -13,9 +12,7 @@ function MyApp({ Component, pageProps }) {
         />
         <link rel="icon" href="/ufopa.ico" />
       </Head>
-    <Layout>
       <Component {...pageProps} />
-    </Layout>   
     </>
   );
 }
