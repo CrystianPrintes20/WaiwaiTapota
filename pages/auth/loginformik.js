@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState} from "react";
 import {
     Button,
     Label,
@@ -16,9 +16,12 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import AuthLogo from "../../src/assets/images/logos/ufopa.png";
+import LeftBg from "../../src/assets/images/landingpage/left.png";
+import { signIn } from "next-auth/react"
 
 const LoginFormik = () => {
-    const navigate = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter()
 
     const initialValues = {
         email: "",
@@ -32,10 +35,15 @@ const LoginFormik = () => {
             .required("Password is required"),
     });
     return (
-        <div className="loginBox">
+        <div>
+          
+
+            {/* <div className="position-absolute end-0 top">
+                <Image src={RightBg} alt="right" />
+            </div> */}
             <Container fluid className="h-100">
                 <Row className="justify-content-center align-items-center h-100">
-                    <Col lg="12" sm="6" md="6" className="loginContainer">
+                    <Col lg="6" sm="6" md="6" className="loginContainer">
 
                         <div className="p-4 d-flex justify-content-center gap-2">
                             <Link href="/">
@@ -44,7 +52,7 @@ const LoginFormik = () => {
                                 </a>
                             </Link>
                         </div>
-                        
+
                         <Card className="bg-white">
                             <CardBody className="p-4 m-1">
                                 <h4 className="mb-0 fw-bold">Login</h4>
@@ -56,7 +64,44 @@ const LoginFormik = () => {
                                     initialValues={initialValues}
                                     validationSchema={validationSchema}
                                     onSubmit={async (fields) => {
-                                        await fetch("/api/auth/register");
+                                      let response;
+                                      try {
+                                        setIsLoading(true);
+                                        /* console.log(JSON.stringify(teste)) */
+                                        response = await axios({
+                                          url: "https://jsonplaceholder.typicode.com/posts",
+                                          method: "POST",
+                                          headers: {"Content-Type": "application/json"},
+                                          data: {
+                                            "title": "foo",
+                                            "body": "bar",
+                                            "userId": 1
+                                          }
+                                          //data: JSON.stringify(fields),
+                                        });
+                                       
+                                        if (response.status === 201) {
+                                          /* sessionStorage.setItem("token", response.data.token);
+                                          router.push("/api/auth/signin"); */
+                                          router.push("./loginformik")
+                                        }
+                                      } catch (err) {
+                                        if (
+                                          err?.response.status === 500 &&
+                                          err?.response?.data?.message
+                                        ) {
+                                          console.log({
+                                            type: "error",
+                                            message: err.response.data.message,
+                                          });
+                                        } else {
+                                          console.log({
+                                            type: "error",
+                                            message: "An error ocurred. Please, try again.",
+                                          });
+                                        }
+                                      }
+                                      setIsLoading(false);
                                     }}
                                     render={({ errors, touched }) => (
                                         <Form>
@@ -114,6 +159,10 @@ const LoginFormik = () => {
                     </Col>
                 </Row>
             </Container>
+            
+         {/*    <div>
+                <Image src={LeftBg} alt="left" fixed-bottom />
+            </div> */}
 
         </div>
     );

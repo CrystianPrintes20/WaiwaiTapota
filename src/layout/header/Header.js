@@ -31,7 +31,7 @@ const Header = () => {
           <Navbar className="navbar-expand-lg h6-nav-bar">
             <NavbarBrand href="/">
               {/* <Image src={logo} alt="wrapkit" /> */}
-              <img src="http://via.placeholder.com/80x80"></img>
+              <img src="https://placehold.jp/170x80.png"></img>
             </NavbarBrand>
             <NavbarToggler onClick={toggle}>
               <span className="ti-menu"></span>

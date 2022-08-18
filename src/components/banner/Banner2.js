@@ -31,7 +31,7 @@ const Banner2 = () => {
           </Col>
           <Col lg="6" md="6">
             {/* <Image src={bannerimg} alt="hero banner" /> */}
-            <img src="http://via.placeholder.com/514x510"></img>
+            <img src="https://placehold.jp/514x510.png"></img>
           </Col>
         </Row>
       </Container>
