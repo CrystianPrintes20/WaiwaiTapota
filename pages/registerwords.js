@@ -9,9 +9,15 @@ import {
     Col,
     Card,
     CardBody,
+    CardTitle,
+    CardText,
     Input,
 } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
 export default function RegisterWords() {
     return (
@@ -22,136 +28,92 @@ export default function RegisterWords() {
                     <Container>
                         <Row className="justify-content-center">
                             <Col md="7" className="text-center">
-                                <h2 className="title">Cadastre novas palavras!</h2>
-                                <h6 className="subtitle">
-                                    You can relay on our amazing features list and also our customer
-                                    services will be great experience for you without doubt and in
-                                    no-time
-                                </h6>
+                                <h2 className="title">Melhore o Wai-Wai Translator!</h2>
                             </Col>
                         </Row>
                         <Row className="m-t-40">
-                            <Col md="6" className="wrap-feature4-box">
+                            <Col sm="6">
                                 <Card>
+                                    <img
+                                        alt="Card"
+                                        src="https://picsum.photos/400/175"
+                                    />
                                     <CardBody>
-                                        <div className="icon-round bg-light-info">
-                                            <i className="fa fa-star"></i>
+                                        <div class="h-u-text-left main__item--card__desc">
+                                            <p >A sua colaboração é uma parte importante no processo
+                                                de inclusão de novas palavras no Wai-Wai Translator.
+                                                Se você fala ou conhece palavras na língua nativa Wai-Wai e
+                                                identificou que ela ainda não está presente aqui,
+                                                ajude-nos preenchendo o formulário ao lado e adicionando elas ao nosso tradutor.</p>
                                         </div>
-                                        <h5 className="font-medium">Lorem ipsum</h5>
-                                        <p className="m-t-20">
-                                            You can relay on our amazing features list and also our
-                                            customer services will be great experience. Lorem ipsum
-                                            dolor sit amet, consectetur adipiscing elit. Praesent
-                                            tristique pellentesque ipsum.
-                                        </p>
-                                        <a href="#" className="linking text-themecolor">
-                                            Explore More<i className="ti-arrow-right"></i>
-                                        </a>
                                     </CardBody>
+
                                 </Card>
                             </Col>
-                            <Col md="6" className="wrap-feature4-box">
-                                <Card>
-                                    <CardBody>
-                                        <Form>
-                                            <FormGroup>
-                                                <Label htmlFor="firstName">Usuário</Label>
-                                                <Field
-                                                    name="UserName"
-                                                    type="text"
-                                                    className={`form-control ${errors.UserName && touched.UserName
-                                                        ? " is-invalid"
-                                                        : ""
-                                                        }`}
-                                                />
-                                                <ErrorMessage
-                                                    name="UserName"
-                                                    component="div"
-                                                    className="invalid-feedback"
-                                                />
-                                            </FormGroup>
+                            <Col sm="6">
+                                <Card body>
+                                    <h4 className="title">Cadastro de Palavras</h4>
+                                    <Formik
+                                        render={({ errors, touched }) => (
+                                            <Form>
+                                                <FormGroup>
+                                                    <Label htmlFor="Name">Palavra</Label>
+                                                    <Field
+                                                        name="Name"
+                                                        type="text"
+                                                        className={`form-control ${errors.Name && touched.Name
+                                                            ? " is-invalid"
+                                                            : ""
+                                                            }`}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="Name"
+                                                        component="div"
+                                                        className="invalid-feedback"
+                                                    />
+                                                </FormGroup>
 
-                                            <FormGroup>
-                                                <Label htmlFor="email">Email</Label>
-                                                <Field
-                                                    name="email"
-                                                    type="text"
-                                                    className={`form-control${errors.email && touched.email ? " is-invalid" : ""
-                                                        }`}
-                                                />
-                                                <ErrorMessage
-                                                    name="email"
-                                                    component="div"
-                                                    className="invalid-feedback"
-                                                />
-                                            </FormGroup>
-                                            <FormGroup>
-                                                <Label htmlFor="password">Senha</Label>
-                                                <Field
-                                                    name="password"
-                                                    type="password"
-                                                    className={`form-control${errors.password && touched.password
-                                                        ? " is-invalid"
-                                                        : ""
-                                                        }`}
-                                                />
-                                                <ErrorMessage
-                                                    name="password"
-                                                    component="div"
-                                                    className="invalid-feedback"
-                                                />
-                                            </FormGroup>
-                                            <FormGroup>
-                                                <Label htmlFor="confirmPassword">
-                                                    Confirmar Senha
-                                                </Label>
-                                                <Field
-                                                    name="confirmPassword"
-                                                    type="password"
-                                                    className={`form-control${errors.confirmPassword && touched.confirmPassword
-                                                        ? " is-invalid"
-                                                        : ""
-                                                        }`}
-                                                />
-                                                <ErrorMessage
-                                                    name="confirmPassword"
-                                                    component="div"
-                                                    className="invalid-feedback"
-                                                />
-                                            </FormGroup>
-                                            <FormGroup inline className="form-check">
-                                                <Field
-                                                    type="checkbox"
-                                                    name="acceptTerms"
-                                                    id="acceptTerms"
-                                                    className={`form-check-input ${errors.acceptTerms && touched.acceptTerms
-                                                        ? " is-invalid"
-                                                        : ""
-                                                        }`}
-                                                />
-                                                <Label
-                                                    htmlFor="acceptTerms"
-                                                    className="form-check-label"
-                                                >
-                                                    Aceitar Termos & Condições
-                                                </Label>
-                                                <ErrorMessage
-                                                    name="acceptTerms"
-                                                    component="div"
-                                                    className="invalid-feedback"
-                                                />
-                                            </FormGroup>
-                                            <FormGroup>
-                                                <Button type="submit" color="primary" className="me-2" disabled={isLoading}>
-                                                    Cadastrar
-                                                </Button>
-                                                <Button type="reset" color="secondary" className="mx-3" disabled={isLoading}>
-                                                    Cancelar
-                                                </Button>
-                                            </FormGroup>
-                                        </Form>
-
-                                    </CardBody>
+                                                <FormGroup>
+                                                    <Label htmlFor="traducao">Tradução</Label>
+                                                    <Field
+                                                        name="traducao"
+                                                        type="text"
+                                                        className={`form-control${errors.traducao && touched.traducao ? " is-invalid" : ""
+                                                            }`}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="traducao"
+                                                        component="div"
+                                                        className="invalid-feedback"
+                                                    />
+                                                </FormGroup>
+                                                <FormGroup>
+                                                    <Label htmlFor="descricao">Descrição</Label>
+                                                    <Field
+                                                        name="descricao"
+                                                        type="text"
+                                                        className={`form-control${errors.descricao && touched.descricao
+                                                            ? " is-invalid"
+                                                            : ""
+                                                            }`}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="descricao"
+                                                        component="div"
+                                                        className="invalid-feedback"
+                                                    />
+                                                </FormGroup>
+                                                <FormGroup>
+                                                    <Button type="submit" color="primary" >
+                                                        Enviar
+                                                    </Button>
+                                                    <Button type="reset" color="secondary" >
+                                                        Cancelar
+                                                    </Button>
+                                                </FormGroup>
+                                            </Form>
+                                        )}
+                                    />
                                 </Card>
                             </Col>
                         </Row>
