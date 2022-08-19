@@ -73,7 +73,17 @@ const Header = () => {
                   <NavLink href="#">Lorem Ipsum</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="#">Lorem Ipsum</NavLink>
+                <Link href="/registerwords">
+                    <a
+                      className={
+                        router.pathname == "/registerwords"
+                          ? "text-white nav-link"
+                          : "nav-link"
+                      }
+                    >
+                      Cadastrar Palavras
+                    </a>
+                  </Link>
                 </NavItem>
            {/*      <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav>

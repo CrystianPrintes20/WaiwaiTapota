@@ -71,7 +71,7 @@ const RegisterFormik = () => {
                     response = await axios({
                       url: "https://jsonplaceholder.typicode.com/posts",
                       method: "POST",
-                      headers: {"Content-Type": "application/json"},
+                      headers: { "Content-Type": "application/json" },
                       data: {
                         "title": "foo",
                         "body": "bar",
@@ -79,7 +79,7 @@ const RegisterFormik = () => {
                       }
                       //data: JSON.stringify(fields),
                     });
-                   
+
                     if (response.status === 201) {
                       /* sessionStorage.setItem("token", response.data.token);
                       router.push("/api/auth/signin"); */
