@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import {
     Button,
     Label,
@@ -17,9 +17,9 @@ import Link from "next/link";
 import Image from "next/image";
 import AuthLogo from "../../src/assets/images/logos/ufopa.png";
 import LeftBg from "../../src/assets/images/landingpage/left.png";
-import { signIn } from "next-auth/react"
+import { providers, signIn, getSession, csrfToken } from "next-auth/client";
 
-const LoginFormik = () => {
+const LoginFormik = ({ providers }) => {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
 
@@ -36,7 +36,7 @@ const LoginFormik = () => {
     });
     return (
         <div>
-          
+
 
             {/* <div className="position-absolute end-0 top">
                 <Image src={RightBg} alt="right" />
@@ -64,44 +64,33 @@ const LoginFormik = () => {
                                     initialValues={initialValues}
                                     validationSchema={validationSchema}
                                     onSubmit={async (fields) => {
-                                      let response;
-                                      try {
-                                        setIsLoading(true);
-                                        /* console.log(JSON.stringify(teste)) */
-                                        response = await axios({
-                                          url: "https://jsonplaceholder.typicode.com/posts",
-                                          method: "POST",
-                                          headers: {"Content-Type": "application/json"},
-                                          data: {
-                                            "title": "foo",
-                                            "body": "bar",
-                                            "userId": 1
-                                          }
-                                          //data: JSON.stringify(fields),
-                                        });
-                                       
-                                        if (response.status === 201) {
-                                          /* sessionStorage.setItem("token", response.data.token);
-                                          router.push("/api/auth/signin"); */
-                                          router.push("./loginformik")
+                                        let response
+                                        try {
+                                            setIsLoading(true);
+
+                                            response = signIn("credentials", { fields, redirect: false })
+                                            console.log(response);
+                                            if (response.status === 200) {
+                                                sessionStorage.setItem("token", response.data.token);
+                                                router.push("../index")
+                                            }
+                                        } catch (err) {
+                                            if (
+                                                err?.response.status === 500 &&
+                                                err?.response?.data?.message
+                                            ) {
+                                                console.log({
+                                                    type: "error",
+                                                    message: err.response.data.message,
+                                                });
+                                            } else {
+                                                console.log({
+                                                    type: "error",
+                                                    message: "An error ocurred. Please, try again.",
+                                                });
+                                            }
                                         }
-                                      } catch (err) {
-                                        if (
-                                          err?.response.status === 500 &&
-                                          err?.response?.data?.message
-                                        ) {
-                                          console.log({
-                                            type: "error",
-                                            message: err.response.data.message,
-                                          });
-                                        } else {
-                                          console.log({
-                                            type: "error",
-                                            message: "An error ocurred. Please, try again.",
-                                          });
-                                        }
-                                      }
-                                      setIsLoading(false);
+                                        setIsLoading(false);
                                     }}
                                     render={({ errors, touched }) => (
                                         <Form>
@@ -154,13 +143,25 @@ const LoginFormik = () => {
                                         </Form>
                                     )}
                                 />
+                                <div>
+                                    {console.log(providers)}
+                                    {Object.values(providers).map((provider) => {
+                                        return (
+                                            <div key={provider.name}>
+                                                <button onClick={() => signIn(provider.id)}>
+                                                    Sign in with {provider.name}
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </CardBody>
                         </Card>
                     </Col>
                 </Row>
             </Container>
-            
-         {/*    <div>
+
+            {/*    <div>
                 <Image src={LeftBg} alt="left" fixed-bottom />
             </div> */}
 
