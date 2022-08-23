@@ -18,6 +18,7 @@ import * as Yup from "yup";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import TableComponents from "../src/components/custom/TableComponents";
 
 export default function RegisterWords() {
     return (
@@ -119,7 +120,9 @@ export default function RegisterWords() {
                         </Row>
                     </Container>
                 </div>
+                <TableComponents/>
             </div>
+            
         </Layout>
 
     );
