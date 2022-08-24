@@ -105,10 +105,10 @@ export default function RegisterWords() {
                                                     />
                                                 </FormGroup>
                                                 <FormGroup>
-                                                    <Button type="submit" color="primary" >
+                                                    <Button type="submit" color="primary" className="me-2" >
                                                         Enviar
                                                     </Button>
-                                                    <Button type="reset" color="secondary" >
+                                                    <Button type="reset" color="secondary" className="mx-3">
                                                         Cancelar
                                                     </Button>
                                                 </FormGroup>
