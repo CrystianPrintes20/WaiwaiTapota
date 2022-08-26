@@ -68,7 +68,7 @@ const RegisterFormik = () => {
                   try {
                     setIsLoading(true);
                     /* console.log(JSON.stringify(teste)) */
-                    response = await axios({
+                   /*  response = await axios({
                       url: "https://jsonplaceholder.typicode.com/posts",
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
@@ -76,6 +76,15 @@ const RegisterFormik = () => {
                         "title": "foo",
                         "body": "bar",
                         "userId": 1
+                      }
+                      //data: JSON.stringify(fields),
+                    }); */
+                    response = await axios({
+                      url: "https://6096015d116f3f00174b29ba.mockapi.io/especialidades",
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      data: {
+                        "descricao": "Crystian"
                       }
                       //data: JSON.stringify(fields),
                     });
