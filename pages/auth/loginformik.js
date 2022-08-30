@@ -1,15 +1,6 @@
-import React, { useState } from "react";
-import {
-    Button,
-    Label,
-    FormGroup,
-    Container,
-    Row,
-    Col,
-    Card,
-    CardBody,
-    Input,
-} from "reactstrap";
+import React, { useState, useEffect } from "react";
+import { signIn, useSession } from 'next-auth/react'
+import { Button, Label, FormGroup, Container, Row, Col, Card, CardBody, Input} from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
@@ -17,12 +8,26 @@ import Link from "next/link";
 import Image from "next/image";
 import AuthLogo from "../../src/assets/images/logos/ufopa.png";
 import LeftBg from "../../src/assets/images/landingpage/left.png";
-import { providers, signIn, getSession, csrfToken } from "next-auth/client";
 
-const LoginFormik = ({ providers }) => {
+const LoginFormik = () => {
     const [isLoading, setIsLoading] = useState(false);
+    const [loginError, setLoginError] = useState('')
+    const [email, setEmail] = useState('')
     const router = useRouter()
 
+    useEffect(() => {
+        if (router.query.error) {
+          setLoginError(router.query.error)
+          setEmail(router.query.email)
+        }
+      }, [router])
+ /*    if (useSession) {
+        if (router.query?.callbackUrl) {
+            router.push(router.query.callbackUrl)
+        } else {
+            router.push('/')
+        }
+    } */
     const initialValues = {
         email: "",
         password: "",
@@ -64,7 +69,43 @@ const LoginFormik = ({ providers }) => {
                                     initialValues={initialValues}
                                     validationSchema={validationSchema}
                                     onSubmit={async (fields) => {
+                                        let email =  fields.email
+                                        let password = fields.password
                                         let response
+                                        try {
+                                            setIsLoading(true);
+
+                                            response = signIn('credentials',
+                                                {
+                                                    email,
+                                                    password,
+                                                    // The page where you want to redirect to after a 
+                                                    // successful login
+                                                    callbackUrl: `${window.location.origin}/registerwords`
+                                                }
+                                            )
+                                            console.log("gffgf",response);
+                                            /* if (response.status === 201) {
+                                                sessionStorage.setItem("token", response.data.token);
+                                                router.push("../index")
+                                            }  */
+                                        } catch (err) {
+                                            if (
+                                                err?.response.status === 500 &&
+                                                err?.response?.data?.message
+                                            ) {
+                                                console.log({
+                                                    type: "error",
+                                                    message: err.response.data.message,
+                                                });
+                                            } else {
+                                                console.log({
+                                                    type: "error",
+                                                    message: "An error ocurred. Please, try again.",
+                                                });
+                                            }
+                                        }
+                                        /* let response
                                         try {
                                             setIsLoading(true);
 
@@ -90,10 +131,20 @@ const LoginFormik = ({ providers }) => {
                                                 });
                                             }
                                         }
-                                        setIsLoading(false);
+                                        setIsLoading(false); */
                                     }}
                                     render={({ errors, touched }) => (
                                         <Form>
+                                          {/*   <FormGroup>
+                                                <Field
+                                                    name="csrfToken"
+                                                    type="hidden"
+                                                    defaultValue={csrfToken}
+
+                                                />
+
+                                            </FormGroup> */}
+
                                             <FormGroup>
                                                 <Label htmlFor="email">Email</Label>
                                                 <Field
@@ -136,25 +187,14 @@ const LoginFormik = ({ providers }) => {
                                                 </Link>
                                             </FormGroup>
                                             <FormGroup>
-                                                <Button type="submit" color="primary">
+                                                <Button type="submit" color="primary" disabled={isLoading}>
                                                     Login
                                                 </Button>
                                             </FormGroup>
                                         </Form>
                                     )}
                                 />
-                                <div>
-                                    {console.log(providers)}
-                                    {Object.values(providers).map((provider) => {
-                                        return (
-                                            <div key={provider.name}>
-                                                <button onClick={() => signIn(provider.id)}>
-                                                    Sign in with {provider.name}
-                                                </button>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
+
                             </CardBody>
                         </Card>
                     </Col>
@@ -170,3 +210,11 @@ const LoginFormik = ({ providers }) => {
 };
 
 export default LoginFormik;
+/*
+export async function getServerSideProps(context) {
+    return {
+        props: {
+            csrfToken: await getCsrfToken(context),
+        }
+    }
+} */

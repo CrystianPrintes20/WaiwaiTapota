@@ -1,27 +1,38 @@
 import Layout from "../src/layout/Layout";
 import RegisterComponents from "../src/components/custom/Register-components";
 import {
-    Button,
-    Label,
-    FormGroup,
-    Container,
-    Row,
-    Col,
-    Card,
-    CardBody,
-    CardTitle,
-    CardText,
-    Input,
+  Button,
+  Label,
+  FormGroup,
+  Container,
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardTitle,
+  CardText,
+  Input,
 } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import Image from "next/image";
+import { getSession, useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import TableComponents from "../src/components/custom/TableComponents";
+import { useEffect } from "react";
 
 export default function RegisterWords() {
+  const router = useRouter();
+  const { data: token, status } = useSession();
+  console.log(token);
+  const { data: session } = useSession();
+  console.log(session);
+  if (session) {
     return (
+      <>
+        Signed in as {session.user.email} <br />
+        <button onClick={() => signOut()}>Sign out</button>
+       
         <Layout>
             <RegisterComponents />
             <div>
@@ -120,10 +131,23 @@ export default function RegisterWords() {
                         </Row>
                     </Container>
                 </div>
-                <TableComponents/>
             </div>
-            
         </Layout>
-
+        
+      </>
     );
+  }
+  return (
+    <>
+      Not signed in <br />
+      <button onClick={() => signIn()}>Sign in</button>
+    </>
+  );
+  /*  useEffect(() => {
+        console.log(loading, session)
+		if(!loading && !session?.accessToken) {
+			router.push('./auth/loginformik')
+		}
+	}, [loading, session])
+ */
 }
