@@ -18,12 +18,17 @@ import {
   NavbarToggler,
   Collapse,
 } from "reactstrap";
+import { getSession, useSession, signIn, signOut } from "next-auth/react";
 import logo from "../../assets/images/logos/white-text.png";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const toggle = () => setIsOpen(!isOpen);
+  const { data: token, status } = useSession();
+  console.log(token);
+  const { data: session } = useSession();
+  console.log(session);
   return (
     <div className="topbar" id="top">
       <div className="header6">
@@ -43,7 +48,7 @@ const Header = () => {
               id="h6-info"
             >
               <Nav navbar className="ml-auto mt-2 mt-lg-0">
-                <NavItem >
+                <NavItem>
                   <Link href="/">
                     <a
                       className={
@@ -52,7 +57,7 @@ const Header = () => {
                           : "nav-link"
                       }
                     >
-                     Home
+                      Home
                     </a>
                   </Link>
                 </NavItem>
@@ -70,10 +75,7 @@ const Header = () => {
                   </Link>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="#">Lorem Ipsum</NavLink>
-                </NavItem>
-                <NavItem>
-                <Link href="/registerwords">
+                  <Link href="/registerwords">
                     <a
                       className={
                         router.pathname == "/registerwords"
@@ -85,7 +87,7 @@ const Header = () => {
                     </a>
                   </Link>
                 </NavItem>
-           {/*      <UncontrolledDropdown nav inNavbar>
+                {/*      <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav>
                     Sign in/Sign up <i className="fa fa-angle-down m-l-5"></i>
                   </DropdownToggle>
@@ -96,36 +98,52 @@ const Header = () => {
                     
                   </DropdownMenu>
                 </UncontrolledDropdown> */}
-                
               </Nav>
-  
-              <div className="act-buttons">
-                <Link href="/auth/loginformik">
-                    <a
-                      className={
-                        router.pathname == "/auth/loginformik"
-                          ? "text-white nav-link btn btn-outline-light font-14"
-                          : "nav-link btn btn-outline-light font-14"
-                      }
-                    >
-                      Sign In
-                    </a>
-                  </Link>
-              </div>
+              {session ? (
+                <>
+                  <div className="act-buttons">
+                    <Link href="/auth/registerformik">
+                      <button
+                      onClick={() => signOut()}
+                        className="nav-link btn btn-danger font-14"
+                        
+                      >
+                        Sign out
+                      </button>
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="act-buttons">
+                    <Link href="/auth/loginformik">
+                      <a
+                        className={
+                          router.pathname == "/auth/loginformik"
+                            ? "text-white nav-link btn btn-outline-light font-14"
+                            : "nav-link btn btn-outline-light font-14"
+                        }
+                      >
+                        Sign In
+                      </a>
+                    </Link>
+                  </div>
 
-              <div className="act-buttons">
-                <Link href="/auth/registerformik">
-                    <a
-                      className={
-                        router.pathname == "/auth/registerformik"
-                          ? "text-white nav-link btn btn-danger font-14"
-                          : "nav-link btn btn-danger font-14"
-                      }
-                    >
-                      Sign up
-                    </a>
-                  </Link>
-              </div>
+                  <div className="act-buttons">
+                    <Link href="/auth/registerformik">
+                      <a
+                        className={
+                          router.pathname == "/auth/registerformik"
+                            ? "text-white nav-link btn btn-danger font-14"
+                            : "nav-link btn btn-danger font-14"
+                        }
+                      >
+                        Sign up
+                      </a>
+                    </Link>
+                  </div>
+                </>
+              )}
             </Collapse>
           </Navbar>
         </Container>

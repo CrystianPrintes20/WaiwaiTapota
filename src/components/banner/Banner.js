@@ -7,18 +7,19 @@ const Banner = () => {
       <Container>
         <Row className="justify-content-center">
           <Col lg="8" md="6" className="align-self-center text-center">
-            <h1 className="title">NextJs UI Kit Lite</h1>
+            <h1 className="title">Você não está logado!</h1>
             <h4 className="subtitle font-light">
-              Powerful Reactstrap UI Kit with
-              <br /> Beautiful Pre-Built Demos
+                Para acessar e começar a contribuir com o projeto
+              <br /> é necessário fazer o registro na plataforma ou caso já tenha uma conta <br />
+              faça seu login.
             </h4>
 
-            <Button
+           {/*  <Button
               to="/#coming"
               className="btn btn-md m-t-30 btn-danger-gradiant font-14"
             >
               Upgrade To Pro
-            </Button>
+            </Button> */}
           </Col>
         </Row>
       </Container>
