@@ -44,9 +44,9 @@ export default function RegisterWords() {
                 <Row className="m-t-10">
                   <Col sm="6">
                     <Card>
-                      <img alt="Card" src="https://picsum.photos/400/175" />
+                      <img alt="Card" src="https://picsum.photos/400/175"/>
                       <CardBody>
-                        <div class="h-u-text-left main__item--card__desc">
+                        <div className="h-u-text-left main__item--card__desc">
                           <p>
                             A sua colaboração é uma parte importante no processo
                             de inclusão de novas palavras no Wai-Wai Translator.

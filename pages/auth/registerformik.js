@@ -16,12 +16,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import AuthLogo from "../../src/assets/images/logos/ufopa.png";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RegisterFormik = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter()
   const initialValues = {
-    UserName: "",
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -29,7 +31,7 @@ const RegisterFormik = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    UserName: Yup.string().required("UserName is required"),
+    username: Yup.string().required("username is required"),
     email: Yup.string().email("Email is invalid").required("Email is required"),
     password: Yup.string()
       .min(6, "Password must be at least 6 characters")
@@ -67,43 +69,44 @@ const RegisterFormik = () => {
                   let response;
                   try {
                     setIsLoading(true);
-                    /* console.log(JSON.stringify(teste)) */
-                   /*  response = await axios({
-                      url: "https://jsonplaceholder.typicode.com/posts",
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      data: {
-                        "title": "foo",
-                        "body": "bar",
-                        "userId": 1
-                      }
-                      //data: JSON.stringify(fields),
-                    }); */
+                 
                     response = await axios({
-                      url: "https://6096015d116f3f00174b29ba.mockapi.io/especialidades",
+                      url: "http://localhost:5000/registrarUsuarios",
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
-                      data: {
-                        "descricao": "Crystian"
-                      }
-                      //data: JSON.stringify(fields),
+                      data: JSON.stringify(fields),
                     });
-
-                    if (response.status === 201) {
+                    if (response.status === 200) {
                       /* sessionStorage.setItem("token", response.data.token);
                       router.push("/api/auth/signin"); */
                       router.push("./loginformik")
                     }
                   } catch (err) {
                     if (
-                      err?.response.status === 500 &&
-                      err?.response?.data?.message
-                    ) {
+                      err?.response.status === 409 || err?.response?.data?.message) {
+                        toast.error("Email ou nome de usuario ja cadastrados! Verifique-os e tente novamente.", {
+                          position: "top-right",
+                          autoClose: 5000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: false,
+                          draggable: true,
+                          progress: undefined,
+                      });
                       console.log({
                         type: "error",
                         message: err.response.data.message,
                       });
                     } else {
+                      toast.error("Erro ao cadastrar.", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                    });
                       console.log({
                         type: "error",
                         message: "An error ocurred. Please, try again.",
@@ -117,15 +120,15 @@ const RegisterFormik = () => {
                     <FormGroup>
                       <Label htmlFor="firstName">Usuário</Label>
                       <Field
-                        name="UserName"
+                        name="username"
                         type="text"
-                        className={`form-control ${errors.UserName && touched.UserName
+                        className={`form-control ${errors.username && touched.username
                           ? " is-invalid"
                           : ""
                           }`}
                       />
                       <ErrorMessage
-                        name="UserName"
+                        name="username"
                         component="div"
                         className="invalid-feedback"
                       />
@@ -209,6 +212,7 @@ const RegisterFormik = () => {
                         Cancelar
                       </Button>
                     </FormGroup>
+                    <ToastContainer />
                   </Form>
                 )}
               />
