@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import Image from "next/image";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { User, LogOut } from "react-feather";
+import axios from "axios";
 import {
   Row,
   Col,
   UncontrolledDropdown,
+  Dropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
@@ -19,20 +21,58 @@ import {
   Collapse,
 } from "reactstrap";
 import { getSession, useSession, signIn, signOut } from "next-auth/react";
-import logo from "../../assets/images/logos/white-text.png";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const toggle = () => setIsOpen(!isOpen);
-  const { data: token, status } = useSession();
-  console.log(token);
   const { data: session } = useSession();
-  console.log(session);
+  const [token, setToken] = useState()
+  const [dados, setdados] = useState()
+
+  const [data, setData] = useState(null)
+  const [isLoading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (session) {
+      setToken(session?.user?.token)
+    }
+  }, [session])
+
+  useEffect(() => {
+    setLoading(true)
+    axios.get('http://localhost:5000/userLog', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    })
+      .then((res) => res.data.profile)
+      .then((data) => {
+        setData(data)
+        setLoading(false)
+      })
+  }, [token])
+
+  useEffect(()=>{
+    console.log(data)
+  })
+
+  //  axios.get("http://localhost:5000/userLog", {
+  //     headers: {
+  //       'Authorization': `Bearer ${token}`
+  //     },
+  //   })
+  //   .then((res) => {
+  //     setdados(res?.data?.profile)
+  //   })
+  //   .catch((error) => {
+  //     console.error(error)
+  //   })
   return (
     <div className="topbar" id="top">
       <div className="header6">
         <Container className="po-relative">
+
           <Navbar className="navbar-expand-lg h6-nav-bar">
             <NavbarBrand href="/">
               {/* <Image src={logo} alt="wrapkit" /> */}
@@ -87,31 +127,46 @@ const Header = () => {
                     </a>
                   </Link>
                 </NavItem>
-                {/*      <UncontrolledDropdown nav inNavbar>
-                  <DropdownToggle nav>
-                    Sign in/Sign up <i className="fa fa-angle-down m-l-5"></i>
-                  </DropdownToggle>
-                  <DropdownMenu className="b-none animated fadeInUp">
-                    <DropdownItem>Sign in</DropdownItem>
-                    <DropdownItem divider />
-                    <DropdownItem>Sign up</DropdownItem>
-                    
-                  </DropdownMenu>
-                </UncontrolledDropdown> */}
+
               </Nav>
               {session ? (
                 <>
-                  <div className="act-buttons">
+                  {/* <div className="act-buttons">
                     <Link href="/auth/registerformik">
                       <button
-                      onClick={() => signOut()}
+                        onClick={() => signOut()}
                         className="nav-link btn btn-danger font-14"
-                        
                       >
                         Sign out
                       </button>
                     </Link>
-                  </div>
+                  </div> */}
+
+                  <UncontrolledDropdown >
+                    <DropdownToggle
+                      color="transparent"
+                    >
+                      <div className="d-flex gap-3 border-bottom border-danger p-0">
+                        <span className="text-truncate mr-3">
+                          <h6 className="mb-0 text-white text-uppercase">{data?.username}</h6>
+                          <small className="elipsis">{data?.email}</small>
+                        </span>
+                 
+                        <User className="border rounded-circle" size={40} color="white" />
+                      </div>
+
+
+                    </DropdownToggle>
+
+                    <DropdownMenu dark>
+                      <DropdownItem>
+                        <User className="mr-2" size={25} /> Meu perfil
+                      </DropdownItem>
+                      <DropdownItem onClick={() => signOut()}>
+                        <LogOut className="mr-2" size={25} />Sing out
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </UncontrolledDropdown>
                 </>
               ) : (
                 <>
