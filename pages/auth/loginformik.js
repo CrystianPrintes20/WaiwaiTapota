@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { signIn, useSession } from 'next-auth/react'
-import { Button, Label, FormGroup, Container, Row, Col, Card, CardBody, Input} from "reactstrap";
+import { Button, Label, FormGroup, Container, Row, Col, Card, CardBody, Input } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
@@ -8,26 +8,29 @@ import Link from "next/link";
 import Image from "next/image";
 import AuthLogo from "../../src/assets/images/logos/ufopa.png";
 import LeftBg from "../../src/assets/images/landingpage/left.png";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginFormik = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [loginError, setLoginError] = useState('')
     const [email, setEmail] = useState('')
     const router = useRouter()
+    const notify = () => toast("Wow so easy !");
 
     useEffect(() => {
         if (router.query.error) {
-          setLoginError(router.query.error)
-          setEmail(router.query.email)
+            setLoginError(router.query.error)
+            setEmail(router.query.email)
         }
-      }, [router])
- /*    if (useSession) {
-        if (router.query?.callbackUrl) {
-            router.push(router.query.callbackUrl)
-        } else {
-            router.push('/')
-        }
-    } */
+    }, [router])
+    /*    if (useSession) {
+           if (router.query?.callbackUrl) {
+               router.push(router.query.callbackUrl)
+           } else {
+               router.push('/')
+           }
+       } */
     const initialValues = {
         email: "",
         password: "",
@@ -41,11 +44,6 @@ const LoginFormik = () => {
     });
     return (
         <div>
-
-
-            {/* <div className="position-absolute end-0 top">
-                <Image src={RightBg} alt="right" />
-            </div> */}
             <Container fluid className="h-100">
                 <Row className="justify-content-center align-items-center h-100">
                     <Col lg="6" sm="6" md="6" className="loginContainer">
@@ -69,57 +67,38 @@ const LoginFormik = () => {
                                     initialValues={initialValues}
                                     validationSchema={validationSchema}
                                     onSubmit={async (fields) => {
-                                        let email =  fields.email
+                                        let email = fields.email
                                         let password = fields.password
                                         let response
                                         try {
                                             setIsLoading(true);
-
-                                            response = signIn('credentials',
-                                                {
-                                                    email,
-                                                    password,
-                                                    // The page where you want to redirect to after a 
-                                                    // successful login
-                                                    callbackUrl: `${window.location.origin}/registerwords`
-                                                }
-                                            )
-                                            console.log("gffgf",response);
-                                            /* if (response.status === 201) {
-                                                sessionStorage.setItem("token", response.data.token);
-                                                router.push("../index")
-                                            }  */
-                                        } catch (err) {
-                                            if (
-                                                err?.response.status === 500 &&
-                                                err?.response?.data?.message
-                                            ) {
-                                                console.log({
-                                                    type: "error",
-                                                    message: err.response.data.message,
-                                                });
-                                            } else {
-                                                console.log({
-                                                    type: "error",
-                                                    message: "An error ocurred. Please, try again.",
-                                                });
-                                            }
-                                        }
-                                        /* let response
-                                        try {
-                                            setIsLoading(true);
-
-                                            response = signIn("credentials", { fields, redirect: false })
-                                            console.log(response);
+                                            response = await signIn("credentials", { email, password, redirect: false })
                                             if (response.status === 200) {
-                                                sessionStorage.setItem("token", response.data.token);
-                                                router.push("../index")
+                                                router.push(`${window.location.origin}/registerwords`)
                                             }
-                                        } catch (err) {
-                                            if (
-                                                err?.response.status === 500 &&
-                                                err?.response?.data?.message
-                                            ) {
+                                            else if (response.status === 401) {
+                                                toast.error("Email ou senha incorretos! Verifique-os e tente novamente.", {
+                                                    position: "top-right",
+                                                    autoClose: 5000,
+                                                    hideProgressBar: false,
+                                                    closeOnClick: true,
+                                                    pauseOnHover: false,
+                                                    draggable: true,
+                                                    progress: undefined,
+                                                });
+                                            } else {
+                                                toast.error("Erro ao cadastrar.", {
+                                                    position: "top-right",
+                                                    autoClose: 5000,
+                                                    hideProgressBar: false,
+                                                    closeOnClick: true,
+                                                    pauseOnHover: false,
+                                                    draggable: true,
+                                                    progress: undefined,
+                                                });
+                                            }
+                                        } catch (e) {
+                                            if (response.status === 500 && response?.data?.message) {
                                                 console.log({
                                                     type: "error",
                                                     message: err.response.data.message,
@@ -131,20 +110,11 @@ const LoginFormik = () => {
                                                 });
                                             }
                                         }
-                                        setIsLoading(false); */
+
+                                        setIsLoading(false);
                                     }}
                                     render={({ errors, touched }) => (
                                         <Form>
-                                          {/*   <FormGroup>
-                                                <Field
-                                                    name="csrfToken"
-                                                    type="hidden"
-                                                    defaultValue={csrfToken}
-
-                                                />
-
-                                            </FormGroup> */}
-
                                             <FormGroup>
                                                 <Label htmlFor="email">Email</Label>
                                                 <Field
@@ -191,6 +161,7 @@ const LoginFormik = () => {
                                                     Login
                                                 </Button>
                                             </FormGroup>
+                                            <ToastContainer />
                                         </Form>
                                     )}
                                 />
@@ -200,21 +171,8 @@ const LoginFormik = () => {
                     </Col>
                 </Row>
             </Container>
-
-            {/*    <div>
-                <Image src={LeftBg} alt="left" fixed-bottom />
-            </div> */}
-
         </div>
     );
 };
 
 export default LoginFormik;
-/*
-export async function getServerSideProps(context) {
-    return {
-        props: {
-            csrfToken: await getCsrfToken(context),
-        }
-    }
-} */
