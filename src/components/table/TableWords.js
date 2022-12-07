@@ -12,11 +12,10 @@ const TableWords = () => {
               <h6 className="subtitle">
                 Aqui estão listadas todas as palavras cadastradas por você caro
                 usuário.
-
                 Cosumir a API:
                 registro, login, cadastrar as palavras, editar e deletar
                 tenho que mostrar todas as palavras cadastradas
-                Criar uma aba "Listar todas as palavras cadastradas"
+                Criar uma aba Listar todas as palavras cadastradas
               </h6>
             </Col>
           </Row>
