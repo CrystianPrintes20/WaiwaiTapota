@@ -57,17 +57,6 @@ const Header = () => {
     console.log(data)
   })
 
-  //  axios.get("http://localhost:5000/userLog", {
-  //     headers: {
-  //       'Authorization': `Bearer ${token}`
-  //     },
-  //   })
-  //   .then((res) => {
-  //     setdados(res?.data?.profile)
-  //   })
-  //   .catch((error) => {
-  //     console.error(error)
-  //   })
   return (
     <div className="topbar" id="top">
       <div className="header6">
@@ -102,15 +91,28 @@ const Header = () => {
                   </Link>
                 </NavItem>
                 <NavItem>
-                  <Link href="/basic">
+                  <Link href="/myWord">
                     <a
                       className={
-                        router.pathname == "/basic"
+                        router.pathname == "/myWord"
                           ? "text-white nav-link"
                           : "nav-link"
                       }
                     >
-                      Lorem Ipsum
+                      Minhas palavras
+                    </a>
+                  </Link>
+                </NavItem>
+                <NavItem>
+                  <Link href="/dictionary">
+                    <a
+                      className={
+                        router.pathname == "/dictionary"
+                          ? "text-white nav-link"
+                          : "nav-link"
+                      }
+                    >
+                      Dicionario
                     </a>
                   </Link>
                 </NavItem>
@@ -148,8 +150,8 @@ const Header = () => {
                     >
                       <div className="d-flex gap-3 border-bottom border-danger p-0">
                         <span className="text-truncate mr-3">
-                          <h6 className="mb-0 text-white text-uppercase">{data?.username}</h6>
-                          <small className="elipsis">{data?.email}</small>
+                          <h6 className="mb-0 text-white text-uppercase">{data?.username ? data?.username : "Usuario sem login!"}</h6>
+                          <small className="elipsis">{data?.email ? data?.email : "Sem email" }</small>
                         </span>
                  
                         <User className="border rounded-circle" size={40} color="white" />
