@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import { useEffect } from 'react';
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -29,7 +30,10 @@ const rows = [
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
 
-export default function DataTable() {
+const DataTable = ({dados}) => {
+    useEffect(()=>{
+        console.log("aaaaaaaaaaaaa",dados)
+      }, [dados])
   return (
     <div style={{ height: 400, width: '60%' }}>
       <DataGrid
@@ -42,3 +46,5 @@ export default function DataTable() {
     </div>
   );
 }
+
+export default DataTable;

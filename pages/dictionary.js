@@ -33,17 +33,13 @@ export default function Dictionary() {
             setDados(data)
           })
       },[token])
-    
-      useEffect(()=>{
-        console.log(dados)
-      }, [dados])
 
     return (
         <Layout>
             <Banner3 />
             <Card>
                 <CardBody>
-                    <DataTable/>
+                    <DataTable dados={dados}/>
                 </CardBody>
             </Card>
         </Layout>
