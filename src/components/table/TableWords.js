@@ -42,7 +42,7 @@ const TableWords = () => {
                     <td>Prohaska</td>
                     <td>
                       is simply dummy text of the printing and typesetting
-                      industry. Lorem Ipsum has been the industry's standard
+                      industry. Lorem Ipsum has been the standard
                       dummy text ever since the 1500s, when an m Genelia
                     </td>
                     <td>
@@ -56,7 +56,7 @@ const TableWords = () => {
                     <td>Gaylord</td>
                     <td>
                       is simply dummy text of the printing and typesetting
-                      industry. Lorem Ipsum has been the industry's standard
+                      industry. Lorem Ipsum has been the standard
                       dummy text ever since the 1500s, when an m Ritesh
                     </td>
                     <td>
@@ -69,7 +69,7 @@ const TableWords = () => {
                     <td>Gusikowski</td>
                     <td>
                       is simply dummy text of the printing and typesetting
-                      industry. Lorem Ipsum has been the industry's standard
+                      industry. Lorem Ipsum has been the standard
                       dummy text ever since the 1500s, when an m Govinda
                     </td>
                     <td>
@@ -82,7 +82,7 @@ const TableWords = () => {
                     <td>Rogahn</td>
                     <td>
                       is simply dummy text of the printing and typesetting
-                      industry. Lorem Ipsum has been the industry's standard
+                      industry. Lorem Ipsum has been the  standard
                       dummy text ever since the 1500s, when an m Hritik
                     </td>
                     <td>
@@ -95,7 +95,7 @@ const TableWords = () => {
                     <td>Hickle</td>
                     <td>
                       is simply dummy text of the printing and typesetting
-                      industry. Lorem Ipsum has been the industry's standard
+                      industry. Lorem Ipsum has been the s standard
                       dummy text ever since the 1500s, when an m Maruti
                     </td>
                     <td>
@@ -108,7 +108,7 @@ const TableWords = () => {
                     <td>Eichmann</td>
                     <td>
                       is simply dummy text of the printing and typesetting
-                      industry. Lorem Ipsum has been the industry's standard
+                      industry. Lorem Ipsum has been the standard
                       dummy text ever since the 1500s, when an m Sonu
                     </td>
                     <td>
