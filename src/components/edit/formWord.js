@@ -56,12 +56,10 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
     onOpen: (props) => console.log(props.foo),
     onClose: (props) => console.log(props.foo),
     autoClose: 6000,
-    closeButton: FontAwesomeCloseButton,
     type: toast.TYPE.INFO,
     hideProgressBar: false,
     position: toast.POSITION.TOP_LEFT,
     pauseOnHover: true,
-    transition: MyCustomTransition,
     progress: 0.2,
     // and so on ...
   };
