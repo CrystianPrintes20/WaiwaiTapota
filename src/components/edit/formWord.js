@@ -72,6 +72,7 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
       .then((data) => {
         setDados(data);
         setModal(!modal);
+        toast.success("Palavra atualizada com sucesso!", options);
       });
   };
 
@@ -165,8 +166,8 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                       data: JSON.stringify(fields),
                     });
                     if (response.status === 200) {
-                      toast.success("Palavra atualizada com sucesso!", options);
-                      // fetchDados();
+                      // toast.success("Palavra atualizada com sucesso!", options);
+                      fetchDados();
                     }
                   } catch (err) {
                     toast.error("Erro ao atualizar palavra.", {
@@ -362,11 +363,11 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                   </Form>
                 )}
               />
-              <ToastContainer />
             </CardBody>
           </Card>
         </Col>
       </Row>
+      <ToastContainer />
     </Container>
   );
 };
