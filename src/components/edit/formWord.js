@@ -367,7 +367,6 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
           </Card>
         </Col>
       </Row>
-      <ToastContainer />
     </Container>
   );
 };
