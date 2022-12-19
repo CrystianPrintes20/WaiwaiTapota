@@ -14,9 +14,21 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
+import {useSession } from "next-auth/react";
 
 
-const FormWord = ({ data, modal, setModal}) => {
+
+const FormWord = ({ data, modal, setModal, setDados }) => {
+
+    const [token, setToken] = useState()
+  const { data: session } = useSession();
+  
+    useEffect(() => {
+        if (session) {
+          setToken(session?.user?.token)
+        }
+      }, [session])
+
   const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState();
   const [formValues, setFormValues] = useState({
@@ -42,6 +54,19 @@ const FormWord = ({ data, modal, setModal}) => {
   const handleDeleteWord = async () => {
     await handleMutationDelete()
   }
+
+  fetchDados = () => {
+    axios.get('http://localhost:5000/visualizarPalavras', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+        })
+          .then((res) => res.data)
+          .then((data) => {
+            setDados(data)
+          })
+    }
+
 
   const handleMutationDelete =  async() =>{
     try {
@@ -130,8 +155,8 @@ const FormWord = ({ data, modal, setModal}) => {
                           draggable: true,
                           progress: undefined,
                         });
-                        setModal(!modal)
                       }
+                      setModal(!modal)
                     } catch (err) {
 
                       toast.error("Erro ao atualizar palavra.", {
@@ -149,6 +174,7 @@ const FormWord = ({ data, modal, setModal}) => {
                       });
 
                     }
+                    fetchDados()
                     setIsLoading(false);
                   }}
                   render={({ errors, touched, setFieldValue }) => (

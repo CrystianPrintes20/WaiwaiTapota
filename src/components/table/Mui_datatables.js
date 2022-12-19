@@ -18,11 +18,11 @@ const DataTable = ({ dados }) => {
       const columns = [
         { field: 'word_portugues', headerName: 'Palavra em Português', width: 140 },
         { field: 'translation_Waiwai', headerName: 'Tradução em Waiwai', width: 140 },
-        { field: 'category', headerName: 'Catogoria', width: 140 },
-        { field: 'meaning_Portuguese', headerName: 'Siginificado em Português', width: 140 },
-        { field: 'meaningWaiwai', headerName: 'Siginificado em Waiwai', width: 140 },
-        { field: 'synonymPortugues', headerName: 'Sinonimo em Português', width: 140 },
-        { field: 'synonymWaiwai', headerName: 'Sinonimo em Waiwai', width: 140, },
+        { field: 'category', headerName: 'Categoria', width: 140 },
+        { field: 'meaning_Portuguese', headerName: 'Significado em Português', width: 140 },
+        { field: 'meaningWaiwai', headerName: 'Significado em Waiwai', width: 140 },
+        { field: 'synonymPortugues', headerName: 'Sinônimo em Português', width: 140 },
+        { field: 'synonymWaiwai', headerName: 'Sinônimo em Waiwai', width: 140, },
     
         {
             field: 'action',
@@ -65,7 +65,7 @@ const DataTable = ({ dados }) => {
                 />
             </div>
             <Dicionario toggle={toggle} modal={modal} >
-                <FormWord data={word} modal={modal} setModal={setModal} />
+                <FormWord data={word} modal={modal} setModal={setModal} setDados={setDados} />
             </Dicionario>
         </Container>
     );
