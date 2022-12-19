@@ -41,7 +41,7 @@ export default function Dictionary() {
                 <Banner3 />
                 <Card>
                     <CardBody>
-                        {/* <DataTable dados={dados} /> */}
+                        <DataTable dados={dados} />
                     </CardBody>
                 </Card>
             </Layout>
