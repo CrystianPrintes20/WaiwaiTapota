@@ -76,7 +76,8 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
-        toast.success("Palavra excluida com sucesso!", {
+      toast.success("Palavra excluida com sucesso!", {
+          onOpen: () => fetchDados(),
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -85,7 +86,7 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
           draggable: true,
           progress: undefined,
         });
-      fetchDados();
+      
       
     } catch (err) {
 
@@ -98,7 +99,7 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
         draggable: true,
         progress: undefined,
       });
-      console.log({
+      console.error({
         type: "error",
         message: "An error ocurred. Please, try again.",
       });
@@ -150,6 +151,7 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                       });
                       if (response.status === 200) {
                         toast.success("Palavra atualizada com sucesso!", {
+                          onOpen: () => fetchDados(),
                           position: "top-right",
                           autoClose: 5000,
                           hideProgressBar: false,
@@ -158,7 +160,6 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                           draggable: true,
                           progress: undefined,
                         });
-                        fetchDados()
 
                       }
                     } catch (err) {
