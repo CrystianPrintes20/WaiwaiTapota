@@ -158,13 +158,13 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                   let response;
                   try {
                     setIsLoading(true);
-                    console.log(JSON.stringify(fields));
                     response = await axios({
                       url: `http://localhost:5000/atualizarPalavra/${userId}`,
                       method: "PUT",
                       headers: { "Content-Type": "application/json" },
                       data: JSON.stringify(fields),
                     });
+                    toast.success("Palavra atualizada com sucesso!", options);
                     if (response.status === 200) {
                       fetchDados();
                     }
@@ -178,7 +178,7 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                       draggable: true,
                       progress: undefined,
                     });
-                    console.log({
+                    console.error({
                       type: "error",
                       message: "An error ocurred. Please, try again.",
                     });
