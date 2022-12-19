@@ -25,6 +25,7 @@ export default function RegisterWords() {
   const router = useRouter();
   const { data: session } = useSession();
 
+ 
   // useEffect(() => {
   //   if (!session?.user) {
   //     router.push('./')

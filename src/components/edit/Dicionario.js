@@ -1,7 +1,7 @@
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { useEffect, useState } from 'react';
 
-const Dicionario = ({ data, toggle, modal, children}) => {
+const Dicionario = ({ toggle, modal, children}) => {
     return (
         <Modal isOpen={modal} toggle={toggle}>
             <ModalHeader toggle={toggle}>Editar palavra</ModalHeader>

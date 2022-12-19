@@ -14,31 +14,63 @@ import {
     Card,
     CardBody,
 } from "reactstrap";
-import {useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import DataTable from "../src/components/table/Mui_datatables";
+import axios from "axios";
 
 export default function MyWords() {
     const { data: session } = useSession();
-    
-    if(session){
+    const [dados, setDados] = useState(null)
+    const [token, setToken] = useState()
+
+    const columns = [
+        { field: 'word_portugues', headerName: 'Palavra em Português', width: 140 },
+        { field: 'translation_Waiwai', headerName: 'Tradução em Waiwai', width: 140 },
+        { field: 'category', headerName: 'Catogoria', width: 140 },
+        { field: 'meaning_Portuguese', headerName: 'Siginificado em Português', width: 140 },
+        { field: 'meaningWaiwai', headerName: 'Siginificado em Waiwai', width: 140 },
+        { field: 'synonymPortugues', headerName: 'Sinonimo em Português', width: 140 },
+        { field: 'synonymWaiwai', headerName: 'Sinonimo em Waiwai', width: 140, }    
+    ];
+
+    useEffect(() => {
+        if (session) {
+            setToken(session?.user?.token)
+        }
+    }, [session])
+
+    useEffect(() => {
+        axios.get('http://localhost:5000/visualizarPalavras', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        })
+            .then((res) => res.data)
+            .then((data) => {
+                setDados(data)
+            })
+    }, [token])
+
+    if (session) {
         return (
             <Layout>
                 <Banner3 />
                 <Card>
                     <CardBody>
-                        <TableWords />
+                        <DataTable dados={dados} columns={columns}/>
                     </CardBody>
                 </Card>
             </Layout>
         )
-    }else{
+    } else {
         return (
             <>
-              <Layout>
-                <Banner/>
-              </Layout>
+                <Layout>
+                    <Banner />
+                </Layout>
             </>
-          )
+        )
     }
-  
+
 
 }
