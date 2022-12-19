@@ -53,14 +53,14 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
   };
 
   const options = {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-        };
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
+  };
   const fetchDados = () => {
     axios
       .get("http://localhost:5000/visualizarPalavras", {
@@ -72,7 +72,6 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
       .then((data) => {
         setDados(data);
         setModal(!modal);
-        toast.success("Palavra atualizada com sucesso!", options);
       });
   };
 
@@ -83,6 +82,7 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
+      toast.success("Palavra atualizada com sucesso!", options);
       fetchDados();
       // toast.success("Palavra excluida com sucesso!", {
       //     onOpen: () => fetchDados(),
