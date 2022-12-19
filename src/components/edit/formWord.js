@@ -52,6 +52,19 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
     await handleMutationDelete();
   };
 
+  const options = {
+    onOpen: (props) => console.log(props.foo),
+    onClose: (props) => console.log(props.foo),
+    autoClose: 6000,
+    closeButton: FontAwesomeCloseButton,
+    type: toast.TYPE.INFO,
+    hideProgressBar: false,
+    position: toast.POSITION.TOP_LEFT,
+    pauseOnHover: true,
+    transition: MyCustomTransition,
+    progress: 0.2,
+    // and so on ...
+  };
   const fetchDados = () => {
     axios
       .get("http://localhost:5000/visualizarPalavras", {
@@ -63,16 +76,16 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
       .then((data) => {
         setDados(data);
         setModal(!modal);
-        toast.notify("caralhoooo");
-        toast.success("Palavra atualizada com sucesso!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success("Hello", options);
+        // toast.success("Palavra atualizada com sucesso!", {
+        //   position: "top-right",
+        //   autoClose: 5000,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: false,
+        //   draggable: true,
+        //   progress: undefined,
+        // });
       });
   };
 
