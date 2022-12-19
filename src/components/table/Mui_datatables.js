@@ -48,9 +48,9 @@ const DataTable = ({ dados }) => {
 
     useEffect(() => {
         if (dados) {
-            // setRows(() => {
-            //     return dados.map(item => ({ ...item, id: item["_id"]["$oid"] }))
-            // })
+            setRows(() => {
+                return dados.map(item => ({ ...item, id: item["_id"]["$oid"] }))
+            })
         }
     }, [dados])
 
