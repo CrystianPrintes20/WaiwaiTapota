@@ -55,7 +55,7 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
     await handleMutationDelete()
   }
 
-  fetchDados = () => {
+  const fetchDados = () => {
     axios.get('http://localhost:5000/visualizarPalavras', {
           headers: {
             'Authorization': `Bearer ${token}`
