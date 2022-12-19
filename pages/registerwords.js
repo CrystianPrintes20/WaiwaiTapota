@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { getSession, useSession, signIn, signOut } from "next-auth/react";
+import {useSession } from "next-auth/react";
 import Banner3 from "../src/components/banner/Banner3";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
@@ -23,15 +23,14 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function RegisterWords() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { data: token, status } = useSession();
   const { data: session } = useSession();
 
-  useEffect(() => {
-    if (!session?.user) {
-      console.log("aaa", session?.user);
-      router.push('./auth/loginformik')
-    }
-  }, [router, session])
+ 
+  // useEffect(() => {
+  //   if (!session?.user) {
+  //     router.push('./')
+  //   }
+  // }, [router, session])
 
   const initialValues = {
     word_portugues: "",
@@ -309,11 +308,4 @@ export default function RegisterWords() {
       </Layout>
     </>
   );
-  /*  useEffect(() => {
-        console.log(session)
-    if(!loading && !session?.accessToken) {
-      router.push('./auth/loginformik')
-    }
-  }, [loading, session])
- */
 }
