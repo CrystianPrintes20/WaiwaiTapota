@@ -53,16 +53,14 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
   };
 
   const options = {
-    onOpen: (props) => console.log(props.foo),
-    onClose: (props) => console.log(props.foo),
-    autoClose: 6000,
-    type: toast.TYPE.INFO,
-    hideProgressBar: false,
-    position: toast.POSITION.TOP_LEFT,
-    pauseOnHover: true,
-    progress: 0.2,
-    // and so on ...
-  };
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+        };
   const fetchDados = () => {
     axios
       .get("http://localhost:5000/visualizarPalavras", {
@@ -74,16 +72,7 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
       .then((data) => {
         setDados(data);
         setModal(!modal);
-        toast.success("Hello", options);
-        // toast.success("Palavra atualizada com sucesso!", {
-        //   position: "top-right",
-        //   autoClose: 5000,
-        //   hideProgressBar: false,
-        //   closeOnClick: true,
-        //   pauseOnHover: false,
-        //   draggable: true,
-        //   progress: undefined,
-        // });
+        toast.success("Palavra atualizada com sucesso!", options);
       });
   };
 
