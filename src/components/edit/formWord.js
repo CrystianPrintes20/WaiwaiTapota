@@ -56,6 +56,7 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
   }
 
   const fetchDados = () => {
+    
     axios.get('http://localhost:5000/visualizarPalavras', {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -65,6 +66,15 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
           .then((data) => {
             setDados(data)
             setModal(!modal)
+            toast.success("Palavra atualizada com sucesso!", {
+                          position: "top-right",
+                          autoClose: 5000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: false,
+                          draggable: true,
+                          progress: undefined,
+                      });
           })
     }
 
@@ -150,16 +160,8 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                         data: JSON.stringify(fields),
                       });
                       if (response.status === 200) {
-                        toast.success("Palavra atualizada com sucesso!", {
-                          onOpen: () => fetchDados(),
-                          position: "top-right",
-                          autoClose: 5000,
-                          hideProgressBar: false,
-                          closeOnClick: true,
-                          pauseOnHover: false,
-                          draggable: true,
-                          progress: undefined,
-                        });
+                        fetchDados()
+                        
 
                       }
                     } catch (err) {
