@@ -64,6 +64,7 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
           .then((res) => res.data)
           .then((data) => {
             setDados(data)
+            setModal(!modal)
           })
     }
 
@@ -157,7 +158,6 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                           progress: undefined,
                         });
                       }
-                      setModal(!modal)
                     } catch (err) {
 
                       toast.error("Erro ao atualizar palavra.", {
