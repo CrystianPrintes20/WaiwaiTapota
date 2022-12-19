@@ -164,9 +164,9 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                       headers: { "Content-Type": "application/json" },
                       data: JSON.stringify(fields),
                     });
-                    toast.success("Palavra atualizada com sucesso!", options);
                     if (response.status === 200) {
-                      fetchDados();
+                      toast.success("Palavra atualizada com sucesso!", options);
+                      // fetchDados();
                     }
                   } catch (err) {
                     toast.error("Erro ao atualizar palavra.", {
