@@ -7,7 +7,7 @@ import Dicionario from '../edit/Dicionario';
 import FormWord from '../edit/formWord';
 
 
-const DataTable = ({ dados, columns}) => {
+const DataTable = ({ dados }) => {
     const [modal, setModal] = useModalDicionario();
     const toggle = () => setModal(!modal);
     const [word, setWord] = useState(null)
@@ -15,13 +15,42 @@ const DataTable = ({ dados, columns}) => {
     const [rows, setRows] = useState([])
     
 
+      const columns = [
+        { field: 'word_portugues', headerName: 'Palavra em Português', width: 140 },
+        { field: 'translation_Waiwai', headerName: 'Tradução em Waiwai', width: 140 },
+        { field: 'category', headerName: 'Catogoria', width: 140 },
+        { field: 'meaning_Portuguese', headerName: 'Siginificado em Português', width: 140 },
+        { field: 'meaningWaiwai', headerName: 'Siginificado em Waiwai', width: 140 },
+        { field: 'synonymPortugues', headerName: 'Sinonimo em Português', width: 140 },
+        { field: 'synonymWaiwai', headerName: 'Sinonimo em Waiwai', width: 140, },
+    
+        {
+            field: 'action',
+            headerName: 'Ação',
+            width: 210,
+            sortable: false,
+            disableClickEventBubbling: true,
+    
+            renderCell: (params) => {
+                const onClick = (e) => {
+                    setWord(params.row)
+                    setModal(!modal)
+                };
+                return (
+                    <div>
+                        <Button variant="outlined" color="success" onClick={onClick}>Detalhes</Button>
+                    </div>
+                );
+            },
+        }
+    
+    ];
+
     useEffect(() => {
         if (dados) {
-            let url_atual = window.location.href;
-            setRows(() => {
-                return dados.map(item => ({ ...item, id: item["_id"]["$oid"] }))
-            })
-            console.log(url_atual)
+            // setRows(() => {
+            //     return dados.map(item => ({ ...item, id: item["_id"]["$oid"] }))
+            // })
         }
     }, [dados])
 
