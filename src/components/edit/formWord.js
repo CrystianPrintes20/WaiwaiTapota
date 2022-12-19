@@ -86,6 +86,7 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
           progress: undefined,
         });
       fetchDados();
+      
     } catch (err) {
 
       toast.error("Erro ao excluir palavra.", {
@@ -157,6 +158,8 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                           draggable: true,
                           progress: undefined,
                         });
+                        fetchDados()
+
                       }
                     } catch (err) {
 
@@ -175,7 +178,6 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                       });
 
                     }
-                    fetchDados()
                     setIsLoading(false);
                   }}
                   render={({ errors, touched, setFieldValue }) => (
