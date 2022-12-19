@@ -11,43 +11,12 @@ import {
 import DataTable from "../src/components/table/Mui_datatables";
 import axios from "axios";
 import {useSession } from "next-auth/react";
-import { useWordTable } from "../src/hooks/useWordTable";
 
 export default function Dictionary() {
     const [dados, setDados] = useState(null)
     const [token, setToken] = useState()
   const { data: session } = useSession();
-  const [word, setWord] = useWordTable()
-    
-    const columns = [
-      { field: 'word_portugues', headerName: 'Palavra em Português', width: 140 },
-      { field: 'translation_Waiwai', headerName: 'Tradução em Waiwai', width: 140 },
-      { field: 'category', headerName: 'Catogoria', width: 140 },
-      { field: 'meaning_Portuguese', headerName: 'Siginificado em Português', width: 140 },
-      { field: 'meaningWaiwai', headerName: 'Siginificado em Waiwai', width: 140 },
-      { field: 'synonymPortugues', headerName: 'Sinonimo em Português', width: 140 },
-      { field: 'synonymWaiwai', headerName: 'Sinonimo em Waiwai', width: 140, },
-      {
-          field: 'action',
-          headerName: 'Ação',
-          width: 210,
-          sortable: false,
-          disableClickEventBubbling: true,
-
-          renderCell: (params) => {
-              const onClick = (e) => {
-                  setWord(params.row)
-                  setModal(!modal)
-              };
-              return (
-                  <div>
-                      <Button variant="outlined" color="success" onClick={onClick}>Detalhes</Button>
-                  </div>
-              );
-          },
-      }
-  ];
-
+  
     useEffect(() => {
         if (session) {
           setToken(session?.user?.token)
@@ -72,7 +41,7 @@ export default function Dictionary() {
                 <Banner3 />
                 <Card>
                     <CardBody>
-                        <DataTable dados={dados} columns={columns}/>
+                        <DataTable dados={dados} />
                     </CardBody>
                 </Card>
             </Layout>

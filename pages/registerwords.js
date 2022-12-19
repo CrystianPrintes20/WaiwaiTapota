@@ -25,12 +25,6 @@ export default function RegisterWords() {
   const router = useRouter();
   const { data: session } = useSession();
 
- 
-  // useEffect(() => {
-  //   if (!session?.user) {
-  //     router.push('./')
-  //   }
-  // }, [router, session])
 
   const initialValues = {
     word_portugues: "",
