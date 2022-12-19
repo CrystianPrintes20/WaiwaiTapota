@@ -11,12 +11,13 @@ import {
 import DataTable from "../src/components/table/Mui_datatables";
 import axios from "axios";
 import {useSession } from "next-auth/react";
-
+import { useWordTable } from "../src/hooks/useWordTable";
 
 export default function Dictionary() {
     const [dados, setDados] = useState(null)
     const [token, setToken] = useState()
-    const { data: session } = useSession();
+  const { data: session } = useSession();
+  const [word, setWord] = useWordTable()
     
     const columns = [
       { field: 'word_portugues', headerName: 'Palavra em Português', width: 140 },
