@@ -65,7 +65,7 @@ const DataTable = ({ dados }) => {
                 />
             </div>
             <Dicionario toggle={toggle} modal={modal} >
-                <FormWord data={word} />
+                <FormWord data={word} modal={modal} setModal={setModal} />
             </Dicionario>
         </Container>
     );

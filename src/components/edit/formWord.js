@@ -16,7 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 
 
-const FormWord = ({ data }) => {
+const FormWord = ({ data, modal, setModal}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState();
   const [formValues, setFormValues] = useState({
@@ -130,6 +130,7 @@ const FormWord = ({ data }) => {
                           draggable: true,
                           progress: undefined,
                         });
+                        setModal(!modal)
                       }
                     } catch (err) {
 
