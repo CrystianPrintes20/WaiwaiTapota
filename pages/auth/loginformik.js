@@ -1,25 +1,36 @@
-import React from "react";
-import {
-    Button,
-    Label,
-    FormGroup,
-    Container,
-    Row,
-    Col,
-    Card,
-    CardBody,
-    Input,
-} from "reactstrap";
+import React, { useState, useEffect } from "react";
+import { signIn, useSession } from 'next-auth/react'
+import { Button, Label, FormGroup, Container, Row, Col, Card, CardBody, Input } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import AuthLogo from "../../src/assets/images/logos/ufopa.png";
+import LeftBg from "../../src/assets/images/landingpage/left.png";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginFormik = () => {
-    const navigate = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const [loginError, setLoginError] = useState('')
+    const [email, setEmail] = useState('')
+    const router = useRouter()
+    const notify = () => toast("Wow so easy !");
 
+    useEffect(() => {
+        if (router.query.error) {
+            setLoginError(router.query.error)
+            setEmail(router.query.email)
+        }
+    }, [router])
+    /*    if (useSession) {
+           if (router.query?.callbackUrl) {
+               router.push(router.query.callbackUrl)
+           } else {
+               router.push('/')
+           }
+       } */
     const initialValues = {
         email: "",
         password: "",
@@ -32,10 +43,10 @@ const LoginFormik = () => {
             .required("Password is required"),
     });
     return (
-        <div className="loginBox">
+        <div>
             <Container fluid className="h-100">
                 <Row className="justify-content-center align-items-center h-100">
-                    <Col lg="12" sm="6" md="6" className="loginContainer">
+                    <Col lg="6" sm="6" md="6" className="loginContainer">
 
                         <div className="p-4 d-flex justify-content-center gap-2">
                             <Link href="/">
@@ -44,7 +55,7 @@ const LoginFormik = () => {
                                 </a>
                             </Link>
                         </div>
-                        
+
                         <Card className="bg-white">
                             <CardBody className="p-4 m-1">
                                 <h4 className="mb-0 fw-bold">Login</h4>
@@ -56,7 +67,51 @@ const LoginFormik = () => {
                                     initialValues={initialValues}
                                     validationSchema={validationSchema}
                                     onSubmit={async (fields) => {
-                                        await fetch("/api/auth/register");
+                                        let email = fields.email
+                                        let password = fields.password
+                                        let response
+                                        try {
+                                            setIsLoading(true);
+                                            response = await signIn("credentials", { email, password, redirect: false })
+                                            if (response.status === 200) {
+                                                router.push(`${window.location.origin}/registerwords`)
+                                            }
+                                            else if (response.status === 401) {
+                                                toast.error("Email ou senha incorretos! Verifique-os e tente novamente.", {
+                                                    position: "top-right",
+                                                    autoClose: 5000,
+                                                    hideProgressBar: false,
+                                                    closeOnClick: true,
+                                                    pauseOnHover: false,
+                                                    draggable: true,
+                                                    progress: undefined,
+                                                });
+                                            } else {
+                                                toast.error("Erro ao cadastrar.", {
+                                                    position: "top-right",
+                                                    autoClose: 5000,
+                                                    hideProgressBar: false,
+                                                    closeOnClick: true,
+                                                    pauseOnHover: false,
+                                                    draggable: true,
+                                                    progress: undefined,
+                                                });
+                                            }
+                                        } catch (e) {
+                                            if (response.status === 500 && response?.data?.message) {
+                                                console.log({
+                                                    type: "error",
+                                                    message: err.response.data.message,
+                                                });
+                                            } else {
+                                                console.log({
+                                                    type: "error",
+                                                    message: "An error ocurred. Please, try again.",
+                                                });
+                                            }
+                                        }
+
+                                        setIsLoading(false);
                                     }}
                                     render={({ errors, touched }) => (
                                         <Form>
@@ -102,19 +157,20 @@ const LoginFormik = () => {
                                                 </Link>
                                             </FormGroup>
                                             <FormGroup>
-                                                <Button type="submit" color="primary">
+                                                <Button type="submit" color="primary" disabled={isLoading}>
                                                     Login
                                                 </Button>
                                             </FormGroup>
+                                            <ToastContainer />
                                         </Form>
                                     )}
                                 />
+
                             </CardBody>
                         </Card>
                     </Col>
                 </Row>
             </Container>
-
         </div>
     );
 };

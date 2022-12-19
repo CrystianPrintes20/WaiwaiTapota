@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import Image from "next/image";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { User, LogOut } from "react-feather";
+import axios from "axios";
 import {
   Row,
   Col,
   UncontrolledDropdown,
+  Dropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
@@ -18,20 +20,52 @@ import {
   NavbarToggler,
   Collapse,
 } from "reactstrap";
-import logo from "../../assets/images/logos/white-text.png";
+import { getSession, useSession, signIn, signOut } from "next-auth/react";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const toggle = () => setIsOpen(!isOpen);
+  const { data: session } = useSession();
+  const [token, setToken] = useState()
+  const [dados, setdados] = useState()
+
+  const [data, setData] = useState(null)
+  const [isLoading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (session) {
+      setToken(session?.user?.token)
+    }
+  }, [session])
+
+  useEffect(() => {
+    setLoading(true)
+    axios.get('http://localhost:5000/userLog', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    })
+      .then((res) => res.data.profile)
+      .then((data) => {
+        setData(data)
+        setLoading(false)
+      })
+  }, [token])
+
+  useEffect(()=>{
+    console.log(data)
+  })
+
   return (
     <div className="topbar" id="top">
       <div className="header6">
         <Container className="po-relative">
+
           <Navbar className="navbar-expand-lg h6-nav-bar">
             <NavbarBrand href="/">
               {/* <Image src={logo} alt="wrapkit" /> */}
-              <img src="http://via.placeholder.com/80x80"></img>
+              <img src="https://placehold.jp/170x80.png"></img>
             </NavbarBrand>
             <NavbarToggler onClick={toggle}>
               <span className="ti-menu"></span>
@@ -43,7 +77,7 @@ const Header = () => {
               id="h6-info"
             >
               <Nav navbar className="ml-auto mt-2 mt-lg-0">
-                <NavItem >
+                <NavItem>
                   <Link href="/">
                     <a
                       className={
@@ -52,70 +86,121 @@ const Header = () => {
                           : "nav-link"
                       }
                     >
-                     Home
+                      Home
                     </a>
                   </Link>
                 </NavItem>
                 <NavItem>
-                  <Link href="/basic">
+                  <Link href="/myWord">
                     <a
                       className={
-                        router.pathname == "/basic"
+                        router.pathname == "/myWord"
                           ? "text-white nav-link"
                           : "nav-link"
                       }
                     >
-                      Lorem Ipsum
+                      Minhas palavras
                     </a>
                   </Link>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="#">Lorem Ipsum</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="#">Lorem Ipsum</NavLink>
-                </NavItem>
-           {/*      <UncontrolledDropdown nav inNavbar>
-                  <DropdownToggle nav>
-                    Sign in/Sign up <i className="fa fa-angle-down m-l-5"></i>
-                  </DropdownToggle>
-                  <DropdownMenu className="b-none animated fadeInUp">
-                    <DropdownItem>Sign in</DropdownItem>
-                    <DropdownItem divider />
-                    <DropdownItem>Sign up</DropdownItem>
-                    
-                  </DropdownMenu>
-                </UncontrolledDropdown> */}
-                
-              </Nav>
-  
-              <div className="act-buttons">
-                <Link href="/auth/loginformik">
+                  <Link href="/dictionary">
                     <a
                       className={
-                        router.pathname == "/auth/loginformik"
-                          ? "text-white nav-link btn btn-outline-light font-14"
-                          : "nav-link btn btn-outline-light font-14"
+                        router.pathname == "/dictionary"
+                          ? "text-white nav-link"
+                          : "nav-link"
                       }
                     >
-                      Sign In
+                      Dicionario
                     </a>
                   </Link>
-              </div>
+                </NavItem>
+                <NavItem>
+                  <Link href="/registerwords">
+                    <a
+                      className={
+                        router.pathname == "/registerwords"
+                          ? "text-white nav-link"
+                          : "nav-link"
+                      }
+                    >
+                      Cadastrar Palavras
+                    </a>
+                  </Link>
+                </NavItem>
 
-              <div className="act-buttons">
-                <Link href="/auth/registerformik">
-                    <a
-                      className={
-                        router.pathname == "/auth/registerformik"
-                          ? "text-white nav-link btn btn-danger font-14"
-                          : "nav-link btn btn-danger font-14"
-                      }
+              </Nav>
+              {session ? (
+                <>
+                  {/* <div className="act-buttons">
+                    <Link href="/auth/registerformik">
+                      <button
+                        onClick={() => signOut()}
+                        className="nav-link btn btn-danger font-14"
+                      >
+                        Sign out
+                      </button>
+                    </Link>
+                  </div> */}
+
+                  <UncontrolledDropdown >
+                    <DropdownToggle
+                      color="transparent"
                     >
-                      Sign up
-                    </a>
-                  </Link>
-              </div>
+                      <div className="d-flex gap-3 border-bottom border-danger p-0">
+                        <span className="text-truncate mr-3">
+                          <h6 className="mb-0 text-white text-uppercase">{data?.username ? data?.username : "Usuario sem login!"}</h6>
+                          <small className="elipsis">{data?.email ? data?.email : "Sem email" }</small>
+                        </span>
+                 
+                        <User className="border rounded-circle" size={40} color="white" />
+                      </div>
+
+
+                    </DropdownToggle>
+
+                    <DropdownMenu dark>
+                      <DropdownItem>
+                        <User className="mr-2" size={25} /> Meu perfil
+                      </DropdownItem>
+                      <DropdownItem onClick={() => signOut()}>
+                        <LogOut className="mr-2" size={25} />Sing out
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </UncontrolledDropdown>
+                </>
+              ) : (
+                <>
+                  <div className="act-buttons">
+                    <Link href="/auth/loginformik">
+                      <a
+                        className={
+                          router.pathname == "/auth/loginformik"
+                            ? "text-white nav-link btn btn-outline-light font-14"
+                            : "nav-link btn btn-outline-light font-14"
+                        }
+                      >
+                        Sign In
+                      </a>
+                    </Link>
+                  </div>
+
+                  <div className="act-buttons">
+                    <Link href="/auth/registerformik">
+                      <a
+                        className={
+                          router.pathname == "/auth/registerformik"
+                            ? "text-white nav-link btn btn-danger font-14"
+                            : "nav-link btn btn-danger font-14"
+                        }
+                      >
+                        Sign up
+                      </a>
+                    </Link>
+                  </div>
+                </>
+              )}
             </Collapse>
           </Navbar>
         </Container>
