@@ -23,15 +23,6 @@ export default function MyWords() {
     const [dados, setDados] = useState(null)
     const [token, setToken] = useState()
 
-    const columns = [
-        { field: 'word_portugues', headerName: 'Palavra em Português', width: 140 },
-        { field: 'translation_Waiwai', headerName: 'Tradução em Waiwai', width: 140 },
-        { field: 'category', headerName: 'Catogoria', width: 140 },
-        { field: 'meaning_Portuguese', headerName: 'Siginificado em Português', width: 140 },
-        { field: 'meaningWaiwai', headerName: 'Siginificado em Waiwai', width: 140 },
-        { field: 'synonymPortugues', headerName: 'Sinonimo em Português', width: 140 },
-        { field: 'synonymWaiwai', headerName: 'Sinonimo em Waiwai', width: 140, }    
-    ];
 
     useEffect(() => {
         if (session) {
@@ -57,7 +48,7 @@ export default function MyWords() {
                 <Banner3 />
                 <Card>
                     <CardBody>
-                        <DataTable dados={dados} columns={columns}/>
+                        <DataTable dados={dados}/>
                     </CardBody>
                 </Card>
             </Layout>

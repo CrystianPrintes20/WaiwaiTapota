@@ -39,7 +39,7 @@ export default function Dictionary() {
         <Banner3 />
         <Card>
           <CardBody>
-            <DataTable dados={dados} setDados={setDados} />
+            <DataTable dados={dados} setDados={setDados} showAction/>
           </CardBody>
         </Card>
         <ToastContainer />

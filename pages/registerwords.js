@@ -20,10 +20,57 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+/**
+ * Importações para entrada de áudio
+ */
+import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
+import { uuid } from 'uuidv4';
+
+
 export default function RegisterWords() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
+
+  /*
+   * Módulo para entrada de áudio 
+   */
+  const [curAudio, setCurAudio] = useState(null)
+  const recorderControls = useAudioRecorder();
+  const addAudioElement = (blob) => {
+    // var dataAudio = new FormData();
+    // let nameFile = uuid()
+    // dataAudio.append('file', blob);
+    // axios.post(`http://localhost:5000/uploads/${nameFile}`, dataAudio, {
+    //   processData: false,
+    //   contentType: false}).then(res =>
+    // console.log(res))
+
+    setCurAudio(blob)
+    // const urlBlob = URL.createObjectURL(blob)
+    // const audio = document.createElement('audio');
+    // audio.src = urlBlob;
+    // audio.controls = true;
+    // document.body.appendChild(audio);
+  };
+
+  useEffect(()=>{
+    if(curAudio){
+      console.log(curAudio)
+      var dataAudio = new FormData();
+      let nameFile = uuid()
+      dataAudio.append('file', curAudio);
+
+      axios.post(`http://localhost:5000/uploads/${nameFile}`, dataAudio, {
+        // 'application/json' is the modern content-type for JSON, but some
+        // older servers may use 'text/json'.
+        // See: http://bit.ly/text-json
+        'Content-Type': curAudio.type
+      }
+        ).then(res =>
+      console.log(res))
+    }
+  },[curAudio])
 
 
   const initialValues = {
@@ -267,7 +314,12 @@ export default function RegisterWords() {
                                 />
                               </FormGroup>
                             </Row>
-
+                            <Row>
+                              <AudioRecorder
+                                onRecordingComplete={(blob) => addAudioElement(blob)}
+                                recorderControls={recorderControls}
+                              />
+                            </Row>
                             <Row className="mt-3">
                               <FormGroup>
                                 <Button type="submit" color="primary" className="me-2" disabled={isLoading}>
