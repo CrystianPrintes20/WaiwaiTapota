@@ -29,7 +29,7 @@ const Dropzone = ({ onDrop, accept }) => {
           <p className="dropzone-content">Release to drop the files here</p>
         ) : (
           <p className="dropzone-content">
-            Drag  drop some files here, or click to select files
+            Arraste e solte alguns arquivos aqui ou clique para selecionar os arquivos
           </p>
         )}
       </div>

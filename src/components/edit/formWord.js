@@ -72,7 +72,7 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
       .then((data) => {
         setDados(data);
         setModal(!modal);
-        toast.success("Palavra atualizada com sucesso!", options);
+       // toast.success("Palavra atualizada com sucesso!", options);
       });
   };
 
@@ -83,8 +83,8 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
-      toast.success("Palavra atualizada com sucesso!", options);
-      fetchDados();
+      setModal(!modal);
+      toast.success("Palavra excluida com sucesso!", options);
       // toast.success("Palavra excluida com sucesso!", {
       //     onOpen: () => fetchDados(),
       //     position: "top-right",
@@ -166,7 +166,7 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                       data: JSON.stringify(fields),
                     });
                     if (response.status === 200) {
-                      // toast.success("Palavra atualizada com sucesso!", options);
+                      toast.success("Palavra atualizada com sucesso!", options);
                       fetchDados();
                     }
                   } catch (err) {

@@ -14,17 +14,17 @@ const DataTable = ({ dados, setDados, showAction}) => {
     const [state, setState] = useState(false)
     const [rows, setRows] = useState([])
     
-    let columns = [ { field: 'word_portugues', headerName: 'Palavra em Português', width: 140 },
-    { field: 'translation_Waiwai', headerName: 'Tradução em Waiwai', width: 140 },
-    { field: 'category', headerName: 'Categoria', width: 140 },
-    { field: 'meaning_Portuguese', headerName: 'Significado em Português', width: 140 },
-    { field: 'meaningWaiwai', headerName: 'Significado em Waiwai', width: 140 },
-    { field: 'synonymPortugues', headerName: 'Sinônimo em Português', width: 140 },
-    { field: 'synonymWaiwai', headerName: 'Sinônimo em Waiwai', width: 140, }]
+    let columns = [ { field: 'word_portugues', headerName: 'Palavra em Português', minWidth: 140 },
+    { field: 'translation_Waiwai', headerName: 'Tradução em Waiwai', minWidth: 140 },
+    { field: 'category', headerName: 'Categoria', minWidth: 140 },
+    { field: 'meaning_Portuguese', headerName: 'Significado em Português', minWidth: 140 },
+    { field: 'meaningWaiwai', headerName: 'Significado em Waiwai', minWidth: 140 },
+    { field: 'synonymPortugues', headerName: 'Sinônimo em Português', minWidth: 140 },
+    { field: 'synonymWaiwai', headerName: 'Sinônimo em Waiwai', minWidth: 140, }]
     showAction ? columns.push({
         field: 'action',
         headerName: 'Ação',
-        width: 210,
+        minWidth: 180,
         sortable: false,
         disableClickEventBubbling: true,
 

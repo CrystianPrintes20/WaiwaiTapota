@@ -11,17 +11,18 @@ import {
   Col,
   Card,
   CardBody,
+  Input,
 } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import {useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Banner3 from "../src/components/banner/Banner3";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import React, { useCallback } from "react";
 import Dropzone from "../src/components/dragDrop";
-import ImageList from "../src/components/PreviewImagem";
+import Image from "../src/components/PreviewImagem";
 
 
 /**
@@ -60,8 +61,8 @@ export default function RegisterWords() {
     // document.body.appendChild(audio);
   };
 
-  useEffect(()=>{
-    if(curAudio){
+  useEffect(() => {
+    if (curAudio) {
       console.log(curAudio)
       var dataAudio = new FormData();
       let nameFile = uuid()
@@ -73,13 +74,13 @@ export default function RegisterWords() {
         // See: http://bit.ly/text-json
         'Content-Type': curAudio.type
       }
-        ).then(res =>
-      console.log(res))
+      ).then(res =>
+        console.log(res))
     }
-  },[curAudio])
+  }, [curAudio])
 
 
-  const [images, setImages] = useState([]);
+  const [image, setImage] = useState(null);
 
   const onDrop = useCallback(acceptedFiles => {
     // Loop through accepted files
@@ -87,12 +88,13 @@ export default function RegisterWords() {
       // Initialize FileReader browser API
       const reader = new FileReader();
       // onload callback gets called after the reader reads the file data
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         // add the image into the state. Since FileReader reading process is asynchronous, its better to get the latest snapshot state (i.e., prevState) and update it. 
-        setImages(prevState => [
-          ...prevState,
-          { id: cuid(), src: e.target.result }
-        ]);
+        // setImages(prevState => [
+        //   ...prevState,
+        //   { id: cuid(), src: e.target.result }
+        // ]);
+        setImage({ id: cuid(), src: e.target.result });
       };
       // Read the file as Data URL (since we accept only images)
       reader.readAsDataURL(file);
@@ -259,9 +261,11 @@ export default function RegisterWords() {
                             <Row>
                               <FormGroup className="w-50 pr-3">
                                 <Label htmlFor="meaning_Portuguese">Significado em português</Label>
-                                <Field
+                                <Input
                                   name="meaning_Portuguese"
-                                  type="text"
+                                  type="textarea"
+                                  rows="3"
+                                  id="meaning_Portuguese"
                                   className={`form-control ${errors.meaning_Portuguese && touched.meaning_Portuguese
                                     ? " is-invalid"
                                     : ""
@@ -276,9 +280,10 @@ export default function RegisterWords() {
 
                               <FormGroup className="w-50">
                                 <Label htmlFor="meaningWaiwai">Significado em Waiwai</Label>
-                                <Field
+                                <Input
                                   name="meaningWaiwai"
-                                  type="text"
+                                  type="textarea"
+                                  rows="3"
                                   className={`form-control ${errors.meaningWaiwai && touched.meaningWaiwai
                                     ? " is-invalid"
                                     : ""
@@ -345,12 +350,25 @@ export default function RegisterWords() {
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
+                              
+                              <FormGroup className="w-50">
+                              <Label htmlFor="audio">Gravar audio</Label>
+                                <AudioRecorder
+                                  onRecordingComplete={(blob) => addAudioElement(blob)}
+                                  recorderControls={recorderControls}
+                                />
+                              </FormGroup>
                             </Row>
                             <Row>
-                              <AudioRecorder
-                                onRecordingComplete={(blob) => addAudioElement(blob)}
-                                recorderControls={recorderControls}
-                              />
+                            
+                              <FormGroup className="w-50" >
+                                <Label htmlFor="img_logo">Insira uma image</Label>
+                                <div style={{ border: "3px #00806b dashed" }}>
+                                  <Dropzone onDrop={onDrop} accept={"image/*"} />
+                                  {image ? (<Image image={image} />) : null}
+                                </div>
+
+                              </FormGroup>
                             </Row>
                             <Row className="mt-3">
                               <FormGroup>
@@ -363,9 +381,8 @@ export default function RegisterWords() {
                               </FormGroup>
 
                             </Row>
-                            <h1 className="text-center">Drag and Drop Example</h1>
-                            <Dropzone onDrop={onDrop} accept={"image/*"} />
-                            <ImageList images={images} />
+
+
                           </Form>
                         )}
                       />

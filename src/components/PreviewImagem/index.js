@@ -3,8 +3,8 @@ import React from "react";
 // Rendering individual images
 const Image = ({ image }) => {
   return (
-    <div className="file-item">
-      <img alt={`img - ${image.id}`} src={image.src} className="file-img" />
+    <div className="file-item d-flex justify-content-center">
+      <img alt={`img - ${image.id}`} src={image.src} className="file-img"width={200} height={200} />
     </div>
   );
 };
@@ -26,4 +26,5 @@ const ImageList = ({ images }) => {
   return <section className="file-list">{images.map(renderImage)}</section>;
 };
 
-export default ImageList;
+export default Image;
+
