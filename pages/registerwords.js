@@ -19,6 +19,10 @@ import Banner3 from "../src/components/banner/Banner3";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import React, { useCallback } from "react";
+import Dropzone from "../src/components/dragDrop";
+import ImageList from "../src/components/PreviewImagem";
+
 
 /**
  * Importações para entrada de áudio
@@ -26,6 +30,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import { uuid } from 'uuidv4';
 
+// cuid is a simple library to generate unique IDs
+import cuid from "cuid";
 
 export default function RegisterWords() {
   const [isLoading, setIsLoading] = useState(false);
@@ -72,6 +78,32 @@ export default function RegisterWords() {
     }
   },[curAudio])
 
+
+  const [images, setImages] = useState([]);
+
+  const onDrop = useCallback(acceptedFiles => {
+    // Loop through accepted files
+    acceptedFiles.map(file => {
+      // Initialize FileReader browser API
+      const reader = new FileReader();
+      // onload callback gets called after the reader reads the file data
+      reader.onload = function(e) {
+        // add the image into the state. Since FileReader reading process is asynchronous, its better to get the latest snapshot state (i.e., prevState) and update it. 
+        setImages(prevState => [
+          ...prevState,
+          { id: cuid(), src: e.target.result }
+        ]);
+      };
+      // Read the file as Data URL (since we accept only images)
+      reader.readAsDataURL(file);
+      return file;
+    });
+  }, []);
+
+  // const onDrop = useCallback(acceptedFiles => {
+  //   // this callback will be called after files get dropped, we will get the acceptedFiles. If you want, you can even access the rejected files too
+  //   console.log(acceptedFiles);
+  // }, []);
 
   const initialValues = {
     word_portugues: "",
@@ -331,7 +363,9 @@ export default function RegisterWords() {
                               </FormGroup>
 
                             </Row>
-
+                            <h1 className="text-center">Drag and Drop Example</h1>
+                            <Dropzone onDrop={onDrop} accept={"image/*"} />
+                            <ImageList images={images} />
                           </Form>
                         )}
                       />
