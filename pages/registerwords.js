@@ -19,12 +19,19 @@ import Banner3 from "../src/components/banner/Banner3";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import React, { useCallback } from "react";
+import Dropzone from "../src/components/drangDrop";
+import ImageList from "../src/components/PreviewImagem";
 
 export default function RegisterWords() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
 
+  const onDrop = useCallback(acceptedFiles => {
+    // this callback will be called after files get dropped, we will get the acceptedFiles. If you want, you can even access the rejected files too
+    console.log(acceptedFiles);
+  }, []);
 
   const initialValues = {
     word_portugues: "",
@@ -279,7 +286,8 @@ export default function RegisterWords() {
                               </FormGroup>
 
                             </Row>
-
+                            <Dropzone onDrop={onDrop} accept={"image/*"} />
+                            <ImageList images={images} />
                           </Form>
                         )}
                       />
