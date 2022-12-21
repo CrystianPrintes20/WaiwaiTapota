@@ -127,6 +127,9 @@ export default function RegisterWords() {
   const removeImage = () => {
     setImage(null)
   }
+  const removeAudio = () => {
+    setRecord(null)
+  }
   const validationSchema = Yup.object().shape({
     word_portugues: Yup.string().required("Este campo é obrigatorio."),
     translation_Waiwai: Yup.string().required("Este campo é obrigatorio."),
@@ -279,7 +282,7 @@ export default function RegisterWords() {
                                     ? " is-invalid"
                                     : ""
                                     }`}
-                                    component={MyInput}/>
+                                  component={MyInput} />
                                 {/* <Input
                                   
                                 /> */}
@@ -292,15 +295,15 @@ export default function RegisterWords() {
 
                               <FormGroup className="w-50">
                                 <Label htmlFor="meaningWaiwai">Significado em Waiwai</Label>
-                                <Field 
-                                name="meaningWaiwai"
-                                type="textarea"
-                                rows="3"
-                                className={`form-control ${errors.meaningWaiwai && touched.meaningWaiwai
-                                  ? " is-invalid"
-                                  : ""
-                                  }`}
-                                  component={MyInput}/>
+                                <Field
+                                  name="meaningWaiwai"
+                                  type="textarea"
+                                  rows="3"
+                                  className={`form-control ${errors.meaningWaiwai && touched.meaningWaiwai
+                                    ? " is-invalid"
+                                    : ""
+                                    }`}
+                                  component={MyInput} />
                                 <ErrorMessage
                                   name="meaningWaiwai"
                                   component="div"
@@ -346,7 +349,7 @@ export default function RegisterWords() {
                             </Row>
 
                             <Row>
-                              <FormGroup className="w-50 pr-3">
+                              <FormGroup className="w-100 pr-3">
                                 <Label htmlFor="category">Categoria da palavra</Label>
                                 <Field
                                   name="category"
@@ -362,38 +365,69 @@ export default function RegisterWords() {
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
-                              
-                              <FormGroup className="w-50">
-                              <Label htmlFor="audio">Gravar audio</Label>
-                                <AudioRecorder
-                                  onRecordingComplete={(blob) => addAudioElement(blob)}
-                                  recorderControls={recorderControls}
-                                />
-                                {record ? 
-                                <ReactAudioPlayer src={URL.createObjectURL(record)} 
-                                  controls
-                                  /> : null}
-                              </FormGroup>
+
+
                             </Row>
                             <Row>
-                            
-                              <FormGroup className="w-50" >
+
+                              <FormGroup className="w-50 pr-3" >
                                 <Label htmlFor="img_logo">Insira uma image</Label>
-                                
+
                                 <div style={{ border: "3px #00806b dashed" }}>
-                                <Button onClick={removeImage}>x</Button>
-                                  <Dropzone onDrop={onDrop} accept={"image/*"} />
-                                  {image ? (<Image image={image} />) : null}
+                                  {image ? (
+                                    <>
+                                      <div className="d-flex justify-content-end">
+                                        <Button onClick={removeImage}
+                                          type="button"
+                                          color="none"
+                                          className="px-1 py-0 my-0 mx-0 border border-white">
+                                          <span className="badge bg-secondary ">x</span>
+                                        </Button>
+                                      </div>
+                                      <Image image={image} />
+                                    </>
+
+                                  ) : <>
+                                    <Dropzone onDrop={onDrop} accept={"image/*"} />
+                                  </>}
+                                </div>
+
+                              </FormGroup>
+                              <FormGroup className="w-50">
+                                <Label htmlFor="audio">Gravar audio</Label>
+
+
+                                <div className="my-2">
+                                  {record ? (
+                                    <>
+                                      <div className="d-flex justify-content-start">
+                                      <ReactAudioPlayer src={URL.createObjectURL(record)}
+                                          controls
+                                        />
+                                        <Button onClick={removeAudio}
+                                          type="button"
+                                          color="none"
+                                          className="px-1 py-0 my-0 mx-0 border border-white">
+                                          <span className="badge bg-secondary">x</span>
+                                        </Button>
+                                      
+                                      </div>
+                                    </>
+                                  )
+                                    : (<AudioRecorder
+                                      onRecordingComplete={(blob) => addAudioElement(blob)}
+                                      recorderControls={recorderControls}
+                                    />)}
                                 </div>
 
                               </FormGroup>
                             </Row>
                             <Row className="mt-3">
                               <FormGroup>
-                                <Button type="submit" color="primary" className="me-2" disabled={isLoading}>
-                                  Enviar
+                                <Button type="submit" color="success" className="me-2" disabled={isLoading}>
+                                  Salvar
                                 </Button>
-                                <Button type="reset" color="secondary" className="mx-3" disabled={isLoading}>
+                                <Button type="reset" color="danger" className="mx-3" disabled={isLoading}>
                                   Cancelar
                                 </Button>
                               </FormGroup>

@@ -15,6 +15,7 @@
     "@mui/x-data-grid": "^5.17.14",
     "axios": "^0.27.2",
     "bootstrap": "4.6.0",
+    "bootstrap-icons": "^1.10.2",
     "cuid": "^2.1.8",
     "formik": "^2.2.9",
     "next": "^11.1.4",
