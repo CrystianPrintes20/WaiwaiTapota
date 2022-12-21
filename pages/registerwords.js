@@ -24,6 +24,7 @@ import React, { useCallback } from "react";
 import Dropzone from "../src/components/dragDrop";
 import Image from "../src/components/PreviewImagem";
 
+import ReactAudioPlayer from 'react-audio-player';
 
 /**
  * Importações para entrada de áudio
@@ -34,16 +35,23 @@ import { uuid } from 'uuidv4';
 // cuid is a simple library to generate unique IDs
 import cuid from "cuid";
 
+const MyInput = ({ field, form, ...props }) => {
+  return <Input {...field} {...props} />;
+};
+
 export default function RegisterWords() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
 
+
+
   /*
    * Módulo para entrada de áudio 
    */
-  const [curAudio, setCurAudio] = useState(null)
+  const [record, setRecord] = useState(null)
   const recorderControls = useAudioRecorder();
+
   const addAudioElement = (blob) => {
     // var dataAudio = new FormData();
     // let nameFile = uuid()
@@ -53,7 +61,7 @@ export default function RegisterWords() {
     //   contentType: false}).then(res =>
     // console.log(res))
 
-    setCurAudio(blob)
+    setRecord(blob)
     // const urlBlob = URL.createObjectURL(blob)
     // const audio = document.createElement('audio');
     // audio.src = urlBlob;
@@ -61,23 +69,23 @@ export default function RegisterWords() {
     // document.body.appendChild(audio);
   };
 
-  useEffect(() => {
-    if (curAudio) {
-      console.log(curAudio)
-      var dataAudio = new FormData();
-      let nameFile = uuid()
-      dataAudio.append('file', curAudio);
+  // useEffect(() => {
+  //   if (curAudio) {
+  //     console.log(curAudio)
+  //     var dataAudio = new FormData();
+  //     let nameFile = uuid()
+  //     dataAudio.append('file', curAudio);
 
-      axios.post(`http://localhost:5000/uploads/${nameFile}`, dataAudio, {
-        // 'application/json' is the modern content-type for JSON, but some
-        // older servers may use 'text/json'.
-        // See: http://bit.ly/text-json
-        'Content-Type': curAudio.type
-      }
-      ).then(res =>
-        console.log(res))
-    }
-  }, [curAudio])
+  //     axios.post(`http://localhost:5000/uploads/${nameFile}`, dataAudio, {
+  //       // 'application/json' is the modern content-type for JSON, but some
+  //       // older servers may use 'text/json'.
+  //       // See: http://bit.ly/text-json
+  //       'Content-Type': curAudio.type
+  //     }
+  //     ).then(res =>
+  //       console.log(res))
+  //   }
+  // }, [curAudio])
 
 
   const [image, setImage] = useState(null);
@@ -116,7 +124,9 @@ export default function RegisterWords() {
     synonymPortugues: "",
     synonymWaiwai: "",
   };
-
+  const removeImage = () => {
+    setImage(null)
+  }
   const validationSchema = Yup.object().shape({
     word_portugues: Yup.string().required("Este campo é obrigatorio."),
     translation_Waiwai: Yup.string().required("Este campo é obrigatorio."),
@@ -166,58 +176,58 @@ export default function RegisterWords() {
                         onSubmit={async (fields) => {
                           let response;
                           console.log(fields)
-                          try {
-                            setIsLoading(true);
+                          // try {
+                          //   setIsLoading(true);
 
-                            response = await axios({
-                              url: "http://localhost:5000/adicionarPalavra",
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              data: JSON.stringify(fields),
-                            });
-                            if (response.status === 200) {
-                              toast.success("Nova palavra adicionada com sucesso!", {
-                                position: "top-right",
-                                autoClose: 5000,
-                                hideProgressBar: false,
-                                closeOnClick: true,
-                                pauseOnHover: false,
-                                draggable: true,
-                                progress: undefined,
-                              });
-                            }
-                          } catch (err) {
-                            if (
-                              err?.response.status === 409 || err?.response?.data?.message) {
-                              toast.error("Email ou nome de usuario ja cadastrados! Verifique-os e tente novamente.", {
-                                position: "top-right",
-                                autoClose: 5000,
-                                hideProgressBar: false,
-                                closeOnClick: true,
-                                pauseOnHover: false,
-                                draggable: true,
-                                progress: undefined,
-                              });
-                              console.log({
-                                type: "error",
-                                message: err.response.data.message,
-                              });
-                            } else {
-                              toast.error("Erro ao cadastrar.", {
-                                position: "top-right",
-                                autoClose: 5000,
-                                hideProgressBar: false,
-                                closeOnClick: true,
-                                pauseOnHover: false,
-                                draggable: true,
-                                progress: undefined,
-                              });
-                              console.log({
-                                type: "error",
-                                message: "An error ocurred. Please, try again.",
-                              });
-                            }
-                          }
+                          //   response = await axios({
+                          //     url: "http://localhost:5000/adicionarPalavra",
+                          //     method: "POST",
+                          //     headers: { "Content-Type": "application/json" },
+                          //     data: JSON.stringify(fields),
+                          //   });
+                          //   if (response.status === 200) {
+                          //     toast.success("Nova palavra adicionada com sucesso!", {
+                          //       position: "top-right",
+                          //       autoClose: 5000,
+                          //       hideProgressBar: false,
+                          //       closeOnClick: true,
+                          //       pauseOnHover: false,
+                          //       draggable: true,
+                          //       progress: undefined,
+                          //     });
+                          //   }
+                          // } catch (err) {
+                          //   if (
+                          //     err?.response.status === 409 || err?.response?.data?.message) {
+                          //     toast.error("Email ou nome de usuario ja cadastrados! Verifique-os e tente novamente.", {
+                          //       position: "top-right",
+                          //       autoClose: 5000,
+                          //       hideProgressBar: false,
+                          //       closeOnClick: true,
+                          //       pauseOnHover: false,
+                          //       draggable: true,
+                          //       progress: undefined,
+                          //     });
+                          //     console.log({
+                          //       type: "error",
+                          //       message: err.response.data.message,
+                          //     });
+                          //   } else {
+                          //     toast.error("Erro ao cadastrar.", {
+                          //       position: "top-right",
+                          //       autoClose: 5000,
+                          //       hideProgressBar: false,
+                          //       closeOnClick: true,
+                          //       pauseOnHover: false,
+                          //       draggable: true,
+                          //       progress: undefined,
+                          //     });
+                          //     console.log({
+                          //       type: "error",
+                          //       message: "An error ocurred. Please, try again.",
+                          //     });
+                          //   }
+                          // }
                           setIsLoading(false);
                         }}
                         render={({ errors, touched }) => (
@@ -261,8 +271,7 @@ export default function RegisterWords() {
                             <Row>
                               <FormGroup className="w-50 pr-3">
                                 <Label htmlFor="meaning_Portuguese">Significado em português</Label>
-                                <Input
-                                  name="meaning_Portuguese"
+                                <Field name="meaning_Portuguese"
                                   type="textarea"
                                   rows="3"
                                   id="meaning_Portuguese"
@@ -270,7 +279,10 @@ export default function RegisterWords() {
                                     ? " is-invalid"
                                     : ""
                                     }`}
-                                />
+                                    component={MyInput}/>
+                                {/* <Input
+                                  
+                                /> */}
                                 <ErrorMessage
                                   name="meaning_Portuguese"
                                   component="div"
@@ -280,15 +292,15 @@ export default function RegisterWords() {
 
                               <FormGroup className="w-50">
                                 <Label htmlFor="meaningWaiwai">Significado em Waiwai</Label>
-                                <Input
-                                  name="meaningWaiwai"
-                                  type="textarea"
-                                  rows="3"
-                                  className={`form-control ${errors.meaningWaiwai && touched.meaningWaiwai
-                                    ? " is-invalid"
-                                    : ""
-                                    }`}
-                                />
+                                <Field 
+                                name="meaningWaiwai"
+                                type="textarea"
+                                rows="3"
+                                className={`form-control ${errors.meaningWaiwai && touched.meaningWaiwai
+                                  ? " is-invalid"
+                                  : ""
+                                  }`}
+                                  component={MyInput}/>
                                 <ErrorMessage
                                   name="meaningWaiwai"
                                   component="div"
@@ -357,13 +369,19 @@ export default function RegisterWords() {
                                   onRecordingComplete={(blob) => addAudioElement(blob)}
                                   recorderControls={recorderControls}
                                 />
+                                {record ? 
+                                <ReactAudioPlayer src={URL.createObjectURL(record)} 
+                                  controls
+                                  /> : null}
                               </FormGroup>
                             </Row>
                             <Row>
                             
                               <FormGroup className="w-50" >
                                 <Label htmlFor="img_logo">Insira uma image</Label>
+                                
                                 <div style={{ border: "3px #00806b dashed" }}>
+                                <Button onClick={removeImage}>x</Button>
                                   <Dropzone onDrop={onDrop} accept={"image/*"} />
                                   {image ? (<Image image={image} />) : null}
                                 </div>
