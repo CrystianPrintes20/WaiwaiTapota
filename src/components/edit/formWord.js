@@ -16,7 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 
-const FormWord = ({ data, modal, setModal, setDados }) => {
+const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
   const [token, setToken] = useState();
   const { data: session } = useSession();
 
@@ -72,7 +72,7 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
       .then((data) => {
         setDados(data);
         setModal(!modal);
-       // toast.success("Palavra atualizada com sucesso!", options);
+        // toast.success("Palavra atualizada com sucesso!", options);
       });
   };
 
@@ -203,11 +203,10 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                               true
                             );
                           }}
-                          className={`form-control ${
-                            errors.word_portugues && touched.word_portugues
+                          className={`form-control ${errors.word_portugues && touched.word_portugues
                               ? " is-invalid"
                               : ""
-                          }`}
+                            }`}
                         />
                         <ErrorMessage
                           name="word_portugues"
@@ -223,12 +222,11 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                         <Field
                           name="translation_Waiwai"
                           type="text"
-                          className={`form-control ${
-                            errors.translation_Waiwai &&
-                            touched.translation_Waiwai
+                          className={`form-control ${errors.translation_Waiwai &&
+                              touched.translation_Waiwai
                               ? " is-invalid"
                               : ""
-                          }`}
+                            }`}
                         />
                         <ErrorMessage
                           name="translation_Waiwai"
@@ -246,12 +244,11 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                         <Field
                           name="meaning_Portuguese"
                           type="text"
-                          className={`form-control ${
-                            errors.meaning_Portuguese &&
-                            touched.meaning_Portuguese
+                          className={`form-control ${errors.meaning_Portuguese &&
+                              touched.meaning_Portuguese
                               ? " is-invalid"
                               : ""
-                          }`}
+                            }`}
                         />
                         <ErrorMessage
                           name="meaning_Portuguese"
@@ -267,11 +264,10 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                         <Field
                           name="meaningWaiwai"
                           type="text"
-                          className={`form-control ${
-                            errors.meaningWaiwai && touched.meaningWaiwai
+                          className={`form-control ${errors.meaningWaiwai && touched.meaningWaiwai
                               ? " is-invalid"
                               : ""
-                          }`}
+                            }`}
                         />
                         <ErrorMessage
                           name="meaningWaiwai"
@@ -289,11 +285,10 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                         <Field
                           name="synonymPortugues"
                           type="text"
-                          className={`form-control ${
-                            errors.synonymPortugues && touched.synonymPortugues
+                          className={`form-control ${errors.synonymPortugues && touched.synonymPortugues
                               ? " is-invalid"
                               : ""
-                          }`}
+                            }`}
                         />
                         <ErrorMessage
                           name="synonymPortugues"
@@ -307,11 +302,10 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                         <Field
                           name="synonymWaiwai"
                           type="text"
-                          className={`form-control ${
-                            errors.synonymWaiwai && touched.synonymWaiwai
+                          className={`form-control ${errors.synonymWaiwai && touched.synonymWaiwai
                               ? " is-invalid"
                               : ""
-                          }`}
+                            }`}
                         />
                         <ErrorMessage
                           name="synonymWaiwai"
@@ -327,11 +321,10 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                         <Field
                           name="category"
                           type="text"
-                          className={`form-control ${
-                            errors.category && touched.category
+                          className={`form-control ${errors.category && touched.category
                               ? " is-invalid"
                               : ""
-                          }`}
+                            }`}
                         />
                         <ErrorMessage
                           name="category"
@@ -340,26 +333,30 @@ const FormWord = ({ data, modal, setModal, setDados }) => {
                         />
                       </FormGroup>
                     </Row>
+                    {
+                      showAction ? (
+                        <Row className="mt-3">
+                          <FormGroup className="w-100">
+                            <div className="d-flex justify-content-between">
+                              <Button
+                                type="submit"
+                                color="primary"
+                                disabled={isLoading}
+                              >
+                                Enviar
+                              </Button>
+                              <Button
+                                color="danger"
+                                onClick={() => handleDeleteWord()}
+                              >
+                                Excluir
+                              </Button>
+                            </div>
+                          </FormGroup>
+                        </Row>
+                      ) : null
+                    }
 
-                    <Row className="mt-3">
-                      <FormGroup className="w-100">
-                        <div className="d-flex justify-content-between">
-                          <Button
-                            type="submit"
-                            color="primary"
-                            disabled={isLoading}
-                          >
-                            Enviar
-                          </Button>
-                          <Button
-                            color="danger"
-                            onClick={() => handleDeleteWord()}
-                          >
-                            Excluir
-                          </Button>
-                        </div>
-                      </FormGroup>
-                    </Row>
                   </Form>
                 )}
               />

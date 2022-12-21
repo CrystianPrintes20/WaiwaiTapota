@@ -398,7 +398,15 @@ export default function RegisterWords() {
 
 
                                 <div className="my-2">
-                                  {record ? (
+                                  {record?
+                                    (<Button onClick={e => setRecord(null)}>False</Button>) : 
+                                    (<AudioRecorder
+                                      onRecordingComplete={(blob) => addAudioElement(blob)}
+                                      recorderControls={recorderControls}
+                                    />)
+                                    // (<Button onClick={e => setRecord(true)}>True</Button>)
+                                    }
+                                  {/* {record ? (
                                     <>
                                       <div className="d-flex justify-content-start">
                                       <ReactAudioPlayer src={URL.createObjectURL(record)}
@@ -417,7 +425,7 @@ export default function RegisterWords() {
                                     : (<AudioRecorder
                                       onRecordingComplete={(blob) => addAudioElement(blob)}
                                       recorderControls={recorderControls}
-                                    />)}
+                                    />)} */}
                                 </div>
 
                               </FormGroup>

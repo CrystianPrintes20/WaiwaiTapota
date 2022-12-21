@@ -20,8 +20,8 @@ const DataTable = ({ dados, setDados, showAction}) => {
     { field: 'meaning_Portuguese', headerName: 'Significado em Português', minWidth: 140 },
     { field: 'meaningWaiwai', headerName: 'Significado em Waiwai', minWidth: 140 },
     { field: 'synonymPortugues', headerName: 'Sinônimo em Português', minWidth: 140 },
-    { field: 'synonymWaiwai', headerName: 'Sinônimo em Waiwai', minWidth: 140, }]
-    showAction ? columns.push({
+    { field: 'synonymWaiwai', headerName: 'Sinônimo em Waiwai', minWidth: 140, },
+{
         field: 'action',
         headerName: 'Ação',
         minWidth: 180,
@@ -39,7 +39,7 @@ const DataTable = ({ dados, setDados, showAction}) => {
                 </div>
             );
         },
-    }) : null
+    }]
 
     useEffect(() => {
         if (dados) {
@@ -60,7 +60,7 @@ const DataTable = ({ dados, setDados, showAction}) => {
                 />
             </div>
             <Dicionario toggle={toggle} modal={modal} >
-                <FormWord data={word} modal={modal} setModal={setModal} setDados={setDados} />
+                <FormWord data={word} modal={modal} setModal={setModal} setDados={setDados}  showAction={showAction}/>
             </Dicionario>
         </Container>
     );
