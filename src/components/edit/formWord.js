@@ -7,14 +7,19 @@ import {
   Col,
   Card,
   CardBody,
+  Input
 } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+
+const MyInput = ({ field, form, ...props }) => {
+  return <Input {...field} {...props} />;
+};
 
 const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
   const [token, setToken] = useState();
@@ -243,12 +248,13 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
                         </Label>
                         <Field
                           name="meaning_Portuguese"
-                          type="text"
+                          type="textarea"
                           className={`form-control ${errors.meaning_Portuguese &&
                               touched.meaning_Portuguese
                               ? " is-invalid"
                               : ""
                             }`}
+                          component={MyInput}
                         />
                         <ErrorMessage
                           name="meaning_Portuguese"
@@ -263,11 +269,12 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
                         </Label>
                         <Field
                           name="meaningWaiwai"
-                          type="text"
+                          type="textarea"
                           className={`form-control ${errors.meaningWaiwai && touched.meaningWaiwai
                               ? " is-invalid"
                               : ""
                             }`}
+                          component={MyInput}
                         />
                         <ErrorMessage
                           name="meaningWaiwai"
@@ -316,7 +323,7 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
                     </Row>
 
                     <Row>
-                      <FormGroup className="w-50 pr-3">
+                      <FormGroup className="w-100">
                         <Label htmlFor="category">Categoria da palavra</Label>
                         <Field
                           name="category"
@@ -333,6 +340,7 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
                         />
                       </FormGroup>
                     </Row>
+                    
                     {
                       showAction ? (
                         <Row className="mt-3">

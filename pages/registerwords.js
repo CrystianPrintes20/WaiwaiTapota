@@ -43,8 +43,7 @@ export default function RegisterWords() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
-
-
+  const [image, setImage] = useState(null);
 
   /*
    * Módulo para entrada de áudio 
@@ -52,7 +51,16 @@ export default function RegisterWords() {
   const [record, setRecord] = useState(null)
   const recorderControls = useAudioRecorder();
 
-  const addAudioElement = (blob) => {
+  const removeImage = () => {
+    setImage(null)
+  }
+  const removeAudio = () => {
+    console.log("chegouu", record)
+    setRecord("kdkdk")
+    console.log("passou", record)
+  }
+
+  const addAudioElement = (blob, isAction) => {
     // var dataAudio = new FormData();
     // let nameFile = uuid()
     // dataAudio.append('file', blob);
@@ -61,13 +69,19 @@ export default function RegisterWords() {
     //   contentType: false}).then(res =>
     // console.log(res))
 
-    setRecord(blob)
+
+    isAction ? setRecord(null) : setRecord(blob)
+    //
     // const urlBlob = URL.createObjectURL(blob)
     // const audio = document.createElement('audio');
     // audio.src = urlBlob;
     // audio.controls = true;
     // document.body.appendChild(audio);
   };
+
+  useEffect(() => {
+
+  },)
 
   // useEffect(() => {
   //   if (curAudio) {
@@ -88,7 +102,6 @@ export default function RegisterWords() {
   // }, [curAudio])
 
 
-  const [image, setImage] = useState(null);
 
   const onDrop = useCallback(acceptedFiles => {
     // Loop through accepted files
@@ -124,12 +137,7 @@ export default function RegisterWords() {
     synonymPortugues: "",
     synonymWaiwai: "",
   };
-  const removeImage = () => {
-    setImage(null)
-  }
-  const removeAudio = () => {
-    setRecord(null)
-  }
+
   const validationSchema = Yup.object().shape({
     word_portugues: Yup.string().required("Este campo é obrigatorio."),
     translation_Waiwai: Yup.string().required("Este campo é obrigatorio."),
@@ -179,58 +187,59 @@ export default function RegisterWords() {
                         onSubmit={async (fields) => {
                           let response;
                           console.log(fields)
-                          // try {
-                          //   setIsLoading(true);
+                          try {
+                            setIsLoading(true);
 
-                          //   response = await axios({
-                          //     url: "http://localhost:5000/adicionarPalavra",
-                          //     method: "POST",
-                          //     headers: { "Content-Type": "application/json" },
-                          //     data: JSON.stringify(fields),
-                          //   });
-                          //   if (response.status === 200) {
-                          //     toast.success("Nova palavra adicionada com sucesso!", {
-                          //       position: "top-right",
-                          //       autoClose: 5000,
-                          //       hideProgressBar: false,
-                          //       closeOnClick: true,
-                          //       pauseOnHover: false,
-                          //       draggable: true,
-                          //       progress: undefined,
-                          //     });
-                          //   }
-                          // } catch (err) {
-                          //   if (
-                          //     err?.response.status === 409 || err?.response?.data?.message) {
-                          //     toast.error("Email ou nome de usuario ja cadastrados! Verifique-os e tente novamente.", {
-                          //       position: "top-right",
-                          //       autoClose: 5000,
-                          //       hideProgressBar: false,
-                          //       closeOnClick: true,
-                          //       pauseOnHover: false,
-                          //       draggable: true,
-                          //       progress: undefined,
-                          //     });
-                          //     console.log({
-                          //       type: "error",
-                          //       message: err.response.data.message,
-                          //     });
-                          //   } else {
-                          //     toast.error("Erro ao cadastrar.", {
-                          //       position: "top-right",
-                          //       autoClose: 5000,
-                          //       hideProgressBar: false,
-                          //       closeOnClick: true,
-                          //       pauseOnHover: false,
-                          //       draggable: true,
-                          //       progress: undefined,
-                          //     });
-                          //     console.log({
-                          //       type: "error",
-                          //       message: "An error ocurred. Please, try again.",
-                          //     });
-                          //   }
-                          // }
+                            response = await axios({
+                              url: "http://localhost:5000/adicionarPalavra",
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              data: JSON.stringify(fields),
+                            });
+                            if (response.status === 200) {
+                              toast.success("Nova palavra adicionada com sucesso!", {
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: false,
+                                draggable: true,
+                                progress: undefined,
+                              });
+                              router.push("/myWord")
+                            }
+                          } catch (err) {
+                            if (
+                              err?.response.status === 409 || err?.response?.data?.message) {
+                              toast.error("Email ou nome de usuario ja cadastrados! Verifique-os e tente novamente.", {
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: false,
+                                draggable: true,
+                                progress: undefined,
+                              });
+                              console.log({
+                                type: "error",
+                                message: err.response.data.message,
+                              });
+                            } else {
+                              toast.error("Erro ao cadastrar.", {
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: false,
+                                draggable: true,
+                                progress: undefined,
+                              });
+                              console.log({
+                                type: "error",
+                                message: "An error ocurred. Please, try again.",
+                              });
+                            }
+                          }
                           setIsLoading(false);
                         }}
                         render={({ errors, touched }) => (
@@ -365,8 +374,6 @@ export default function RegisterWords() {
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
-
-
                             </Row>
                             <Row>
 
@@ -398,34 +405,35 @@ export default function RegisterWords() {
 
 
                                 <div className="my-2">
-                                  {record?
-                                    (<Button onClick={e => setRecord(null)}>False</Button>) : 
-                                    (<AudioRecorder
-                                      onRecordingComplete={(blob) => addAudioElement(blob)}
-                                      recorderControls={recorderControls}
-                                    />)
-                                    // (<Button onClick={e => setRecord(true)}>True</Button>)
-                                    }
-                                  {/* {record ? (
+                                  {
+                                    console.log("aa", record)
+
+                                  }
+                                  {record ? (
                                     <>
                                       <div className="d-flex justify-content-start">
-                                      <ReactAudioPlayer src={URL.createObjectURL(record)}
-                                          controls
-                                        />
-                                        <Button onClick={removeAudio}
+                                        {
+                                          isAction ? (
+                                            <ReactAudioPlayer src={URL?.createObjectURL(record)}
+                                              controls
+                                            />
+                                          ) : (<></>)
+                                        }
+
+                                        <Button onClick={(isAction) => addAudioElement(isAction)}
                                           type="button"
                                           color="none"
                                           className="px-1 py-0 my-0 mx-0 border border-white">
                                           <span className="badge bg-secondary">x</span>
                                         </Button>
-                                      
+
                                       </div>
                                     </>
                                   )
                                     : (<AudioRecorder
                                       onRecordingComplete={(blob) => addAudioElement(blob)}
                                       recorderControls={recorderControls}
-                                    />)} */}
+                                    />)}
                                 </div>
 
                               </FormGroup>
