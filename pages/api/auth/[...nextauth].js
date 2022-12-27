@@ -18,7 +18,7 @@ const options = {
       name: "credentials",
       authorize: async (credentials) => {
         const user = await axios.post(
-          "http://localhost:5000/login",
+          "http://localhost:5000/auth/login",
           {
             email: credentials.email,
             password: credentials.password,
