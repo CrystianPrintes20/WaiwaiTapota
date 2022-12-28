@@ -34,22 +34,22 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState();
   const [formValues, setFormValues] = useState({
-    word_portugues: "",
-    translation_Waiwai: "",
+    wordPort: "",
+    translationWaiwai: "",
     category: "",
-    meaning_Portuguese: "",
+    meaningPort: "",
     meaningWaiwai: "",
-    synonymPortugues: "",
+    synonymPort: "",
     synonymWaiwai: "",
   });
 
   const validationSchema = Yup.object().shape({
-    word_portugues: Yup.string().required("Este campo é obrigatorio."),
-    translation_Waiwai: Yup.string().required("Este campo é obrigatorio."),
+    wordPort: Yup.string().required("Este campo é obrigatorio."),
+    translationWaiwai: Yup.string().required("Este campo é obrigatorio."),
     category: Yup.string().required("Este campo é obrigatorio."),
-    meaning_Portuguese: Yup.string().required("Este campo é obrigatorio."),
+    meaningPort: Yup.string().required("Este campo é obrigatorio."),
     meaningWaiwai: Yup.string().required("Este campo é obrigatorio."),
-    synonymPortugues: Yup.string().required("Este campo é obrigatorio."),
+    synonymPort: Yup.string().required("Este campo é obrigatorio."),
     synonymWaiwai: Yup.string().required("Este campo é obrigatorio."),
   });
 
@@ -68,7 +68,7 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
   };
   const fetchDados = () => {
     axios
-      .get("http://localhost:5000/visualizarPalavras", {
+      .get("http://localhost:5000/palavras/ ", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -84,12 +84,13 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
   const handleMutationDelete = async () => {
     try {
       await axios({
-        url: `http://localhost:5000/deletarPalavra/${userId}`,
+        url: `http://localhost:5000/palavras/${userId}`,
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
       setModal(!modal);
       toast.success("Palavra excluida com sucesso!", options);
+      fetchDados();
       // toast.success("Palavra excluida com sucesso!", {
       //     onOpen: () => fetchDados(),
       //     position: "top-right",
@@ -120,14 +121,14 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
     if (data) {
       setUserId(data.id);
       setFormValues({
-        word_portugues: data.word_portugues || formValues.word_portugues,
-        translation_Waiwai:
-          data.translation_Waiwai || formValues.translation_Waiwai,
+        wordPort: data.wordPort || formValues.wordPort,
+        translationWaiwai:
+          data.translationWaiwai || formValues.translationWaiwai,
         category: data.category || formValues.category,
-        meaning_Portuguese:
-          data.meaning_Portuguese || formValues.meaning_Portuguese,
+        meaningPort:
+          data.meaningPort || formValues.meaningPort,
         meaningWaiwai: data.meaningWaiwai || formValues.meaningWaiwai,
-        synonymPortugues: data.synonymPortugues || formValues.synonymPortugues,
+        synonymPort: data.synonymPort || formValues.synonymPort,
         synonymWaiwai: data.synonymWaiwai || formValues.synonymWaiwai,
       });
     }
@@ -135,11 +136,11 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
     data,
     formValues.category,
     formValues.meaningWaiwai,
-    formValues.meaning_Portuguese,
-    formValues.synonymPortugues,
+    formValues.meaningPort,
+    formValues.synonymPort,
     formValues.synonymWaiwai,
-    formValues.translation_Waiwai,
-    formValues.word_portugues,
+    formValues.translationWaiwai,
+    formValues.wordPort,
   ]);
 
   return (
@@ -150,12 +151,12 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
             <CardBody>
               <Formik
                 initialValues={{
-                  word_portugues: formValues.word_portugues,
-                  translation_Waiwai: formValues.translation_Waiwai,
+                  wordPort: formValues.wordPort,
+                  translationWaiwai: formValues.translationWaiwai,
                   category: formValues.category,
-                  meaning_Portuguese: formValues.meaning_Portuguese,
+                  meaningPort: formValues.meaningPort,
                   meaningWaiwai: formValues.meaningWaiwai,
-                  synonymPortugues: formValues.synonymPortugues,
+                  synonymPort: formValues.synonymPort,
                   synonymWaiwai: formValues.synonymWaiwai,
                 }}
                 validationSchema={validationSchema}
@@ -165,12 +166,12 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
                   try {
                     setIsLoading(true);
                     response = await axios({
-                      url: `http://localhost:5000/atualizarPalavra/${userId}`,
+                      url: `http://localhost:5000/palavras/${userId}`,
                       method: "PUT",
                       headers: { "Content-Type": "application/json" },
                       data: JSON.stringify(fields),
                     });
-                    if (response.status === 200) {
+                    if (response.status === 204) {
                       toast.success("Palavra atualizada com sucesso!", options);
                       fetchDados();
                     }
@@ -195,46 +196,46 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
                   <Form>
                     <Row>
                       <FormGroup className="w-50 pr-3">
-                        <Label htmlFor="word_portugues">
+                        <Label htmlFor="wordPort">
                           Palavra em português
                         </Label>
                         <Field
-                          name="word_portugues"
+                          name="wordPort"
                           type="text"
                           onChange={(e) => {
                             setFieldValue(
-                              "word_portugues",
+                              "wordPort",
                               e.target.value,
                               true
                             );
                           }}
-                          className={`form-control ${errors.word_portugues && touched.word_portugues
+                          className={`form-control ${errors.wordPort && touched.wordPort
                               ? " is-invalid"
                               : ""
                             }`}
                         />
                         <ErrorMessage
-                          name="word_portugues"
+                          name="wordPort"
                           component="div"
                           className="invalid-feedback"
                         />
                       </FormGroup>
 
                       <FormGroup className="w-50">
-                        <Label htmlFor="translation_Waiwai">
+                        <Label htmlFor="translationWaiwai">
                           Tradução em Waiwai
                         </Label>
                         <Field
-                          name="translation_Waiwai"
+                          name="translationWaiwai"
                           type="text"
-                          className={`form-control ${errors.translation_Waiwai &&
-                              touched.translation_Waiwai
+                          className={`form-control ${errors.translationWaiwai &&
+                              touched.translationWaiwai
                               ? " is-invalid"
                               : ""
                             }`}
                         />
                         <ErrorMessage
-                          name="translation_Waiwai"
+                          name="translationWaiwai"
                           component="div"
                           className="invalid-feedback"
                         />
@@ -243,21 +244,21 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
 
                     <Row>
                       <FormGroup className="w-50 pr-3">
-                        <Label htmlFor="meaning_Portuguese">
+                        <Label htmlFor="meaningPort">
                           Significado em português
                         </Label>
                         <Field
-                          name="meaning_Portuguese"
+                          name="meaningPort"
                           type="textarea"
-                          className={`form-control ${errors.meaning_Portuguese &&
-                              touched.meaning_Portuguese
+                          className={`form-control ${errors.meaningPort &&
+                              touched.meaningPort
                               ? " is-invalid"
                               : ""
                             }`}
                           component={MyInput}
                         />
                         <ErrorMessage
-                          name="meaning_Portuguese"
+                          name="meaningPort"
                           component="div"
                           className="invalid-feedback"
                         />
@@ -286,19 +287,19 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
 
                     <Row>
                       <FormGroup className="w-50 pr-3">
-                        <Label htmlFor="synonymPortugues">
+                        <Label htmlFor="synonymPort">
                           Sinonimo em Portugues
                         </Label>
                         <Field
-                          name="synonymPortugues"
+                          name="synonymPort"
                           type="text"
-                          className={`form-control ${errors.synonymPortugues && touched.synonymPortugues
+                          className={`form-control ${errors.synonymPort && touched.synonymPort
                               ? " is-invalid"
                               : ""
                             }`}
                         />
                         <ErrorMessage
-                          name="synonymPortugues"
+                          name="synonymPort"
                           component="div"
                           className="invalid-feedback"
                         />

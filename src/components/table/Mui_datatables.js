@@ -11,15 +11,14 @@ const DataTable = ({ dados, setDados, showAction}) => {
     const [modal, setModal] = useModalDicionario();
     const toggle = () => setModal(!modal);
     const [word, setWord] = useState(null)
-    const [state, setState] = useState(false)
     const [rows, setRows] = useState([])
     
-    let columns = [ { field: 'word_portugues', headerName: 'Palavra em Português', minWidth: 140 },
-    { field: 'translation_Waiwai', headerName: 'Tradução em Waiwai', minWidth: 140 },
+    let columns = [ { field: 'wordPort', headerName: 'Palavra em Português', minWidth: 140 },
+    { field: 'translationWaiwai', headerName: 'Tradução em Waiwai', minWidth: 140 },
     { field: 'category', headerName: 'Categoria', minWidth: 140 },
-    { field: 'meaning_Portuguese', headerName: 'Significado em Português', minWidth: 140 },
+    { field: 'meaningPort', headerName: 'Significado em Português', minWidth: 140 },
     { field: 'meaningWaiwai', headerName: 'Significado em Waiwai', minWidth: 140 },
-    { field: 'synonymPortugues', headerName: 'Sinônimo em Português', minWidth: 140 },
+    { field: 'synonymPort', headerName: 'Sinônimo em Português', minWidth: 140 },
     { field: 'synonymWaiwai', headerName: 'Sinônimo em Waiwai', minWidth: 140, },
 {
         field: 'action',
@@ -43,9 +42,9 @@ const DataTable = ({ dados, setDados, showAction}) => {
 
     useEffect(() => {
         if (dados) {
-            setRows(() => {
-                return dados.map(item => ({ ...item, id: item["_id"]["$oid"] }))
-            })
+             setRows(() => {
+                 return dados.map(item => ({ ...item, id: item["_id"]}))
+             })
         }
     }, [dados])
 

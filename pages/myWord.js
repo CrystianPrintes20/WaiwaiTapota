@@ -22,7 +22,7 @@ export default function Dictionary() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/visualizarPalavras", {
+      .get("http://localhost:5000/palavras/me", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

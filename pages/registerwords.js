@@ -56,11 +56,11 @@ export default function RegisterWords() {
   }
   const removeAudio = () => {
     console.log("chegouu", record)
-    setRecord("kdkdk")
+    setRecord(null)
     console.log("passou", record)
   }
 
-  const addAudioElement = (blob, isAction) => {
+  const addAudioElement = (blob) => {
     // var dataAudio = new FormData();
     // let nameFile = uuid()
     // dataAudio.append('file', blob);
@@ -70,7 +70,7 @@ export default function RegisterWords() {
     // console.log(res))
 
 
-    isAction ? setRecord(null) : setRecord(blob)
+    setRecord(blob)
     //
     // const urlBlob = URL.createObjectURL(blob)
     // const audio = document.createElement('audio');
@@ -79,9 +79,6 @@ export default function RegisterWords() {
     // document.body.appendChild(audio);
   };
 
-  useEffect(() => {
-
-  },)
 
   // useEffect(() => {
   //   if (curAudio) {
@@ -129,22 +126,22 @@ export default function RegisterWords() {
   // }, []);
 
   const initialValues = {
-    word_portugues: "",
-    translation_Waiwai: "",
+    wordPort: "",
+    translationWaiwai: "",
     category: "",
-    meaning_Portuguese: "",
+    meaningPort: "",
     meaningWaiwai: "",
-    synonymPortugues: "",
+    synonymPort: "",
     synonymWaiwai: "",
   };
 
   const validationSchema = Yup.object().shape({
-    word_portugues: Yup.string().required("Este campo é obrigatorio."),
-    translation_Waiwai: Yup.string().required("Este campo é obrigatorio."),
+    wordPort: Yup.string().required("Este campo é obrigatorio."),
+    translationWaiwai: Yup.string().required("Este campo é obrigatorio."),
     category: Yup.string().required("Este campo é obrigatorio."),
-    meaning_Portuguese: Yup.string().required("Este campo é obrigatorio."),
+    meaningPort: Yup.string().required("Este campo é obrigatorio."),
     meaningWaiwai: Yup.string().required("Este campo é obrigatorio."),
-    synonymPortugues: Yup.string().required("Este campo é obrigatorio."),
+    synonymPort: Yup.string().required("Este campo é obrigatorio."),
     synonymWaiwai: Yup.string().required("Este campo é obrigatorio.")
   });
 
@@ -186,17 +183,16 @@ export default function RegisterWords() {
                         validationSchema={validationSchema}
                         onSubmit={async (fields) => {
                           let response;
-                          console.log(fields)
                           try {
                             setIsLoading(true);
 
                             response = await axios({
-                              url: "http://localhost:5000/adicionarPalavra",
+                              url: "http://localhost:5000/palavras/",
                               method: "POST",
                               headers: { "Content-Type": "application/json" },
                               data: JSON.stringify(fields),
                             });
-                            if (response.status === 200) {
+                            if (response.status === 201) {
                               toast.success("Nova palavra adicionada com sucesso!", {
                                 position: "top-right",
                                 autoClose: 5000,
@@ -246,34 +242,34 @@ export default function RegisterWords() {
                           <Form>
                             <Row>
                               <FormGroup className="w-50 pr-3">
-                                <Label htmlFor="word_portugues">Palavra em português</Label>
+                                <Label htmlFor="wordPort">Palavra em português</Label>
                                 <Field
-                                  name="word_portugues"
+                                  name="wordPort"
                                   type="text"
-                                  className={`form-control ${errors.word_portugues && touched.word_portugues
+                                  className={`form-control ${errors.wordPort && touched.wordPort
                                     ? " is-invalid"
                                     : ""
                                     }`}
                                 />
                                 <ErrorMessage
-                                  name="word_portugues"
+                                  name="wordPort"
                                   component="div"
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
 
                               <FormGroup className="w-50">
-                                <Label htmlFor="translation_Waiwai">Tradução em Waiwai</Label>
+                                <Label htmlFor="translationWaiwai">Tradução em Waiwai</Label>
                                 <Field
-                                  name="translation_Waiwai"
+                                  name="translationWaiwai"
                                   type="text"
-                                  className={`form-control ${errors.translation_Waiwai && touched.translation_Waiwai
+                                  className={`form-control ${errors.translationWaiwai && touched.translationWaiwai
                                     ? " is-invalid"
                                     : ""
                                     }`}
                                 />
                                 <ErrorMessage
-                                  name="translation_Waiwai"
+                                  name="translationWaiwai"
                                   component="div"
                                   className="invalid-feedback"
                                 />
@@ -282,12 +278,12 @@ export default function RegisterWords() {
 
                             <Row>
                               <FormGroup className="w-50 pr-3">
-                                <Label htmlFor="meaning_Portuguese">Significado em português</Label>
-                                <Field name="meaning_Portuguese"
+                                <Label htmlFor="meaningPort">Significado em português</Label>
+                                <Field name="meaningPort"
                                   type="textarea"
                                   rows="3"
-                                  id="meaning_Portuguese"
-                                  className={`form-control ${errors.meaning_Portuguese && touched.meaning_Portuguese
+                                  id="meaningPort"
+                                  className={`form-control ${errors.meaningPort && touched.meaningPort
                                     ? " is-invalid"
                                     : ""
                                     }`}
@@ -296,7 +292,7 @@ export default function RegisterWords() {
                                   
                                 /> */}
                                 <ErrorMessage
-                                  name="meaning_Portuguese"
+                                  name="meaningPort"
                                   component="div"
                                   className="invalid-feedback"
                                 />
@@ -323,17 +319,17 @@ export default function RegisterWords() {
 
                             <Row>
                               <FormGroup className="w-50 pr-3">
-                                <Label htmlFor="synonymPortugues">Sinonimo em Portugues</Label>
+                                <Label htmlFor="synonymPort">Sinonimo em Portugues</Label>
                                 <Field
-                                  name="synonymPortugues"
+                                  name="synonymPort"
                                   type="text"
-                                  className={`form-control ${errors.synonymPortugues && touched.synonymPortugues
+                                  className={`form-control ${errors.synonymPort && touched.synonymPort
                                     ? " is-invalid"
                                     : ""
                                     }`}
                                 />
                                 <ErrorMessage
-                                  name="synonymPortugues"
+                                  name="synonymPort"
                                   component="div"
                                   className="invalid-feedback"
                                 />
@@ -405,22 +401,13 @@ export default function RegisterWords() {
 
 
                                 <div className="my-2">
-                                  {
-                                    console.log("aa", record)
-
-                                  }
-                                  {record ? (
+                                {record ? (
                                     <>
                                       <div className="d-flex justify-content-start">
-                                        {
-                                          isAction ? (
-                                            <ReactAudioPlayer src={URL?.createObjectURL(record)}
-                                              controls
-                                            />
-                                          ) : (<></>)
-                                        }
-
-                                        <Button onClick={(isAction) => addAudioElement(isAction)}
+                                      <ReactAudioPlayer src={URL.createObjectURL(record)}
+                                          controls
+                                        />
+                                        <Button onClick={removeAudio}
                                           type="button"
                                           color="none"
                                           className="px-1 py-0 my-0 mx-0 border border-white">

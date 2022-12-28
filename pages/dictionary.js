@@ -23,7 +23,7 @@ export default function MyWords() {
     }, [session])
 
     useEffect(() => {
-        axios.get('http://localhost:5000/visualizarPalavras', {
+        axios.get('http://localhost:5000/palavras/', {
             headers: {
                 'Authorization': `Bearer ${token}`
             },

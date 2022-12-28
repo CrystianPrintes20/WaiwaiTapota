@@ -21,6 +21,7 @@ import {
   Collapse,
 } from "reactstrap";
 import { getSession, useSession, signIn, signOut } from "next-auth/react";
+import jwtDecode from "jwt-decode";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,10 +29,7 @@ const Header = () => {
   const toggle = () => setIsOpen(!isOpen);
   const { data: session } = useSession();
   const [token, setToken] = useState()
-  const [dados, setdados] = useState()
-
   const [data, setData] = useState(null)
-  const [isLoading, setLoading] = useState(false)
 
   useEffect(() => {
     if (session) {
@@ -40,22 +38,10 @@ const Header = () => {
   }, [session])
 
   useEffect(() => {
-    setLoading(true)
-    axios.get('http://localhost:5000/userLog', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-    })
-      .then((res) => res.data.profile)
-      .then((data) => {
-        setData(data)
-        setLoading(false)
-      })
+    if(token){
+      setData(jwtDecode(token))
+    }
   }, [token])
-
-  useEffect(()=>{
-    console.log(data)
-  })
 
   return (
     <div className="topbar" id="top">
@@ -150,7 +136,7 @@ const Header = () => {
                     >
                       <div className="d-flex gap-3 border-bottom border-danger p-0">
                         <span className="text-truncate mr-3">
-                          <h6 className="mb-0 text-white text-uppercase">{data?.username ? data?.username : "Usuario sem login!"}</h6>
+                          <h6 className="mb-0 text-white text-uppercase">{data?.sub ? data?.sub : "Usuario sem login!"}</h6>
                           <small className="elipsis">{data?.email ? data?.email : "Sem email" }</small>
                         </span>
                  
