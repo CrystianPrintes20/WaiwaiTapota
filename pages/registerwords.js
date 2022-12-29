@@ -25,12 +25,12 @@ import Dropzone from "../src/components/dragDrop";
 import Image from "../src/components/PreviewImagem";
 
 import ReactAudioPlayer from 'react-audio-player';
+import { getCookie, getCookies  } from 'cookies-next';
 
 /**
  * Importações para entrada de áudio
  */
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
-import { uuid } from 'uuidv4';
 
 // cuid is a simple library to generate unique IDs
 import cuid from "cuid";
@@ -39,7 +39,7 @@ const MyInput = ({ field, form, ...props }) => {
   return <Input {...field} {...props} />;
 };
 
-export default function RegisterWords() {
+export default function RegisterWords({token}) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
@@ -182,16 +182,14 @@ export default function RegisterWords() {
                         initialValues={initialValues}
                         validationSchema={validationSchema}
                         onSubmit={async (fields) => {
-                          let response;
                           try {
                             setIsLoading(true);
+                            const response = await axios.post("http://localhost:5000/palavras/", JSON.stringify(fields), {
+                              headers: { 
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                               }})
 
-                            response = await axios({
-                              url: "http://localhost:5000/palavras/",
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              data: JSON.stringify(fields),
-                            });
                             if (response.status === 201) {
                               toast.success("Nova palavra adicionada com sucesso!", {
                                 position: "top-right",
@@ -461,3 +459,10 @@ export default function RegisterWords() {
     </>
   );
 }
+
+export async function getServerSideProps({req, res}) {
+  return {
+    props: { token: req.cookies.accessToken}, // will be passed to the page component as props
+  }
+}
+

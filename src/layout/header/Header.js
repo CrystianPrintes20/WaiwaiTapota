@@ -21,27 +21,12 @@ import {
   Collapse,
 } from "reactstrap";
 import { getSession, useSession, signIn, signOut } from "next-auth/react";
-import jwtDecode from "jwt-decode";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const toggle = () => setIsOpen(!isOpen);
   const { data: session } = useSession();
-  const [token, setToken] = useState()
-  const [data, setData] = useState(null)
-
-  useEffect(() => {
-    if (session) {
-      setToken(session?.user?.token)
-    }
-  }, [session])
-
-  useEffect(() => {
-    if(token){
-      setData(jwtDecode(token))
-    }
-  }, [token])
 
   return (
     <div className="topbar" id="top">
@@ -136,8 +121,8 @@ const Header = () => {
                     >
                       <div className="d-flex gap-3 border-bottom border-danger p-0">
                         <span className="text-truncate mr-3">
-                          <h6 className="mb-0 text-white text-uppercase">{data?.sub ? data?.sub : "Usuario sem login!"}</h6>
-                          <small className="elipsis">{data?.email ? data?.email : "Sem email" }</small>
+                          <h6 className="mb-0 text-white text-uppercase">{session.user.username}</h6>
+                          <small className="elipsis">{session.user.email}</small>
                         </span>
                  
                         <User className="border rounded-circle" size={40} color="white" />
