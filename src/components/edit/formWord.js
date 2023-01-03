@@ -21,15 +21,8 @@ const MyInput = ({ field, form, ...props }) => {
   return <Input {...field} {...props} />;
 };
 
-const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
-  const [token, setToken] = useState();
+const FormWord = ({ data, modal, setModal, setDados, showAction , token}) => {
   const { data: session } = useSession();
-
-  useEffect(() => {
-    if (session) {
-      setToken(session?.user?.token);
-    }
-  }, [session]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState();
@@ -378,3 +371,9 @@ const FormWord = ({ data, modal, setModal, setDados, showAction }) => {
 };
 
 export default FormWord;
+
+export async function getServerSideProps({req, res}) {
+  return {
+    props: { token: req.cookies.accessToken}, // will be passed to the page component as props
+  }
+}

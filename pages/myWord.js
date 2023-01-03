@@ -9,16 +9,9 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 
-export default function Dictionary() {
+export default function MyWord({token}) {
   const [dados, setDados] = useState(null);
-  const [token, setToken] = useState();
   const { data: session } = useSession();
-
-  useEffect(() => {
-    if (session) {
-      setToken(session?.user?.token);
-    }
-  }, [session]);
 
   useEffect(() => {
     axios
@@ -53,5 +46,10 @@ export default function Dictionary() {
         </Layout>
       </>
     );
+  }
+}
+export async function getServerSideProps({req, res}) {
+  return {
+    props: { token: req.cookies.accessToken}, // will be passed to the page component as props
   }
 }

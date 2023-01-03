@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 import DataTable from "../src/components/table/Mui_datatables";
 import axios from "axios";
 
-export default function MyWords() {
+export default function Dictionary() {
     const { data: session } = useSession();
     const [dados, setDados] = useState(null)
     const [token, setToken] = useState()
