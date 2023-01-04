@@ -32,7 +32,7 @@ export default function MyWord({token}) {
         <Banner3 />
         <Card>
           <CardBody>
-            <DataTable dados={dados} setDados={setDados} showAction/>
+            <DataTable dados={dados} setDados={setDados} token={token} showAction/>
           </CardBody>
         </Card>
         <ToastContainer />

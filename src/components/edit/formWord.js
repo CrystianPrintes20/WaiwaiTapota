@@ -21,7 +21,7 @@ const MyInput = ({ field, form, ...props }) => {
   return <Input {...field} {...props} />;
 };
 
-const FormWord = ({ data, modal, setModal, setDados, showAction , token}) => {
+const FormWord = ({ data, modal, setModal, setDados, showAction , token, disabled}) => {
   const { data: session } = useSession();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -61,7 +61,7 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token}) => {
   };
   const fetchDados = () => {
     axios
-      .get("http://localhost:5000/palavras/ ", {
+      .get("http://localhost:5000/palavras/me ", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -79,7 +79,7 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token}) => {
       await axios({
         url: `http://localhost:5000/palavras/${userId}`,
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}`},
       });
       setModal(!modal);
       toast.success("Palavra excluida com sucesso!", options);
@@ -161,7 +161,7 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token}) => {
                     response = await axios({
                       url: `http://localhost:5000/palavras/${userId}`,
                       method: "PUT",
-                      headers: { "Content-Type": "application/json" },
+                      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
                       data: JSON.stringify(fields),
                     });
                     if (response.status === 204) {
@@ -193,6 +193,7 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token}) => {
                           Palavra em português
                         </Label>
                         <Field
+                          disabled={disabled}
                           name="wordPort"
                           type="text"
                           onChange={(e) => {
@@ -219,6 +220,7 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token}) => {
                           Tradução em Waiwai
                         </Label>
                         <Field
+                          disabled={disabled}
                           name="translationWaiwai"
                           type="text"
                           className={`form-control ${errors.translationWaiwai &&
@@ -241,6 +243,7 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token}) => {
                           Significado em português
                         </Label>
                         <Field
+                          disabled={disabled}
                           name="meaningPort"
                           type="textarea"
                           className={`form-control ${errors.meaningPort &&
@@ -262,6 +265,8 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token}) => {
                           Significado em Waiwai
                         </Label>
                         <Field
+                          disabled={disabled}
+
                           name="meaningWaiwai"
                           type="textarea"
                           className={`form-control ${errors.meaningWaiwai && touched.meaningWaiwai
@@ -284,6 +289,8 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token}) => {
                           Sinonimo em Portugues
                         </Label>
                         <Field
+                          disabled={disabled}
+                        
                           name="synonymPort"
                           type="text"
                           className={`form-control ${errors.synonymPort && touched.synonymPort
@@ -301,6 +308,8 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token}) => {
                       <FormGroup className="w-50">
                         <Label htmlFor="synonymWaiwai">Sinonimo Waiwai</Label>
                         <Field
+                          disabled={disabled}
+
                           name="synonymWaiwai"
                           type="text"
                           className={`form-control ${errors.synonymWaiwai && touched.synonymWaiwai
@@ -320,6 +329,8 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token}) => {
                       <FormGroup className="w-100">
                         <Label htmlFor="category">Categoria da palavra</Label>
                         <Field
+                          disabled={disabled}
+
                           name="category"
                           type="text"
                           className={`form-control ${errors.category && touched.category
@@ -372,8 +383,3 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token}) => {
 
 export default FormWord;
 
-export async function getServerSideProps({req, res}) {
-  return {
-    props: { token: req.cookies.accessToken}, // will be passed to the page component as props
-  }
-}

@@ -10,17 +10,10 @@ import { useSession } from "next-auth/react";
 import DataTable from "../src/components/table/Mui_datatables";
 import axios from "axios";
 
-export default function Dictionary() {
+export default function Dictionary({token}) {
     const { data: session } = useSession();
     const [dados, setDados] = useState(null)
-    const [token, setToken] = useState()
 
-
-    useEffect(() => {
-        if (session) {
-            setToken(session?.user?.token)
-        }
-    }, [session])
 
     useEffect(() => {
         axios.get('http://localhost:5000/palavras/', {
@@ -40,7 +33,7 @@ export default function Dictionary() {
                 <Banner3 />
                 <Card>
                     <CardBody>
-                        <DataTable dados={dados}/>
+                        <DataTable dados={dados} disabled/>
                     </CardBody>
                 </Card>
             </Layout>
@@ -54,6 +47,10 @@ export default function Dictionary() {
             </>
         )
     }
-
-
 }
+
+export async function getServerSideProps({req, res}) {
+    return {
+      props: { token: req.cookies.accessToken}, // will be passed to the page component as props
+    }
+  }

@@ -7,7 +7,7 @@ import Dicionario from '../edit/Dicionario';
 import FormWord from '../edit/formWord';
 
 
-const DataTable = ({ dados, setDados, showAction}) => {
+const DataTable = ({ dados, setDados, showAction, token, disabled}) => {
     const [modal, setModal] = useModalDicionario();
     const toggle = () => setModal(!modal);
     const [word, setWord] = useState(null)
@@ -59,7 +59,7 @@ const DataTable = ({ dados, setDados, showAction}) => {
                 />
             </div>
             <Dicionario toggle={toggle} modal={modal} >
-                <FormWord data={word} modal={modal} setModal={setModal} setDados={setDados}  showAction={showAction}/>
+                <FormWord data={word} modal={modal} setModal={setModal} setDados={setDados}  showAction={showAction} token={token} disabled={disabled}/>
             </Dicionario>
         </Container>
     );
