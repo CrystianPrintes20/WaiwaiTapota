@@ -25,7 +25,7 @@ import Dropzone from "../src/components/dragDrop";
 import Image from "../src/components/PreviewImagem";
 
 import ReactAudioPlayer from 'react-audio-player';
-import { getCookie, getCookies  } from 'cookies-next';
+import { getCookie, getCookies } from 'cookies-next';
 
 /**
  * Importações para entrada de áudio
@@ -39,7 +39,7 @@ const MyInput = ({ field, form, ...props }) => {
   return <Input {...field} {...props} />;
 };
 
-export default function RegisterWords({token}) {
+export default function RegisterWords({ token }) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
@@ -55,75 +55,26 @@ export default function RegisterWords({token}) {
     setImage(null)
   }
   const removeAudio = () => {
-    console.log("chegouu", record)
     setRecord(null)
-    console.log("passou", record)
   }
 
   const addAudioElement = (blob) => {
-    // var dataAudio = new FormData();
-    // let nameFile = uuid()
-    // dataAudio.append('file', blob);
-    // axios.post(`http://localhost:5000/uploads/${nameFile}`, dataAudio, {
-    //   processData: false,
-    //   contentType: false}).then(res =>
-    // console.log(res))
-
-
     setRecord(blob)
-    //
-    // const urlBlob = URL.createObjectURL(blob)
-    // const audio = document.createElement('audio');
-    // audio.src = urlBlob;
-    // audio.controls = true;
-    // document.body.appendChild(audio);
   };
-
-
-  // useEffect(() => {
-  //   if (curAudio) {
-  //     console.log(curAudio)
-  //     var dataAudio = new FormData();
-  //     let nameFile = uuid()
-  //     dataAudio.append('file', curAudio);
-
-  //     axios.post(`http://localhost:5000/uploads/${nameFile}`, dataAudio, {
-  //       // 'application/json' is the modern content-type for JSON, but some
-  //       // older servers may use 'text/json'.
-  //       // See: http://bit.ly/text-json
-  //       'Content-Type': curAudio.type
-  //     }
-  //     ).then(res =>
-  //       console.log(res))
-  //   }
-  // }, [curAudio])
 
 
 
   const onDrop = useCallback(acceptedFiles => {
-    // Loop through accepted files
     acceptedFiles.map(file => {
-      // Initialize FileReader browser API
       const reader = new FileReader();
-      // onload callback gets called after the reader reads the file data
       reader.onload = function (e) {
-        // add the image into the state. Since FileReader reading process is asynchronous, its better to get the latest snapshot state (i.e., prevState) and update it. 
-        // setImages(prevState => [
-        //   ...prevState,
-        //   { id: cuid(), src: e.target.result }
-        // ]);
-        setImage({ id: cuid(), src: e.target.result });
+        setImage({ id: cuid(), src: e.target.result, name: file.name});
       };
-      // Read the file as Data URL (since we accept only images)
       reader.readAsDataURL(file);
       return file;
     });
   }, []);
 
-  // const onDrop = useCallback(acceptedFiles => {
-  //   // this callback will be called after files get dropped, we will get the acceptedFiles. If you want, you can even access the rejected files too
-  //   console.log(acceptedFiles);
-  // }, []);
 
   const initialValues = {
     wordPort: "",
@@ -185,11 +136,40 @@ export default function RegisterWords({token}) {
                           try {
                             setIsLoading(true);
                             const response = await axios.post("http://localhost:5000/palavras/", JSON.stringify(fields), {
-                              headers: { 
+                              headers: {
                                 'Content-Type': 'application/json',
                                 'Authorization': `Bearer ${token}`
-                               }})
-
+                              }
+                            })
+                            const {data} = response;
+                            if(image){
+                              // https://stackoverflow.com/questions/12168909/blob-from-dataurl
+                              const blobData = await (await fetch(image.src)).blob(); 
+                              let uploadImage = new FormData();
+                              uploadImage.append('file', blobData, image.name);
+                              uploadImage.append('oidword', data._id);
+                              let responseImage = await axios({
+                                method: "post",
+                                url: "http://localhost:5000/uploads/",
+                                data: uploadImage,
+                                headers: { "Content-Type": "multipart/form-data",
+                                'Authorization': `Bearer ${token}`},
+                              })
+                            }
+                            if(record){
+                              const event = new Date();
+                              let uploadRecord = new FormData();
+                              uploadRecord.append('file', record, `${event.toISOString()}.weba`);
+                              uploadRecord.append('oidword', data._id, );
+                              let responseRecord = await axios({
+                                method: "post",
+                                url: "http://localhost:5000/uploads/",
+                                data: uploadRecord,
+                                headers: { "Content-Type": "multipart/form-data",
+                                'Authorization': `Bearer ${token}` },
+                              })
+                            }
+                            
                             if (response.status === 201) {
                               toast.success("Nova palavra adicionada com sucesso!", {
                                 position: "top-right",
@@ -205,7 +185,7 @@ export default function RegisterWords({token}) {
                           } catch (err) {
                             if (
                               err?.response.status === 409 || err?.response?.data?.message) {
-                              toast.error("Email ou nome de usuario ja cadastrados! Verifique-os e tente novamente.", {
+                              toast.error("Palavra já cadastrada! Verifique-a e tente novamente.", {
                                 position: "top-right",
                                 autoClose: 5000,
                                 hideProgressBar: false,
@@ -255,7 +235,6 @@ export default function RegisterWords({token}) {
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
-
                               <FormGroup className="w-50">
                                 <Label htmlFor="translationWaiwai">Tradução em Waiwai</Label>
                                 <Field
@@ -273,7 +252,6 @@ export default function RegisterWords({token}) {
                                 />
                               </FormGroup>
                             </Row>
-
                             <Row>
                               <FormGroup className="w-50 pr-3">
                                 <Label htmlFor="meaningPort">Significado em português</Label>
@@ -286,16 +264,12 @@ export default function RegisterWords({token}) {
                                     : ""
                                     }`}
                                   component={MyInput} />
-                                {/* <Input
-                                  
-                                /> */}
                                 <ErrorMessage
                                   name="meaningPort"
                                   component="div"
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
-
                               <FormGroup className="w-50">
                                 <Label htmlFor="meaningWaiwai">Significado em Waiwai</Label>
                                 <Field
@@ -314,7 +288,6 @@ export default function RegisterWords({token}) {
                                 />
                               </FormGroup>
                             </Row>
-
                             <Row>
                               <FormGroup className="w-50 pr-3">
                                 <Label htmlFor="synonymPort">Sinonimo em Portugues</Label>
@@ -332,7 +305,6 @@ export default function RegisterWords({token}) {
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
-
                               <FormGroup className="w-50">
                                 <Label htmlFor="synonymWaiwai">Sinonimo Waiwai</Label>
                                 <Field
@@ -350,7 +322,6 @@ export default function RegisterWords({token}) {
                                 />
                               </FormGroup>
                             </Row>
-
                             <Row>
                               <FormGroup className="w-100 pr-3">
                                 <Label htmlFor="category">Categoria da palavra</Label>
@@ -370,10 +341,8 @@ export default function RegisterWords({token}) {
                               </FormGroup>
                             </Row>
                             <Row>
-
                               <FormGroup className="w-50 pr-3" >
                                 <Label htmlFor="img_logo">Insira uma image</Label>
-
                                 <div style={{ border: "3px #00806b dashed" }}>
                                   {image ? (
                                     <>
@@ -392,17 +361,18 @@ export default function RegisterWords({token}) {
                                     <Dropzone onDrop={onDrop} accept={"image/*"} />
                                   </>}
                                 </div>
-
                               </FormGroup>
                               <FormGroup className="w-50">
                                 <Label htmlFor="audio">Gravar audio</Label>
-
-
+                                <AudioRecorder
+                                  onRecordingComplete={(blob) => addAudioElement(blob)}
+                                  recorderControls={recorderControls}
+                                />
                                 <div className="my-2">
-                                {record ? (
+                                  {record ? (
                                     <>
                                       <div className="d-flex justify-content-start">
-                                      <ReactAudioPlayer src={URL.createObjectURL(record)}
+                                        <ReactAudioPlayer src={URL.createObjectURL(record)}
                                           controls
                                         />
                                         <Button onClick={removeAudio}
@@ -415,12 +385,8 @@ export default function RegisterWords({token}) {
                                       </div>
                                     </>
                                   )
-                                    : (<AudioRecorder
-                                      onRecordingComplete={(blob) => addAudioElement(blob)}
-                                      recorderControls={recorderControls}
-                                    />)}
+                                    : (<></>)}
                                 </div>
-
                               </FormGroup>
                             </Row>
                             <Row className="mt-3">
@@ -432,16 +398,12 @@ export default function RegisterWords({token}) {
                                   Cancelar
                                 </Button>
                               </FormGroup>
-
                             </Row>
-
-
                           </Form>
                         )}
                       />
                       <ToastContainer />
                     </CardBody>
-
                   </Card>
                 </Col>
               </Row>
@@ -460,9 +422,9 @@ export default function RegisterWords({token}) {
   );
 }
 
-export async function getServerSideProps({req, res}) {
+export async function getServerSideProps({ req, res }) {
   return {
-    props: { token: req.cookies.accessToken}, // will be passed to the page component as props
+    props: { token: req.cookies.accessToken }, // will be passed to the page component as props
   }
 }
 
