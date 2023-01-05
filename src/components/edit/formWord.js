@@ -22,7 +22,6 @@ const MyInput = ({ field, form, ...props }) => {
 };
 
 const FormWord = ({ data, modal, setModal, setDados, showAction , token, disabled}) => {
-  const { data: session } = useSession();
 
   const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState();
@@ -35,6 +34,21 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
     synonymPort: "",
     synonymWaiwai: "",
   });
+
+  useEffect(() => {
+    if(data){
+      axios
+      .get(`http://localhost:5000/palavras/${data['_id']}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => res.data)
+      .then((data) => {
+        console.log(data);
+      });
+    }
+  },[data])
 
   const validationSchema = Yup.object().shape({
     wordPort: Yup.string().required("Este campo é obrigatorio."),
