@@ -38,7 +38,7 @@ const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled
     synonymPort: "",
     synonymWaiwai: "",
   });
-  const [imgAudio, setImgAudio] = useState({ id_img: "", id_audio: "" });
+
   const [image, setImage] = useState(null);
   const options = {
     position: "top-right",
@@ -61,7 +61,6 @@ const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled
     console.log(acceptedFiles)
     acceptedFiles.map(file => {
       const reader = new FileReader();
-      console.log(reader)
       reader.onload = function (e) {
         setImage({ id: cuid(), src: e.target.result, name: file.name});
       };
@@ -160,38 +159,34 @@ const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled
   useEffect(() => {
     if (data) {
       axios
-        .get(`http://localhost:5000/palavras/${data["_id"]}`, {
+        .get(`http://localhost:5000/palavras/${data["id"]}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
         .then((res) => res.data)
         .then((data) => {
-          setImgAudio({ id_img: data.image, id_audio: data.audio });
+          setImage({ id: data.image, src: `http://localhost:5000/uploads/${data.image}`, name: data.image})
+          // setRecord({ id: data.audio, src: `http://localhost:5000/uploads/${data.audio}`, name: data.audio})
         });
     }
-  }, [data, token]);
+  }, [data]);
 
-  useEffect(() => {
-    if (imgAudio) {
-      console.log(imgAudio["id_img"])
-      axios
-        .get(`http://localhost:5000/uploads/${imgAudio["id_img"]}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => res.data)
-        .then((data) => {
-          console.log(data)
-        });
-    }
-  }, [imgAudio, token]);
-
-  useEffect(() => {
-    //console.log(image)
-  })
-
+  // useEffect(() => {
+  //   if (imgAudio) {
+  //     console.log(imgAudio["id_img"])
+  //     axios
+  //       .get(`http://localhost:5000/uploads/${imgAudio["id_img"]}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       })
+  //       .then((res) => res.data)
+  //       .then((data) => {
+  //         console.log(data)
+  //       });
+  //   }
+  // }, [imgAudio, token]);
 
   return (
     <Container>
@@ -405,6 +400,7 @@ const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled
                       <FormGroup className="w-50 pr-3">
                         <Label htmlFor="img_logo">Insira uma image</Label>
                         <div style={{ border: "3px #00806b dashed" }}>
+                          
                           {image ? (
                             <>
                               <div className="d-flex justify-content-end">

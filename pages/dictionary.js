@@ -33,7 +33,7 @@ export default function Dictionary({token}) {
                 <Banner3 />
                 <Card>
                     <CardBody>
-                        <DataTable dados={dados} disabled/>
+                        <DataTable dados={dados} token={token} disabled/>
                     </CardBody>
                 </Card>
             </Layout>
