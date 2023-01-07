@@ -7,21 +7,25 @@ import {
   Col,
   Card,
   CardBody,
-  Input
+  Input,
 } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import Dropzone from "../dragDrop";
+import Image from "../PreviewImagem";
+// cuid is a simple library to generate unique IDs
+import cuid from "cuid";
 
 const MyInput = ({ field, form, ...props }) => {
   return <Input {...field} {...props} />;
 };
 
-const FormWord = ({ data, modal, setModal, setDados, showAction , token, disabled}) => {
+const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled,}) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState();
@@ -34,21 +38,38 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
     synonymPort: "",
     synonymWaiwai: "",
   });
+  const [imgAudio, setImgAudio] = useState({ id_img: "", id_audio: "" });
+  const [image, setImage] = useState(null);
+  const options = {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
+  };
 
-  useEffect(() => {
-    if(data){
-      axios
-      .get(`http://localhost:5000/palavras/${data['_id']}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => res.data)
-      .then((data) => {
-        console.log(data);
-      });
-    }
-  },[data])
+  const removeImage = () => {
+    setImage(null)
+  }
+  const removeAudio = () => {
+    setRecord(null)
+  }
+
+  const onDrop = useCallback(acceptedFiles => {
+    console.log(acceptedFiles)
+    acceptedFiles.map(file => {
+      const reader = new FileReader();
+      console.log(reader)
+      reader.onload = function (e) {
+        setImage({ id: cuid(), src: e.target.result, name: file.name});
+      };
+      reader.readAsDataURL(file);
+      return file;
+    });
+
+  }, []);
 
   const validationSchema = Yup.object().shape({
     wordPort: Yup.string().required("Este campo é obrigatorio."),
@@ -60,19 +81,11 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
     synonymWaiwai: Yup.string().required("Este campo é obrigatorio."),
   });
 
+
   const handleDeleteWord = async () => {
     await handleMutationDelete();
   };
 
-  const options = {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: false,
-    draggable: true,
-    progress: undefined,
-  };
   const fetchDados = () => {
     axios
       .get("http://localhost:5000/palavras/me ", {
@@ -93,21 +106,15 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
       await axios({
         url: `http://localhost:5000/palavras/${userId}`,
         method: "DELETE",
-        headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}`},
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       setModal(!modal);
       toast.success("Palavra excluida com sucesso!", options);
       fetchDados();
-      // toast.success("Palavra excluida com sucesso!", {
-      //     onOpen: () => fetchDados(),
-      //     position: "top-right",
-      //     autoClose: 5000,
-      //     hideProgressBar: false,
-      //     closeOnClick: true,
-      //     pauseOnHover: false,
-      //     draggable: true,
-      //     progress: undefined,
-      //   });
+
     } catch (err) {
       toast.error("Erro ao excluir palavra.", {
         position: "top-right",
@@ -124,6 +131,7 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
       });
     }
   };
+
   useEffect(() => {
     if (data) {
       setUserId(data.id);
@@ -132,8 +140,7 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
         translationWaiwai:
           data.translationWaiwai || formValues.translationWaiwai,
         category: data.category || formValues.category,
-        meaningPort:
-          data.meaningPort || formValues.meaningPort,
+        meaningPort: data.meaningPort || formValues.meaningPort,
         meaningWaiwai: data.meaningWaiwai || formValues.meaningWaiwai,
         synonymPort: data.synonymPort || formValues.synonymPort,
         synonymWaiwai: data.synonymWaiwai || formValues.synonymWaiwai,
@@ -149,6 +156,42 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
     formValues.translationWaiwai,
     formValues.wordPort,
   ]);
+
+  useEffect(() => {
+    if (data) {
+      axios
+        .get(`http://localhost:5000/palavras/${data["_id"]}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => res.data)
+        .then((data) => {
+          setImgAudio({ id_img: data.image, id_audio: data.audio });
+        });
+    }
+  }, [data, token]);
+
+  useEffect(() => {
+    if (imgAudio) {
+      console.log(imgAudio["id_img"])
+      axios
+        .get(`http://localhost:5000/uploads/${imgAudio["id_img"]}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => res.data)
+        .then((data) => {
+          console.log(data)
+        });
+    }
+  }, [imgAudio, token]);
+
+  useEffect(() => {
+    //console.log(image)
+  })
+
 
   return (
     <Container>
@@ -175,7 +218,10 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
                     response = await axios({
                       url: `http://localhost:5000/palavras/${userId}`,
                       method: "PUT",
-                      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                      },
                       data: JSON.stringify(fields),
                     });
                     if (response.status === 204) {
@@ -203,24 +249,19 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
                   <Form>
                     <Row>
                       <FormGroup className="w-50 pr-3">
-                        <Label htmlFor="wordPort">
-                          Palavra em português
-                        </Label>
+                        <Label htmlFor="wordPort">Palavra em português</Label>
                         <Field
                           disabled={disabled}
                           name="wordPort"
                           type="text"
                           onChange={(e) => {
-                            setFieldValue(
-                              "wordPort",
-                              e.target.value,
-                              true
-                            );
+                            setFieldValue("wordPort", e.target.value, true);
                           }}
-                          className={`form-control ${errors.wordPort && touched.wordPort
+                          className={`form-control ${
+                            errors.wordPort && touched.wordPort
                               ? " is-invalid"
                               : ""
-                            }`}
+                          }`}
                         />
                         <ErrorMessage
                           name="wordPort"
@@ -237,11 +278,12 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
                           disabled={disabled}
                           name="translationWaiwai"
                           type="text"
-                          className={`form-control ${errors.translationWaiwai &&
-                              touched.translationWaiwai
+                          className={`form-control ${
+                            errors.translationWaiwai &&
+                            touched.translationWaiwai
                               ? " is-invalid"
                               : ""
-                            }`}
+                          }`}
                         />
                         <ErrorMessage
                           name="translationWaiwai"
@@ -260,11 +302,11 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
                           disabled={disabled}
                           name="meaningPort"
                           type="textarea"
-                          className={`form-control ${errors.meaningPort &&
-                              touched.meaningPort
+                          className={`form-control ${
+                            errors.meaningPort && touched.meaningPort
                               ? " is-invalid"
                               : ""
-                            }`}
+                          }`}
                           component={MyInput}
                         />
                         <ErrorMessage
@@ -280,13 +322,13 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
                         </Label>
                         <Field
                           disabled={disabled}
-
                           name="meaningWaiwai"
                           type="textarea"
-                          className={`form-control ${errors.meaningWaiwai && touched.meaningWaiwai
+                          className={`form-control ${
+                            errors.meaningWaiwai && touched.meaningWaiwai
                               ? " is-invalid"
                               : ""
-                            }`}
+                          }`}
                           component={MyInput}
                         />
                         <ErrorMessage
@@ -304,13 +346,13 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
                         </Label>
                         <Field
                           disabled={disabled}
-                        
                           name="synonymPort"
                           type="text"
-                          className={`form-control ${errors.synonymPort && touched.synonymPort
+                          className={`form-control ${
+                            errors.synonymPort && touched.synonymPort
                               ? " is-invalid"
                               : ""
-                            }`}
+                          }`}
                         />
                         <ErrorMessage
                           name="synonymPort"
@@ -323,13 +365,13 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
                         <Label htmlFor="synonymWaiwai">Sinonimo Waiwai</Label>
                         <Field
                           disabled={disabled}
-
                           name="synonymWaiwai"
                           type="text"
-                          className={`form-control ${errors.synonymWaiwai && touched.synonymWaiwai
+                          className={`form-control ${
+                            errors.synonymWaiwai && touched.synonymWaiwai
                               ? " is-invalid"
                               : ""
-                            }`}
+                          }`}
                         />
                         <ErrorMessage
                           name="synonymWaiwai"
@@ -344,13 +386,13 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
                         <Label htmlFor="category">Categoria da palavra</Label>
                         <Field
                           disabled={disabled}
-
                           name="category"
                           type="text"
-                          className={`form-control ${errors.category && touched.category
+                          className={`form-control ${
+                            errors.category && touched.category
                               ? " is-invalid"
                               : ""
-                            }`}
+                          }`}
                         />
                         <ErrorMessage
                           name="category"
@@ -359,31 +401,54 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
                         />
                       </FormGroup>
                     </Row>
-                    
-                    {
-                      showAction ? (
-                        <Row className="mt-3">
-                          <FormGroup className="w-100">
-                            <div className="d-flex justify-content-between">
-                              <Button
-                                type="submit"
-                                color="primary"
-                                disabled={isLoading}
-                              >
-                                Enviar
-                              </Button>
-                              <Button
-                                color="danger"
-                                onClick={() => handleDeleteWord()}
-                              >
-                                Excluir
-                              </Button>
-                            </div>
-                          </FormGroup>
-                        </Row>
-                      ) : null
-                    }
+                    <Row>
+                      <FormGroup className="w-50 pr-3">
+                        <Label htmlFor="img_logo">Insira uma image</Label>
+                        <div style={{ border: "3px #00806b dashed" }}>
+                          {image ? (
+                            <>
+                              <div className="d-flex justify-content-end">
+                                <Button
+                                  onClick={removeImage}
+                                  type="button"
+                                  color="none"
+                                  className="px-1 py-0 my-0 mx-0 border border-white"
+                                >
+                                  <span className="badge bg-secondary ">x</span>
+                                </Button>
+                              </div>
+                              <Image image={image} />
+                            </>
+                          ) : (
+                            <>
+                               <Dropzone onDrop={onDrop} accept={"image/*"} />
+                            </>
+                          )}
+                        </div>
+                      </FormGroup>
+                    </Row>
 
+                    {showAction ? (
+                      <Row className="mt-3">
+                        <FormGroup className="w-100">
+                          <div className="d-flex justify-content-between">
+                            <Button
+                              type="submit"
+                              color="primary"
+                              disabled={isLoading}
+                            >
+                              Enviar
+                            </Button>
+                            <Button
+                              color="danger"
+                              onClick={() => handleDeleteWord()}
+                            >
+                              Excluir
+                            </Button>
+                          </div>
+                        </FormGroup>
+                      </Row>
+                    ) : null}
                   </Form>
                 )}
               />
@@ -396,4 +461,3 @@ const FormWord = ({ data, modal, setModal, setDados, showAction , token, disable
 };
 
 export default FormWord;
-
