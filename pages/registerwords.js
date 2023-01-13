@@ -11,47 +11,94 @@ import {
   Col,
   Card,
   CardBody,
+  Input,
 } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import {useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Banner3 from "../src/components/banner/Banner3";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import React, { useCallback } from "react";
+import Dropzone from "../src/components/dragDrop";
+import Image from "../src/components/PreviewImagem";
 
-export default function RegisterWords() {
+import ReactAudioPlayer from 'react-audio-player';
+import { getCookie, getCookies } from 'cookies-next';
+
+/**
+ * Importações para entrada de áudio
+ */
+import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
+
+// cuid is a simple library to generate unique IDs
+import cuid from "cuid";
+
+const MyInput = ({ field, form, ...props }) => {
+  return <Input {...field} {...props} />;
+};
+
+export default function RegisterWords({ token }) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
+  const [image, setImage] = useState(null);
 
- 
-  // useEffect(() => {
-  //   if (!session?.user) {
-  //     router.push('./')
-  //   }
-  // }, [router, session])
+  /*
+   * Módulo para entrada de áudio 
+   */
+  const [record, setRecord] = useState(null)
+  const recorderControls = useAudioRecorder();
+
+  const removeImage = () => {
+    setImage(null)
+  }
+  const removeAudio = () => {
+    setRecord(null)
+  }
+
+  const addAudioElement = (blob) => {
+    setRecord(blob)
+  };
+
+
+
+  const onDrop = useCallback(acceptedFiles => {
+    acceptedFiles.map(file => {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        setImage({ id: cuid(), src: e.target.result, name: file.name});
+      };
+      reader.readAsDataURL(file);
+      return file;
+    });
+  }, []);
+
 
   const initialValues = {
-    word_portugues: "",
-    translation_Waiwai: "",
+    wordPort: "",
+    translationWaiwai: "",
     category: "",
-    meaning_Portuguese: "",
+    meaningPort: "",
     meaningWaiwai: "",
-    synonymPortugues: "",
+    synonymPort: "",
     synonymWaiwai: "",
   };
 
   const validationSchema = Yup.object().shape({
-    word_portugues: Yup.string().required("Este campo é obrigatorio."),
-    translation_Waiwai: Yup.string().required("Este campo é obrigatorio."),
+    wordPort: Yup.string().required("Este campo é obrigatorio."),
+    translationWaiwai: Yup.string().required("Este campo é obrigatorio."),
     category: Yup.string().required("Este campo é obrigatorio."),
-    meaning_Portuguese: Yup.string().required("Este campo é obrigatorio."),
+    meaningPort: Yup.string().required("Este campo é obrigatorio."),
     meaningWaiwai: Yup.string().required("Este campo é obrigatorio."),
-    synonymPortugues: Yup.string().required("Este campo é obrigatorio."),
+    synonymPort: Yup.string().required("Este campo é obrigatorio."),
     synonymWaiwai: Yup.string().required("Este campo é obrigatorio.")
   });
 
+  useEffect(()=>{
+    console.log(record)
+  })
 
   if (session) {
     return (
@@ -89,18 +136,44 @@ export default function RegisterWords() {
                         initialValues={initialValues}
                         validationSchema={validationSchema}
                         onSubmit={async (fields) => {
-                          let response;
-                          console.log(fields)
                           try {
                             setIsLoading(true);
-
-                            response = await axios({
-                              url: "http://localhost:5000/adicionarPalavra",
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              data: JSON.stringify(fields),
-                            });
-                            if (response.status === 200) {
+                            const response = await axios.post("http://localhost:5000/palavras/", JSON.stringify(fields), {
+                              headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                              }
+                            })
+                            const {data} = response;
+                            if(image){
+                              // https://stackoverflow.com/questions/12168909/blob-from-dataurl
+                              const blobData = await (await fetch(image.src)).blob(); 
+                              let uploadImage = new FormData();
+                              uploadImage.append('file', blobData, image.name);
+                              uploadImage.append('oidword', data._id);
+                              let responseImage = await axios({
+                                method: "post",
+                                url: "http://localhost:5000/uploads/",
+                                data: uploadImage,
+                                headers: { "Content-Type": "multipart/form-data",
+                                'Authorization': `Bearer ${token}`},
+                              })
+                            }
+                            if(record){
+                              const event = new Date();
+                              let uploadRecord = new FormData();
+                              uploadRecord.append('file', record, `${event.toISOString()}.weba`);
+                              uploadRecord.append('oidword', data._id, );
+                              let responseRecord = await axios({
+                                method: "post",
+                                url: "http://localhost:5000/uploads/",
+                                data: uploadRecord,
+                                headers: { "Content-Type": "multipart/form-data",
+                                'Authorization': `Bearer ${token}` },
+                              })
+                            }
+                            
+                            if (response.status === 201) {
                               toast.success("Nova palavra adicionada com sucesso!", {
                                 position: "top-right",
                                 autoClose: 5000,
@@ -110,11 +183,12 @@ export default function RegisterWords() {
                                 draggable: true,
                                 progress: undefined,
                               });
+                              router.push("/myWord")
                             }
                           } catch (err) {
                             if (
                               err?.response.status === 409 || err?.response?.data?.message) {
-                              toast.error("Email ou nome de usuario ja cadastrados! Verifique-os e tente novamente.", {
+                              toast.error("Palavra já cadastrada! Verifique-a e tente novamente.", {
                                 position: "top-right",
                                 autoClose: 5000,
                                 hideProgressBar: false,
@@ -149,68 +223,67 @@ export default function RegisterWords() {
                           <Form>
                             <Row>
                               <FormGroup className="w-50 pr-3">
-                                <Label htmlFor="word_portugues">Palavra em português</Label>
+                                <Label htmlFor="wordPort">Palavra em português</Label>
                                 <Field
-                                  name="word_portugues"
+                                  name="wordPort"
                                   type="text"
-                                  className={`form-control ${errors.word_portugues && touched.word_portugues
+                                  className={`form-control ${errors.wordPort && touched.wordPort
                                     ? " is-invalid"
                                     : ""
                                     }`}
                                 />
                                 <ErrorMessage
-                                  name="word_portugues"
+                                  name="wordPort"
                                   component="div"
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
-
                               <FormGroup className="w-50">
-                                <Label htmlFor="translation_Waiwai">Tradução em Waiwai</Label>
+                                <Label htmlFor="translationWaiwai">Tradução em Waiwai</Label>
                                 <Field
-                                  name="translation_Waiwai"
+                                  name="translationWaiwai"
                                   type="text"
-                                  className={`form-control ${errors.translation_Waiwai && touched.translation_Waiwai
+                                  className={`form-control ${errors.translationWaiwai && touched.translationWaiwai
                                     ? " is-invalid"
                                     : ""
                                     }`}
                                 />
                                 <ErrorMessage
-                                  name="translation_Waiwai"
+                                  name="translationWaiwai"
                                   component="div"
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
                             </Row>
-
                             <Row>
                               <FormGroup className="w-50 pr-3">
-                                <Label htmlFor="meaning_Portuguese">Significado em português</Label>
-                                <Field
-                                  name="meaning_Portuguese"
-                                  type="text"
-                                  className={`form-control ${errors.meaning_Portuguese && touched.meaning_Portuguese
+                                <Label htmlFor="meaningPort">Significado em português</Label>
+                                <Field name="meaningPort"
+                                  type="textarea"
+                                  rows="3"
+                                  id="meaningPort"
+                                  className={`form-control ${errors.meaningPort && touched.meaningPort
                                     ? " is-invalid"
                                     : ""
                                     }`}
-                                />
+                                  component={MyInput} />
                                 <ErrorMessage
-                                  name="meaning_Portuguese"
+                                  name="meaningPort"
                                   component="div"
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
-
                               <FormGroup className="w-50">
                                 <Label htmlFor="meaningWaiwai">Significado em Waiwai</Label>
                                 <Field
                                   name="meaningWaiwai"
-                                  type="text"
+                                  type="textarea"
+                                  rows="3"
                                   className={`form-control ${errors.meaningWaiwai && touched.meaningWaiwai
                                     ? " is-invalid"
                                     : ""
                                     }`}
-                                />
+                                  component={MyInput} />
                                 <ErrorMessage
                                   name="meaningWaiwai"
                                   component="div"
@@ -218,25 +291,23 @@ export default function RegisterWords() {
                                 />
                               </FormGroup>
                             </Row>
-
                             <Row>
                               <FormGroup className="w-50 pr-3">
-                                <Label htmlFor="synonymPortugues">Sinonimo em Portugues</Label>
+                                <Label htmlFor="synonymPort">Sinonimo em Portugues</Label>
                                 <Field
-                                  name="synonymPortugues"
+                                  name="synonymPort"
                                   type="text"
-                                  className={`form-control ${errors.synonymPortugues && touched.synonymPortugues
+                                  className={`form-control ${errors.synonymPort && touched.synonymPort
                                     ? " is-invalid"
                                     : ""
                                     }`}
                                 />
                                 <ErrorMessage
-                                  name="synonymPortugues"
+                                  name="synonymPort"
                                   component="div"
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
-
                               <FormGroup className="w-50">
                                 <Label htmlFor="synonymWaiwai">Sinonimo Waiwai</Label>
                                 <Field
@@ -254,9 +325,8 @@ export default function RegisterWords() {
                                 />
                               </FormGroup>
                             </Row>
-
                             <Row>
-                              <FormGroup className="w-50 pr-3">
+                              <FormGroup className="w-100 pr-3">
                                 <Label htmlFor="category">Categoria da palavra</Label>
                                 <Field
                                   name="category"
@@ -273,25 +343,70 @@ export default function RegisterWords() {
                                 />
                               </FormGroup>
                             </Row>
+                            <Row>
+                              <FormGroup className="w-50 pr-3" >
+                                <Label htmlFor="img_logo">Insira uma image</Label>
+                                <div style={{ border: "3px #00806b dashed" }}>
+                                  {image ? (
+                                    <>
+                                      <div className="d-flex justify-content-end">
+                                        <Button onClick={removeImage}
+                                          type="button"
+                                          color="none"
+                                          className="px-1 py-0 my-0 mx-0 border border-white">
+                                          <span className="badge bg-secondary ">x</span>
+                                        </Button>
+                                      </div>
+                                      <Image image={image} />
+                                    </>
 
+                                  ) : <>
+                                    <Dropzone onDrop={onDrop} accept={"image/*"} />
+                                  </>}
+                                </div>
+                              </FormGroup>
+                              <FormGroup className="w-50">
+                                <Label htmlFor="audio">Gravar audio</Label>
+                                <AudioRecorder
+                                  onRecordingComplete={(blob) => addAudioElement(blob)}
+                                  recorderControls={recorderControls}
+                                />
+                                <div className="my-2">
+                                  {record ? (
+                                    <>
+                                      <div className="d-flex justify-content-start">
+                                        <ReactAudioPlayer src={URL.createObjectURL(record)}
+                                          controls
+                                        />
+                                        <Button onClick={removeAudio}
+                                          type="button"
+                                          color="none"
+                                          className="px-1 py-0 my-0 mx-0 border border-white">
+                                          <span className="badge bg-secondary">x</span>
+                                        </Button>
+
+                                      </div>
+                                    </>
+                                  )
+                                    : (<></>)}
+                                </div>
+                              </FormGroup>
+                            </Row>
                             <Row className="mt-3">
                               <FormGroup>
-                                <Button type="submit" color="primary" className="me-2" disabled={isLoading}>
-                                  Enviar
+                                <Button type="submit" color="success" className="me-2" disabled={isLoading}>
+                                  Salvar
                                 </Button>
-                                <Button type="reset" color="secondary" className="mx-3" disabled={isLoading}>
+                                <Button type="reset" color="danger" className="mx-3" disabled={isLoading}>
                                   Cancelar
                                 </Button>
                               </FormGroup>
-
                             </Row>
-
                           </Form>
                         )}
                       />
                       <ToastContainer />
                     </CardBody>
-
                   </Card>
                 </Col>
               </Row>
@@ -309,3 +424,10 @@ export default function RegisterWords() {
     </>
   );
 }
+
+export async function getServerSideProps({ req, res }) {
+  return {
+    props: { token: req.cookies.accessToken }, // will be passed to the page component as props
+  }
+}
+

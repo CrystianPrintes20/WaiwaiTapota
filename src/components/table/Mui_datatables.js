@@ -7,21 +7,44 @@ import Dicionario from '../edit/Dicionario';
 import FormWord from '../edit/formWord';
 
 
-const DataTable = ({ dados, columns}) => {
+const DataTable = ({ dados, setDados, showAction, token, disabled}) => {
     const [modal, setModal] = useModalDicionario();
     const toggle = () => setModal(!modal);
     const [word, setWord] = useState(null)
-    const [state, setState] = useState(false)
     const [rows, setRows] = useState([])
     
+    let columns = [ { field: 'wordPort', headerName: 'Palavra em Português', minWidth: 140 },
+    { field: 'translationWaiwai', headerName: 'Tradução em Waiwai', minWidth: 140 },
+    { field: 'category', headerName: 'Categoria', minWidth: 140 },
+    { field: 'meaningPort', headerName: 'Significado em Português', minWidth: 140 },
+    { field: 'meaningWaiwai', headerName: 'Significado em Waiwai', minWidth: 140 },
+    { field: 'synonymPort', headerName: 'Sinônimo em Português', minWidth: 140 },
+    { field: 'synonymWaiwai', headerName: 'Sinônimo em Waiwai', minWidth: 140, },
+{
+        field: 'action',
+        headerName: 'Ação',
+        minWidth: 180,
+        sortable: false,
+        disableClickEventBubbling: true,
+
+        renderCell: (params) => {
+            const onClick = (e) => {
+                setWord(params.row)
+                setModal(!modal)
+            };
+            return (
+                <div>
+                    <Button variant="outlined" color="success" onClick={onClick}>Detalhes</Button>
+                </div>
+            );
+        },
+    }]
 
     useEffect(() => {
         if (dados) {
-            let url_atual = window.location.href;
-            setRows(() => {
-                return dados.map(item => ({ ...item, id: item["_id"]["$oid"] }))
-            })
-            console.log(url_atual)
+             setRows(() => {
+                 return dados.map(item => ({ ...item, id: item["_id"]}))
+             })
         }
     }, [dados])
 
@@ -36,7 +59,7 @@ const DataTable = ({ dados, columns}) => {
                 />
             </div>
             <Dicionario toggle={toggle} modal={modal} >
-                <FormWord data={word} />
+                <FormWord data={word} modal={modal} setModal={setModal} setDados={setDados}  showAction={showAction} token={token} disabled={disabled}/>
             </Dicionario>
         </Container>
     );

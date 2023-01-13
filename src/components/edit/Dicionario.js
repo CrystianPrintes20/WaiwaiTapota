@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 const Dicionario = ({ toggle, modal, children}) => {
     return (
-        <Modal isOpen={modal} toggle={toggle}>
+        <Modal isOpen={modal} toggle={toggle} className="modal-lg">
             <ModalHeader toggle={toggle}>Editar palavra</ModalHeader>
             <ModalBody>
                 {children}

@@ -71,12 +71,12 @@ const RegisterFormik = () => {
                     setIsLoading(true);
                  
                     response = await axios({
-                      url: "http://localhost:5000/registrarUsuarios",
+                      url: "http://localhost:5000/auth/register",
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       data: JSON.stringify(fields),
                     });
-                    if (response.status === 200) {
+                    if (response.status === 201) {
                       /* sessionStorage.setItem("token", response.data.token);
                       router.push("/api/auth/signin"); */
                       router.push("./loginformik")
