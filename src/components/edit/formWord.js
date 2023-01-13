@@ -8,6 +8,10 @@ import {
   Card,
   CardBody,
   Input,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -15,18 +19,26 @@ import { useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { useSession } from "next-auth/react";
 import Dropzone from "../dragDrop";
 import Image from "../PreviewImagem";
 // cuid is a simple library to generate unique IDs
 import cuid from "cuid";
+import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
+import ReactAudioPlayer from "react-audio-player";
 
 const MyInput = ({ field, form, ...props }) => {
   return <Input {...field} {...props} />;
 };
 
-const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled,}) => {
-
+const FormWord = ({
+  data,
+  modal,
+  setModal,
+  setDados,
+  showAction,
+  token,
+  disabled,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState();
   const [formValues, setFormValues] = useState({
@@ -38,8 +50,11 @@ const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled
     synonymPort: "",
     synonymWaiwai: "",
   });
-
   const [image, setImage] = useState(null);
+  const [record, setRecord] = useState(null);
+  const [idImage, setIdImage] = useState(null)
+  const [idAudio, setIdAudio] = useState(null)
+  const recorderControls = useAudioRecorder();
   const options = {
     position: "top-right",
     autoClose: 5000,
@@ -49,25 +64,31 @@ const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled
     draggable: true,
     progress: undefined,
   };
+  const [modalExcluir, setModalExcluir] = useState(false);
+  const [modalEditar, setModalEditar] = useState(false);
+
+  const toggleExcluir = () => setModalExcluir(!modalExcluir);
+  const toggleEditar = () => setModalEditar(!modalEditar);
 
   const removeImage = () => {
-    setImage(null)
-  }
+    setImage(null);
+  };
   const removeAudio = () => {
-    setRecord(null)
-  }
+    setRecord(null);
+  };
+  const addAudioElement = (blob) => {
+    setRecord(blob);
+  };
 
-  const onDrop = useCallback(acceptedFiles => {
-    console.log(acceptedFiles)
-    acceptedFiles.map(file => {
+  const onDrop = useCallback((acceptedFiles) => {
+    acceptedFiles.map((file) => {
       const reader = new FileReader();
       reader.onload = function (e) {
-        setImage({ id: cuid(), src: e.target.result, name: file.name});
+        setImage({ id: cuid(), src: e.target.result, name: file.name });
       };
       reader.readAsDataURL(file);
       return file;
     });
-
   }, []);
 
   const validationSchema = Yup.object().shape({
@@ -80,6 +101,11 @@ const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled
     synonymWaiwai: Yup.string().required("Este campo é obrigatorio."),
   });
 
+  const getUrlElement = (object) => {
+    if (typeof object == "string") {
+      return object;
+    } else URL.createObjectURL(object);
+  };
 
   const handleDeleteWord = async () => {
     await handleMutationDelete();
@@ -113,7 +139,6 @@ const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled
       setModal(!modal);
       toast.success("Palavra excluida com sucesso!", options);
       fetchDados();
-
     } catch (err) {
       toast.error("Erro ao excluir palavra.", {
         position: "top-right",
@@ -166,27 +191,17 @@ const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled
         })
         .then((res) => res.data)
         .then((data) => {
-          setImage({ id: data.image, src: `http://localhost:5000/uploads/${data.image}`, name: data.image})
-          // setRecord({ id: data.audio, src: `http://localhost:5000/uploads/${data.audio}`, name: data.audio})
+          setIdImage(data.image)
+          setImage({
+            id: data.image,
+            src: `http://localhost:5000/uploads/${data.image}`,
+            name: data.image,
+          });
+          setIdAudio(data.audio)
+          setRecord(`http://localhost:5000/uploads/${data.audio}`);
         });
     }
   }, [data]);
-
-  // useEffect(() => {
-  //   if (imgAudio) {
-  //     console.log(imgAudio["id_img"])
-  //     axios
-  //       .get(`http://localhost:5000/uploads/${imgAudio["id_img"]}`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       })
-  //       .then((res) => res.data)
-  //       .then((data) => {
-  //         console.log(data)
-  //       });
-  //   }
-  // }, [imgAudio, token]);
 
   return (
     <Container>
@@ -207,18 +222,19 @@ const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled
                 validationSchema={validationSchema}
                 enableReinitialize
                 onSubmit={async (fields) => {
-                  let response;
                   try {
                     setIsLoading(true);
-                    response = await axios({
-                      url: `http://localhost:5000/palavras/${userId}`,
-                      method: "PUT",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                      },
-                      data: JSON.stringify(fields),
-                    });
+                    const response = await axios.put(
+                      `http://localhost:5000/palavras/${userId}`,
+                      JSON.stringify(fields),
+                      {
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${token}`,
+                        },
+                      }
+                    );
+                  
                     if (response.status === 204) {
                       toast.success("Palavra atualizada com sucesso!", options);
                       fetchDados();
@@ -400,25 +416,79 @@ const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled
                       <FormGroup className="w-50 pr-3">
                         <Label htmlFor="img_logo">Insira uma image</Label>
                         <div style={{ border: "3px #00806b dashed" }}>
-                          
                           {image ? (
                             <>
                               <div className="d-flex justify-content-end">
-                                <Button
-                                  onClick={removeImage}
-                                  type="button"
-                                  color="none"
-                                  className="px-1 py-0 my-0 mx-0 border border-white"
-                                >
-                                  <span className="badge bg-secondary ">x</span>
-                                </Button>
+                                {showAction ? (
+                                  <>
+                                    <Button
+                                      onClick={removeImage}
+                                      type="button"
+                                      color="none"
+                                      className="px-1 py-0 my-0 mx-0 border border-white"
+                                    >
+                                      <span className="badge bg-secondary ">
+                                        x
+                                      </span>
+                                    </Button>
+                                  </>
+                                ) : (
+                                  <></>
+                                )}
                               </div>
                               <Image image={image} />
                             </>
                           ) : (
                             <>
-                               <Dropzone onDrop={onDrop} accept={"image/*"} />
+                              <Dropzone onDrop={onDrop} accept={"image/*"} />
                             </>
+                          )}
+                        </div>
+                      </FormGroup>
+
+                      <FormGroup className="w-50">
+                        {showAction ? (
+                          <>
+                            <Label htmlFor="audio">Gravar audio</Label>
+                            <AudioRecorder
+                              onRecordingComplete={(blob) =>
+                                addAudioElement(blob)
+                              }
+                              recorderControls={recorderControls}
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <Label htmlFor="audio">Ouvir audio</Label>
+                          </>
+                        )}
+
+                        <div className="my-3">
+                          {record ? (
+                            <>
+                              <div className="d-flex justify-content-start">
+                                <ReactAudioPlayer
+                                  src={getUrlElement(record)}
+                                  controls
+                                />
+                                {showAction ? (
+                                  <Button
+                                    onClick={removeAudio}
+                                    type="button"
+                                    color="none"
+                                    className="px-1 py-0 my-0 mx-0 border border-white"
+                                  >
+                                    <span className="badge bg-secondary">
+                                      x
+                                    </span>
+                                  </Button>
+                                ) : (
+                                  <></>
+                                )}
+                              </div>
+                            </>
+                          ) : (
+                            <></>
                           )}
                         </div>
                       </FormGroup>
@@ -430,15 +500,12 @@ const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled
                           <div className="d-flex justify-content-between">
                             <Button
                               type="submit"
-                              color="primary"
+                              color="success"
                               disabled={isLoading}
                             >
-                              Enviar
+                              Salvar
                             </Button>
-                            <Button
-                              color="danger"
-                              onClick={() => handleDeleteWord()}
-                            >
+                            <Button color="danger" onClick={toggleExcluir}>
                               Excluir
                             </Button>
                           </div>
@@ -449,6 +516,39 @@ const FormWord = ({ data, modal, setModal, setDados, showAction, token, disabled
                 )}
               />
             </CardBody>
+            <div>
+              <Modal isOpen={modalExcluir} toggle={toggleExcluir}>
+                <ModalHeader toggle={toggleExcluir}>
+                  Excluir palavra
+                </ModalHeader>
+                <ModalBody>
+                  Tem certeza que deseja excluir esta palavra?
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" onClick={() => handleDeleteWord()}>
+                    Sim, excluir
+                  </Button>{" "}
+                  <Button color="secondary" onClick={toggleExcluir}>
+                    Cancelar
+                  </Button>
+                </ModalFooter>
+              </Modal>
+
+              <Modal isOpen={modalEditar} toggle={toggleEditar}>
+                <ModalHeader toggle={toggleEditar}>Editar palavra</ModalHeader>
+                <ModalBody>
+                  Todas suas mudanças serão aplicadas, confirme as alterações.
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="success" onClick={() => handleDeleteWord()}>
+                    Confirmar
+                  </Button>{" "}
+                  <Button color="secondary" onClick={toggleEditar}>
+                    Cancelar
+                  </Button>
+                </ModalFooter>
+              </Modal>
+            </div>
           </Card>
         </Col>
       </Row>

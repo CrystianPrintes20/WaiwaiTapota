@@ -96,6 +96,9 @@ export default function RegisterWords({ token }) {
     synonymWaiwai: Yup.string().required("Este campo é obrigatorio.")
   });
 
+  useEffect(()=>{
+    console.log(record)
+  })
 
   if (session) {
     return (
