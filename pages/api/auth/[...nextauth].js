@@ -3,12 +3,17 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
 import cookie from "cookie";
-import { AuthToken } from "../../../src/services/auth";
+import { TokenDecoder } from "../../../src/services/decoder";
+import { WaiwaiAuthentication } from "../../../src/services/waiwaitapota";
 
 export default (req, res) => {
   // https://github.com/nextauthjs/next-auth/discussions/4428
   // https://github.com/vercel/next.js/discussions/22363
   return NextAuth(req, res, {
+    session: {
+      maxAge: 30 * 24 * 60 * 60, // 30 days login
+      updateAge: 4 * 60 * 60 + 50 * 60, // 4 hours and 50 minutes to update
+    },
     providers: [
       CredentialsProvider({
         name: "credentials",
@@ -28,10 +33,8 @@ export default (req, res) => {
               }
             );
 
-            const authAccess = new AuthToken(data.access_token);
-            const authRefresh = new AuthToken(data.refresh_token);
-
-
+            const authAccess = new TokenDecoder(data.access_token);
+            const authRefresh = new TokenDecoder(data.refresh_token);
             const accessToken = cookie.serialize(
               "accessToken",
               data.access_token,
@@ -65,14 +68,81 @@ export default (req, res) => {
       }),
     ],
     callbacks: {
-      jwt: async ({ token, user }) => {
-        user && (token.user = user);
+      jwt: async (jwt) => {
+        let objCookies = req.cookies;
+        const authAccess = new TokenDecoder(objCookies.accessToken);
+        const authRefresh = new TokenDecoder(objCookies.refreshToken);
+
+        const { token, user } = jwt;
+        if (user) {
+          token.user = user;
+        }
+        if (!authAccess.isExpired) {
+          /**
+           * Referências:
+           * https://next-auth.js.org/tutorials/refresh-token-rotation
+           * https://next-auth.js.org/configuration/callbacks
+           *
+           * Toda vez que usuário entrar na sessão vai verificar se o Token Expirou, caso sim, renova
+           * TODO: Verificar porque são feitas 3 requisições para o servidor
+           */
+          const renewer = new WaiwaiAuthentication(
+            authAccess.token,
+            authRefresh.token
+          );
+          const newAccesToken = await renewer.refreshAccess();
+          const accessTokenRefreshed = cookie.serialize(
+            "accessToken",
+            newAccesToken,
+            {
+              maxAge: authAccess.getExp,
+              httpOnly: true,
+              path: "/",
+            }
+          );
+          res.setHeader("Set-Cookie", [accessTokenRefreshed]);
+        }
         return token;
       },
       session: async ({ session, token }) => {
-        // Todo: Cada vez que o usuário fizer login verificar se Token existe; Validar se token ainda está válido; Renovar Token; Se nada, logout
-        session.user = token.user; // Setting token in session
+        session.user = token.user;
         return session;
+      },
+      async redirect({ url, baseUrl }) {
+        const cookiesReq = cookie.parse(req.headers.cookie);
+        if (cookiesReq["next-auth.session-token"]) {
+          const accessToken = cookie.serialize("accessToken", "", {
+            maxAge: 0,
+            path: "/",
+          });
+          const refreshToken = cookie.serialize("refreshToken", "", {
+            maxAge: 0,
+            path: "/",
+          });
+          res.setHeader("Set-Cookie", [accessToken, refreshToken]);
+        }
+
+        // Allows relative callback URLs
+        if (url.startsWith("/")) return `${baseUrl}${url}`;
+        // Allows callback URLs on the same origin
+        else if (new URL(url).origin === baseUrl) return url;
+        return baseUrl;
+      },
+    },
+    events: {
+      async signOut(message) {
+        /**
+         * TODO: Invalidar tokens do lado da API
+         */
+        // const accessToken = cookie.serialize("accessToken", "", {
+        //   maxAge: 0,
+        //   path: "/",
+        // });
+        // const refreshToken = cookie.serialize("refreshToken", "", {
+        //   maxAge: 0,
+        //   path: "/",
+        // });
+        // res.setHeader("Set-Cookie", [accessToken, refreshToken]);
       },
     },
   });

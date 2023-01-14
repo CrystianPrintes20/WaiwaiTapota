@@ -9,7 +9,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 
-export default function MyWord({token}) {
+export default function MyWord({ token }) {
   const [dados, setDados] = useState(null);
   const { data: session } = useSession();
 
@@ -32,7 +32,12 @@ export default function MyWord({token}) {
         <Banner3 />
         <Card>
           <CardBody>
-            <DataTable dados={dados} setDados={setDados} token={token} showAction/>
+            <DataTable
+              dados={dados}
+              setDados={setDados}
+              token={token}
+              showAction
+            />
           </CardBody>
         </Card>
         <ToastContainer />
@@ -48,8 +53,12 @@ export default function MyWord({token}) {
     );
   }
 }
-export async function getServerSideProps({req, res}) {
+export async function getServerSideProps({ req, res }) {
+  /**
+   * Necessário signin para coletar o token válido, contrário retorna null
+   */
+  const accessToken = req.cookies.accessToken ? req.cookies.accessToken : null;
   return {
-    props: { token: req.cookies.accessToken}, // will be passed to the page component as props
-  }
+    props: { token: accessToken }, // will be passed to the page component as props
+  };
 }
