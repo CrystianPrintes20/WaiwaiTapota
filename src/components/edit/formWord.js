@@ -21,7 +21,6 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Dropzone from "../dragDrop";
 import Image from "../PreviewImagem";
-// cuid is a simple library to generate unique IDs
 import cuid from "cuid";
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 import ReactAudioPlayer from "react-audio-player";
@@ -40,7 +39,6 @@ const FormWord = ({
   disabled,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [userId, setUserId] = useState();
   const [formValues, setFormValues] = useState({
     wordPort: "",
     translationWaiwai: "",
@@ -52,8 +50,8 @@ const FormWord = ({
   });
   const [image, setImage] = useState(null);
   const [record, setRecord] = useState(null);
-  const [idImage, setIdImage] = useState(null)
-  const [idAudio, setIdAudio] = useState(null)
+  const [imageChanged, setImageChanged] = useState(false);
+  const [audioChanged, setAudioChanged] = useState(false);
   const recorderControls = useAudioRecorder();
   const options = {
     position: "top-right",
@@ -71,20 +69,33 @@ const FormWord = ({
   const toggleEditar = () => setModalEditar(!modalEditar);
 
   const removeImage = () => {
+    if (showAction) {
+      setImageChanged(true);
+    }
     setImage(null);
   };
   const removeAudio = () => {
+    if (showAction) {
+      setAudioChanged(true);
+    }
     setRecord(null);
   };
   const addAudioElement = (blob) => {
+    if (showAction) {
+      setAudioChanged(true);
+    }
     setRecord(blob);
   };
 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.map((file) => {
       const reader = new FileReader();
+      let hashImage = cuid();
       reader.onload = function (e) {
-        setImage({ id: cuid(), src: e.target.result, name: file.name });
+        if (showAction) {
+          setImageChanged(true);
+        }
+        setImage({ id: hashImage, src: e.target.result, name: file.name });
       };
       reader.readAsDataURL(file);
       return file;
@@ -104,7 +115,7 @@ const FormWord = ({
   const getUrlElement = (object) => {
     if (typeof object == "string") {
       return object;
-    } else URL.createObjectURL(object);
+    } else return URL.createObjectURL(object);
   };
 
   const handleDeleteWord = async () => {
@@ -129,7 +140,7 @@ const FormWord = ({
   const handleMutationDelete = async () => {
     try {
       await axios({
-        url: `http://localhost:5000/palavras/${userId}`,
+        url: `http://localhost:5000/palavras/${data["id"]}`,
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -158,31 +169,6 @@ const FormWord = ({
 
   useEffect(() => {
     if (data) {
-      setUserId(data.id);
-      setFormValues({
-        wordPort: data.wordPort || formValues.wordPort,
-        translationWaiwai:
-          data.translationWaiwai || formValues.translationWaiwai,
-        category: data.category || formValues.category,
-        meaningPort: data.meaningPort || formValues.meaningPort,
-        meaningWaiwai: data.meaningWaiwai || formValues.meaningWaiwai,
-        synonymPort: data.synonymPort || formValues.synonymPort,
-        synonymWaiwai: data.synonymWaiwai || formValues.synonymWaiwai,
-      });
-    }
-  }, [
-    data,
-    formValues.category,
-    formValues.meaningWaiwai,
-    formValues.meaningPort,
-    formValues.synonymPort,
-    formValues.synonymWaiwai,
-    formValues.translationWaiwai,
-    formValues.wordPort,
-  ]);
-
-  useEffect(() => {
-    if (data) {
       axios
         .get(`http://localhost:5000/palavras/${data["id"]}`, {
           headers: {
@@ -190,15 +176,27 @@ const FormWord = ({
           },
         })
         .then((res) => res.data)
-        .then((data) => {
-          setIdImage(data.image)
-          setImage({
-            id: data.image,
-            src: `http://localhost:5000/uploads/${data.image}`,
-            name: data.image,
+        .then((json) => {
+          setFormValues({
+            ...json,
+            wordPort: json.wordPort || formValues.wordPort,
+            translationWaiwai:
+              json.translationWaiwai || formValues.translationWaiwai,
+            category: json.category || formValues.category,
+            meaningPort: json.meaningPort || formValues.meaningPort,
+            meaningWaiwai: json.meaningWaiwai || formValues.meaningWaiwai,
+            synonymPort: json.synonymPort || formValues.synonymPort,
+            synonymWaiwai: json.synonymWaiwai || formValues.synonymWaiwai,
           });
-          setIdAudio(data.audio)
-          setRecord(`http://localhost:5000/uploads/${data.audio}`);
+          if (json.image) {
+            setImage({
+              id: json.image,
+              src: `http://localhost:5000/uploads/${json.image}`,
+              name: json.image,
+            });
+          }
+          if (json.audio)
+            setRecord(`http://localhost:5000/uploads/${json.audio}`);
         });
     }
   }, [data]);
@@ -225,7 +223,7 @@ const FormWord = ({
                   try {
                     setIsLoading(true);
                     const response = await axios.put(
-                      `http://localhost:5000/palavras/${userId}`,
+                      `http://localhost:5000/palavras/${data["id"]}`,
                       JSON.stringify(fields),
                       {
                         headers: {
@@ -234,10 +232,122 @@ const FormWord = ({
                         },
                       }
                     );
-                  
+
                     if (response.status === 204) {
                       toast.success("Palavra atualizada com sucesso!", options);
-                      fetchDados();
+                    }
+
+                    if (imageChanged) {
+                      if (formValues.image) {
+                        if (image) {
+                          await axios({
+                            method: "delete",
+                            url: `http://localhost:5000/uploads/${formValues.image}`,
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
+                          });
+                          const blobData = await (
+                            await fetch(image.src)
+                          ).blob();
+                          let uploadImage = new FormData();
+                          uploadImage.append("file", blobData, image.name);
+                          uploadImage.append("oidword", data._id);
+                          let responseImage = await axios({
+                            method: "post",
+                            url: "http://localhost:5000/uploads/",
+                            data: uploadImage,
+                            headers: {
+                              "Content-Type": "multipart/form-data",
+                              Authorization: `Bearer ${token}`,
+                            },
+                          });
+                        } else {
+                          await axios({
+                            method: "delete",
+                            url: `http://localhost:5000/uploads/${formValues.image}`,
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
+                          });
+                        }
+                      } else {
+                        if (image) {
+                          const blobData = await (
+                            await fetch(image.src)
+                          ).blob();
+                          let uploadImage = new FormData();
+                          uploadImage.append("file", blobData, image.name);
+                          uploadImage.append("oidword", data._id);
+                          let responseImage = await axios({
+                            method: "post",
+                            url: "http://localhost:5000/uploads/",
+                            data: uploadImage,
+                            headers: {
+                              "Content-Type": "multipart/form-data",
+                              Authorization: `Bearer ${token}`,
+                            },
+                          });
+                        }
+                      }
+                    }
+                    if (audioChanged) {
+                      if (formValues.audio) {
+                        if (record) {
+                          await axios({
+                            method: "delete",
+                            url: `http://localhost:5000/uploads/${formValues.audio}`,
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
+                          });
+                          const event = new Date();
+                          let uploadRecord = new FormData();
+                          uploadRecord.append(
+                            "file",
+                            record,
+                            `${event.toISOString()}.weba`
+                          );
+                          uploadRecord.append("oidword", data["_id"]);
+                          let responseRecord = await axios({
+                            method: "post",
+                            url: "http://localhost:5000/uploads/",
+                            data: uploadRecord,
+                            headers: {
+                              "Content-Type": "multipart/form-data",
+                              Authorization: `Bearer ${token}`,
+                            },
+                          });
+                        } else {
+                          await axios({
+                            method: "delete",
+                            url: `http://localhost:5000/uploads/${formValues.audio}`,
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
+                          });
+                        }
+                      } else {
+                        if (record) {
+                          const event = new Date();
+                          let uploadRecord = new FormData();
+                          uploadRecord.append(
+                            "file",
+                            record,
+                            `${event.toISOString()}.weba`
+                          );
+                          uploadRecord.append("oidword", data["_id"]);
+                          let responseRecord = await axios({
+                            method: "post",
+                            url: "http://localhost:5000/uploads/",
+                            data: uploadRecord,
+                            headers: {
+                              "Content-Type": "multipart/form-data",
+                              Authorization: `Bearer ${token}`,
+                            },
+                          });
+                        }
+                      }
                     }
                   } catch (err) {
                     toast.error("Erro ao atualizar palavra.", {
@@ -254,6 +364,7 @@ const FormWord = ({
                       message: "An error ocurred. Please, try again.",
                     });
                   }
+                  fetchDados();
                   setIsLoading(false);
                 }}
                 render={({ errors, touched, setFieldValue }) => (
@@ -449,7 +560,7 @@ const FormWord = ({
                       <FormGroup className="w-50">
                         {showAction ? (
                           <>
-                            <Label htmlFor="audio">Gravar audio</Label>
+                            <Label htmlFor="audio">Gravar áudio</Label>
                             <AudioRecorder
                               onRecordingComplete={(blob) =>
                                 addAudioElement(blob)
