@@ -16,32 +16,53 @@
 
 O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas nas seguintes tarefas:
 
-- [x] Tarefa 1
-- [x] Tarefa 2
-- [x] Tarefa 3
-- [ ] Tarefa 4
-- [ ] Tarefa 5
+- [ ] Enviar email ao usuário para confirmar cadastro na plataforma.
+- [ ] Trocar o input "categoria" por um combobox trazendo da API todas as categorias cadastradas e caso a que o usuário procure não esteja listada, deverá ser adicionado o campo para adicionar no banco de dados.
 
-## 💻 Pré-requisitos
 
-Antes de começar, verifique se você atendeu aos seguintes requisitos:
-<!---Estes são apenas requisitos de exemplo. Adicionar, duplicar ou remover conforme necessário--->
-* Você instalou a versão mais recente de `<linguagem / dependência / requeridos>`
-* Você tem uma máquina `<Windows / Linux / Mac>`. Indique qual sistema operacional é compatível / não compatível.
-* Você leu `<guia / link / documentação_relacionada_ao_projeto>`.
+## Sobre o Waiwai Tapota
+Waiwai Tapota é um projeto de tradução de linguas maternas brasileiras faciltando dividido em três partes principais: API manager, Aplicativo mobile e sistema web.
 
-## 🚀 Instalando <nome_do_projeto>
+Vá para http://www.ufopa.edu.br/ufopa/ para obter mais informações e documentação.
 
-Para instalar o <nome_do_projeto>, siga estas etapas:
+## 🚀 Primeiros passos
 
-Linux e macOS:
+Para instalar o Waiwai Tapota web, siga estas etapas:
+
+### 1. Clone o repositório e instale dependências
+
 ```
-<comando_de_instalação>
+git clone https://github.com/CrystianSkalena/WaiwaiTranslator/tree/Develop
+cd WaiwaiTranslator
+```
+### 2. Instalação do NVM
+> *Caso ja tenha o node.js na versão v16 e NVM instado pode pular para o proximo passo.*
+
+Instalação do NVM Linux e macOS:
+```
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+
+ou
+
+$ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 ```
 
-Windows:
+Instalação do NVM Windows:
 ```
-<comando_de_instalação>
+Acesse para instalar o nvm: https://learn.microsoft.com/pt-br/windows/dev-environment/javascript/nodejs-on-windows
+```
+Instalar a versão do Node.js
+```
+ nvm install v16.13.0
+```
+### 3. Instalando as depencias do projeto
+Ainda dentro da pasta WaiwaiTranslator execute o comando abaixo
+```
+ nvm install
+
+ ou
+
+ yarn
 ```
 
 ## ☕ Usando <nome_do_projeto>
