@@ -1,6 +1,6 @@
 import "../styles/scss/style.scss";
 import Head from "next/head";
-import { SessionProvider } from "next-auth/react"
+import { SessionProvider } from "next-auth/react";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
@@ -15,8 +15,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       </Head>
       <Component {...pageProps} />
     </SessionProvider>
-
-
   );
 }
 

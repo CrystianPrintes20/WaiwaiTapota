@@ -15,7 +15,7 @@ const Banner2 = () => {
             </h1>
             <h4 className="subtitle font-light">
               FLorem Ipsum is simply dummy text of the printing and typesetting industry. 
-              <br /> Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book
+              <br /> Lorem Ipsum has been the  standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book
             </h4>
             <a
               href="https://wrappixel.com/templates/nextkit-nextjs-free-uikit"
