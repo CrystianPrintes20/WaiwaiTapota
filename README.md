@@ -32,7 +32,7 @@ Para instalar o Waiwai Tapota web, siga estas etapas:
 ### 1. Clone o repositório e instale dependências
 
 ```
-git clone https://github.com/CrystianSkalena/WaiwaiTranslator/tree/Develop
+git clone https://github.com/CrystianPrintes20/WaiwaiTranslator.git
 cd WaiwaiTranslator
 ```
 ### 2. Instalação do NVM
