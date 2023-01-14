@@ -14,16 +14,18 @@ export default function MyWord({ token }) {
   const { data: session } = useSession();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/palavras/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => res.data)
-      .then((data) => {
-        setDados(data);
-      });
+    if (token) {
+      axios
+        .get("http://localhost:5000/palavras/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => res.data)
+        .then((data) => {
+          setDados(data);
+        });
+    }
   }, [token]);
 
   if (session) {
