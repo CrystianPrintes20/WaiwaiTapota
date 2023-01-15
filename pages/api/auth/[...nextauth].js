@@ -32,6 +32,9 @@ export default (req, res) => {
                 },
               }
             );
+            /**
+             * TODO: Verificar se Tokens já existem no cabeçalho;
+             */
 
             const authAccess = new TokenDecoder(data.access_token);
             const authRefresh = new TokenDecoder(data.refresh_token);
@@ -108,41 +111,22 @@ export default (req, res) => {
         session.user = token.user;
         return session;
       },
-      async redirect({ url, baseUrl }) {
-        const cookiesReq = cookie.parse(req.headers.cookie);
-        if (cookiesReq["next-auth.session-token"]) {
-          const accessToken = cookie.serialize("accessToken", "", {
-            maxAge: 0,
-            path: "/",
-          });
-          const refreshToken = cookie.serialize("refreshToken", "", {
-            maxAge: 0,
-            path: "/",
-          });
-          res.setHeader("Set-Cookie", [accessToken, refreshToken]);
-        }
-
-        // Allows relative callback URLs
-        if (url.startsWith("/")) return `${baseUrl}${url}`;
-        // Allows callback URLs on the same origin
-        else if (new URL(url).origin === baseUrl) return url;
-        return baseUrl;
-      },
     },
     events: {
       async signOut(message) {
         /**
          * TODO: Invalidar tokens do lado da API
          */
-        // const accessToken = cookie.serialize("accessToken", "", {
-        //   maxAge: 0,
-        //   path: "/",
-        // });
-        // const refreshToken = cookie.serialize("refreshToken", "", {
-        //   maxAge: 0,
-        //   path: "/",
-        // });
-        // res.setHeader("Set-Cookie", [accessToken, refreshToken]);
+
+        const accessToken = cookie.serialize("accessToken", "", {
+          maxAge: 0,
+          path: "/",
+        });
+        const refreshToken = cookie.serialize("refreshToken", "", {
+          maxAge: 0,
+          path: "/",
+        });
+        res.setHeader("Set-Cookie", [accessToken, refreshToken]);
       },
     },
   });
