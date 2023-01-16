@@ -117,7 +117,6 @@ export default (req, res) => {
         /**
          * TODO: Invalidar tokens do lado da API
          */
-
         const accessToken = cookie.serialize("accessToken", "", {
           maxAge: 0,
           path: "/",
