@@ -20,7 +20,7 @@ const auth = (req, res) => {
         authorize: async (credentials) => {
           try {
             const { data } = await axios.post(
-              "http://localhost:5000/auth/login",
+              `${process.env.NEXTAUTH_URL}/auth/login`,
               {
                 email: credentials.email,
                 password: credentials.password,

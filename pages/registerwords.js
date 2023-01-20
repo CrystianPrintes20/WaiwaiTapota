@@ -138,7 +138,7 @@ export default function RegisterWords({ token }) {
                           try {
                             setIsLoading(true);
                             const response = await axios.post(
-                              "http://localhost:5000/palavras/",
+                              `${process.env.NEXTAUTH_URL}/palavras/`,
                               JSON.stringify(fields),
                               {
                                 headers: {
@@ -158,7 +158,7 @@ export default function RegisterWords({ token }) {
                               uploadImage.append("oidword", data._id);
                               let responseImage = await axios({
                                 method: "post",
-                                url: "http://localhost:5000/uploads/",
+                                url: `${process.env.NEXTAUTH_URL}/uploads/`,
                                 data: uploadImage,
                                 headers: {
                                   "Content-Type": "multipart/form-data",
@@ -177,7 +177,7 @@ export default function RegisterWords({ token }) {
                               uploadRecord.append("oidword", data._id);
                               let responseRecord = await axios({
                                 method: "post",
-                                url: "http://localhost:5000/uploads/",
+                                url: `${process.env.NEXTAUTH_URL}/uploads/`,
                                 data: uploadRecord,
                                 headers: {
                                   "Content-Type": "multipart/form-data",

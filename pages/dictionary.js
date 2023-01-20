@@ -14,7 +14,7 @@ export default function Dictionary({ token }) {
   useEffect(() => {
     if (token) {
       axios
-        .get("http://localhost:5000/palavras/", {
+        .get(`${process.env.NEXTAUTH_URL}/palavras/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
