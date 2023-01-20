@@ -22,8 +22,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useCallback } from "react";
 import Dropzone from "../src/components/dragDrop";
-import Image from "../src/components/PreviewImagem";
-
+import ImagePrev from "../src/components/PreviewImagem";
+import Image from "next/image";
 import ReactAudioPlayer from "react-audio-player";
 import { getCookie, getCookies } from "cookies-next";
 
@@ -43,7 +43,7 @@ export default function RegisterWords({ token }) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
-  const [image, setImage] = useState(null);
+  const [imageWord, setImageWord] = useState(null);
 
   /*
    * Módulo para entrada de áudio
@@ -52,7 +52,7 @@ export default function RegisterWords({ token }) {
   const recorderControls = useAudioRecorder();
 
   const removeImage = () => {
-    setImage(null);
+    setImageWord(null);
   };
   const removeAudio = () => {
     setRecord(null);
@@ -66,7 +66,7 @@ export default function RegisterWords({ token }) {
     acceptedFiles.map((file) => {
       const reader = new FileReader();
       reader.onload = function (e) {
-        setImage({ id: cuid(), src: e.target.result, name: file.name });
+        setImageWord({ id: cuid(), src: e.target.result, name: file.name });
       };
       reader.readAsDataURL(file);
       return file;
@@ -148,13 +148,13 @@ export default function RegisterWords({ token }) {
                               }
                             );
                             const { data } = response;
-                            if (image) {
+                            if (imageWord) {
                               // https://stackoverflow.com/questions/12168909/blob-from-dataurl
                               const blobData = await (
-                                await fetch(image.src)
+                                await fetch(imageWord.src)
                               ).blob();
                               let uploadImage = new FormData();
-                              uploadImage.append("file", blobData, image.name);
+                              uploadImage.append("file", blobData, imageWord.name);
                               uploadImage.append("oidword", data._id);
                               let responseImage = await axios({
                                 method: "post",
@@ -397,7 +397,7 @@ export default function RegisterWords({ token }) {
                                   Insira uma image
                                 </Label>
                                 <div style={{ border: "3px #00806b dashed" }}>
-                                  {image ? (
+                                  {imageWord ? (
                                     <>
                                       <div className="d-flex justify-content-end">
                                         <Button
@@ -411,7 +411,7 @@ export default function RegisterWords({ token }) {
                                           </span>
                                         </Button>
                                       </div>
-                                      <Image image={image} />
+                                      <ImagePrev image={imageWord} />
                                     </>
                                   ) : (
                                     <>

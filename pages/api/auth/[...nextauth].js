@@ -6,7 +6,7 @@ import cookie from "cookie";
 import { TokenDecoder } from "../../../src/services/decoder";
 import { WaiwaiAuthentication } from "../../../src/services/waiwaitapota";
 
-export default (req, res) => {
+const auth = (req, res) => {
   // https://github.com/nextauthjs/next-auth/discussions/4428
   // https://github.com/vercel/next.js/discussions/22363
   return NextAuth(req, res, {
@@ -130,3 +130,4 @@ export default (req, res) => {
     },
   });
 };
+export default auth;
