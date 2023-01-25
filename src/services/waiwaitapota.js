@@ -2,7 +2,7 @@ import axios from "axios";
 import headersAuthorization from "../utils/headerBearer";
 
 export const instanceApi = axios.create({
-  baseURL: process.env.NEXTAUTH_URL,
+  baseURL: process.env.NEXTAUTH_URL_LOCAL,
 });
 
 export class WaiwaiAuthentication {

@@ -71,7 +71,7 @@ const RegisterFormik = () => {
                     setIsLoading(true);
                  
                     response = await axios({
-                      url: `${process.env.NEXTAUTH_URL}/auth/register`,
+                      url: `${process.env.NEXTAUTH_URL_LOCAL}/auth/register`,
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       data: JSON.stringify(fields),

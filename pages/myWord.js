@@ -16,7 +16,7 @@ export default function MyWord({ token }) {
   useEffect(() => {
     if (token) {
       axios
-        .get(`${process.env.NEXTAUTH_URL}/palavras/me`, {
+        .get(`${process.env.NEXTAUTH_URL_LOCAL}/palavras/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
