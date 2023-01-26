@@ -29,9 +29,9 @@ const Banner2 = () => {
               </a>
             </Link> */}
           </Col>
-          <Col lg="6" md="6">
+          <Col lg="6" md="6" className="py-4">
             {/* <Image src={bannerimg} alt="hero banner" /> */}
-            <img src="https://placehold.jp/514x510.png"></img>
+            <img className="img-fluid"  src="https://placehold.jp/514x510.png"></img>
           </Col>
         </Row>
       </Container>
