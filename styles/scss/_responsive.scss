@@ -44,12 +44,6 @@
 }
 
 @media (max-width: 1023px) {
-  .d-flex {
-    display: block !important;
-    &.no-block {
-      display: flex !important;
-    }
-  }
   .wrap-feature30-box {
     left: 0;
     right: 0;

@@ -53,7 +53,7 @@ const LoginFormik = () => {
   });
   return (
     <Container fluid className="h-100">
-      <Row className="justify-content-center align-items-center h-100">
+      <div className="justify-content-center align-items-center h-100">
         <Col lg="6" sm="6" md="6" className="loginContainer">
           <div className="p-4 d-flex justify-content-center gap-2">
             <Link href="/">
@@ -67,8 +67,8 @@ const LoginFormik = () => {
             <CardBody className="p-4 m-1">
               <h4 className="mb-0 fw-bold">Login</h4>
               <small className="pb-4 d-block">
-                Do not have an account?{" "}
-                <Link href="/auth/registerformik">Sign up</Link>
+                Ainda não tem uma conta?{" "}
+                <Link href="/auth/registerformik"> Registrar</Link>
               </small>
               <Formik
                 initialValues={initialValues}
@@ -187,7 +187,7 @@ const LoginFormik = () => {
             </CardBody>
           </Card>
         </Col>
-      </Row>
+      </div>
     </Container>
   );
 };

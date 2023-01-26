@@ -46,7 +46,7 @@ const RegisterFormik = () => {
   });
   return (
     <Container fluid className="h-100 py-5">
-      <Row className="justify-content-center align-items-center h-100">
+      <div className="justify-content-center align-items-center h-100">
         <Col lg="6" className="loginContainer">
           <div className="p-4 d-flex justify-content-center gap-2">
             <Link href="/">
@@ -219,7 +219,7 @@ const RegisterFormik = () => {
             </CardBody>
           </Card>
         </Col>
-      </Row>
+      </div>
     </Container>
 
   );
