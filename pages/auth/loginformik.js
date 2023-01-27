@@ -53,8 +53,8 @@ const LoginFormik = () => {
   });
   return (
     <Container fluid className="h-100">
-      <div className="justify-content-center align-items-center h-100">
-        <Col lg="6" sm="6" md="6" className="loginContainer">
+      <div className="d-flex justify-content-center">
+      <Col sm="6" md="4">
           <div className="p-4 d-flex justify-content-center gap-2">
             <Link href="/">
               <a className="d-flex align-items-center gap-2">
