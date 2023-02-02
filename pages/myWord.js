@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Layout from "../src/layout/Layout";
 import Banner3 from "../src/components/banner/Banner3";
 import Banner from "../src/components/banner/Banner";
-import { Card, CardBody, Button } from "reactstrap";
+import { Card, CardBody, Row, Col } from "reactstrap";
 import DataTable from "../src/components/table/Mui_datatables";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -34,6 +34,18 @@ export default function MyWord({ token }) {
         <Banner3 />
         <Card>
           <CardBody>
+          <Row className="justify-content-center mb-3">
+              <Col md="7" className="text-center">
+                <span className="label label-danger label-rounded">
+                  Tela de Minhas palavras
+                </span>
+                <h2 className="title">Palavras cadastradas por você.</h2>
+                <h6 className="subtitle">
+                  Encontre aqui todas as suas palavras cadastradas! Veja os detalhes, expressões, imagens, áudio e significados em um
+                  formato prático e fácil de usar.
+                </h6>
+              </Col>
+            </Row>
             <DataTable
               dados={dados}
               setDados={setDados}

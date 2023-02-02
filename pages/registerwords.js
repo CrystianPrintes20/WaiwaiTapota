@@ -105,16 +105,15 @@ export default function RegisterWords({ token }) {
           <Card className="feature4">
             <Container>
               <Row className="justify-content-center">
-                <h2 className="title my-5">
+                <h2 className="mx-3 my-5 text-center">
                   Contribua e melhore o Wai-Wai Translator!
                 </h2>
               </Row>
               <Row>
                 <Col sm="4">
                   <Card>
-                    <img alt="Card" src="./tradutor.jpg" />
+                    <img className="img-fluid" alt="Card" src="./tradutor.jpg" />
                     <CardBody>
-                      <div className="h-u-text-left main__item--card__desc">
                         <p>
                           A sua colaboração é uma parte importante no processo
                           de inclusão de novas palavras no Wai-Wai Translator.
@@ -123,14 +122,14 @@ export default function RegisterWords({ token }) {
                           aqui, ajude-nos preenchendo o formulário ao lado e
                           adicionando elas ao nosso tradutor.
                         </p>
-                      </div>
                     </CardBody>
                   </Card>
                 </Col>
                 <Col sm="8">
                   <Card>
+                  <h4 className="mb-3 fw-bold">Cadastro de Palavras</h4>
                     <CardBody>
-                      <h4 className="mb-3 fw-bold">Cadastro de Palavras</h4>
+                     
                       <Formik
                         initialValues={initialValues}
                         validationSchema={validationSchema}
@@ -243,7 +242,7 @@ export default function RegisterWords({ token }) {
                         render={({ errors, touched }) => (
                           <Form>
                             <Row>
-                              <FormGroup className="w-50 pr-3">
+                              <FormGroup className="pr-3 col-md-6 col-sm-12">
                                 <Label htmlFor="wordPort">
                                   Palavra em português
                                 </Label>
@@ -262,7 +261,7 @@ export default function RegisterWords({ token }) {
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
-                              <FormGroup className="w-50">
+                              <FormGroup className="col-md-6 col-sm-12">
                                 <Label htmlFor="translationWaiwai">
                                   Tradução em Waiwai
                                 </Label>
@@ -284,7 +283,7 @@ export default function RegisterWords({ token }) {
                               </FormGroup>
                             </Row>
                             <Row>
-                              <FormGroup className="w-50 pr-3">
+                              <FormGroup className="col-md-6 col-sm-12">
                                 <Label htmlFor="meaningPort">
                                   Significado em português
                                 </Label>
@@ -306,7 +305,7 @@ export default function RegisterWords({ token }) {
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
-                              <FormGroup className="w-50">
+                              <FormGroup className="col-md-6 col-sm-12">
                                 <Label htmlFor="meaningWaiwai">
                                   Significado em Waiwai
                                 </Label>
@@ -330,7 +329,7 @@ export default function RegisterWords({ token }) {
                               </FormGroup>
                             </Row>
                             <Row>
-                              <FormGroup className="w-50 pr-3">
+                              <FormGroup className="col-md-6 col-sm-12">
                                 <Label htmlFor="synonymPort">
                                   Sinonimo em Portugues
                                 </Label>
@@ -349,7 +348,7 @@ export default function RegisterWords({ token }) {
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
-                              <FormGroup className="w-50">
+                              <FormGroup className="col-md-6 col-sm-12">
                                 <Label htmlFor="synonymWaiwai">
                                   Sinonimo Waiwai
                                 </Label>
@@ -371,7 +370,7 @@ export default function RegisterWords({ token }) {
                               </FormGroup>
                             </Row>
                             <Row>
-                              <FormGroup className="w-100 pr-3">
+                              <FormGroup className="col-md-12 col-sm-12">
                                 <Label htmlFor="category">
                                   Categoria da palavra
                                 </Label>
@@ -392,7 +391,7 @@ export default function RegisterWords({ token }) {
                               </FormGroup>
                             </Row>
                             <Row>
-                              <FormGroup className="w-50 pr-3">
+                              <FormGroup className="col-md-6 col-sm-12">
                                 <Label htmlFor="img_logo">
                                   Insira uma image
                                 </Label>
@@ -423,7 +422,7 @@ export default function RegisterWords({ token }) {
                                   )}
                                 </div>
                               </FormGroup>
-                              <FormGroup className="w-50">
+                              <FormGroup className="col-md-6 col-sm-12">
                                 <Label htmlFor="audio">Gravar audio</Label>
                                 <AudioRecorder
                                   onRecordingComplete={(blob) =>

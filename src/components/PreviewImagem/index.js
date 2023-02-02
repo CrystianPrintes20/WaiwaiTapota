@@ -4,7 +4,7 @@ import React from "react";
 const ImagePrev = ({ image }) => {
   return (
     <div className="file-item d-flex justify-content-center">
-      <img alt={`img - ${image.id}`} src={image.src} className="file-img"width={200} height={200} />
+      <img alt={`img - ${image.id}`} src={image.src} className="img-fluid file-img"width={200} height={200} />
     </div>
   );
 };
