@@ -26,6 +26,7 @@ import ImagePrev from "../src/components/PreviewImagem";
 import Image from "next/image";
 import ReactAudioPlayer from "react-audio-player";
 import { getCookie, getCookies } from "cookies-next";
+import Head from "next/head";
 
 /**
  * Importações para entrada de áudio
@@ -38,6 +39,19 @@ import cuid from "cuid";
 const MyInput = ({ field, form, ...props }) => {
   return <Input {...field} {...props} />;
 };
+
+function getLocalStream() {
+  navigator.mediaDevices
+    .getUserMedia({ video: false, audio: true })
+    .then((stream) => {
+      window.localStream = stream;
+      window.localAudio.srcObject = stream;
+      window.localAudio.autoplay = true;
+    })
+    .catch((err) => {
+      console.error(`you got an error: ${err}`);
+    });
+}
 
 export default function RegisterWords({ token }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -93,13 +107,12 @@ export default function RegisterWords({ token }) {
     synonymWaiwai: Yup.string().required("Este campo é obrigatorio."),
   });
 
-  useEffect(() => {
-    console.log(record);
-  });
-
   if (session) {
     return (
       <>
+        <Head>
+          <script>{getLocalStream()}</script>
+        </Head>
         <Layout>
           <Banner3 />
           <Card className="feature4">
@@ -390,10 +403,18 @@ export default function RegisterWords({ token }) {
                                       : ""
                                   }`}
                                 >
-                                  <option selected="selecione" disabled >Selecione</option>
-                                  <option value="categoria_1">Categoria 1</option>
-                                  <option value="categoria_2">Categoria 2</option>
-                                  <option value="categoria_3">Categoria 3</option>
+                                  <option selected="selecione" disabled>
+                                    Selecione
+                                  </option>
+                                  <option value="categoria_1">
+                                    Categoria 1
+                                  </option>
+                                  <option value="categoria_2">
+                                    Categoria 2
+                                  </option>
+                                  <option value="categoria_3">
+                                    Categoria 3
+                                  </option>
                                 </Field>
                                 <ErrorMessage
                                   name="category"
