@@ -52,9 +52,9 @@ const LoginFormik = () => {
       .required("Password is required"),
   });
   return (
-    <Container fluid className="h-100">
+    <Container fluid className="h-100" height="100vmax" style={{ backgroundColor: "#eef5f9" }}>
       <div className="d-flex justify-content-center">
-      <Col sm="6" md="4">
+        <Col sm="6" md="4">
           <div className="p-4 d-flex justify-content-center gap-2">
             <Link href="/">
               <a className="d-flex align-items-center gap-2">

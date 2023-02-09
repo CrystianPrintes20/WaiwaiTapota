@@ -136,7 +136,7 @@ const Header = () => {
                         <User className="mr-2" size={25} /> Meu perfil
                       </DropdownItem>
                       <DropdownItem onClick={() => signOut()}>
-                        <LogOut className="mr-2" size={25} />Sing out
+                        <LogOut className="mr-2" size={25} />Sair
                       </DropdownItem>
                     </DropdownMenu>
                   </UncontrolledDropdown>

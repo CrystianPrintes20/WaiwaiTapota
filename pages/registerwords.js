@@ -112,24 +112,27 @@ export default function RegisterWords({ token }) {
               <Row>
                 <Col sm="4">
                   <Card>
-                    <img className="img-fluid" alt="Card" src="./tradutor.jpg" />
+                    <img
+                      className="img-fluid"
+                      alt="Card"
+                      src="./tradutor.jpg"
+                    />
                     <CardBody>
-                        <p>
-                          A sua colaboração é uma parte importante no processo
-                          de inclusão de novas palavras no Wai-Wai Translator.
-                          Se você fala ou conhece palavras na língua nativa
-                          Wai-Wai e identificou que ela ainda não está presente
-                          aqui, ajude-nos preenchendo o formulário ao lado e
-                          adicionando elas ao nosso tradutor.
-                        </p>
+                      <p>
+                        A sua colaboração é uma parte importante no processo de
+                        inclusão de novas palavras no Wai-Wai Translator. Se
+                        você fala ou conhece palavras na língua nativa Wai-Wai e
+                        identificou que ela ainda não está presente aqui,
+                        ajude-nos preenchendo o formulário ao lado e adicionando
+                        elas ao nosso tradutor.
+                      </p>
                     </CardBody>
                   </Card>
                 </Col>
                 <Col sm="8">
                   <Card>
-                  <h4 className="mb-3 fw-bold">Cadastro de Palavras</h4>
+                    <h4 className="mb-3 fw-bold">Cadastro de Palavras</h4>
                     <CardBody>
-                     
                       <Formik
                         initialValues={initialValues}
                         validationSchema={validationSchema}
@@ -153,7 +156,11 @@ export default function RegisterWords({ token }) {
                                 await fetch(imageWord.src)
                               ).blob();
                               let uploadImage = new FormData();
-                              uploadImage.append("file", blobData, imageWord.name);
+                              uploadImage.append(
+                                "file",
+                                blobData,
+                                imageWord.name
+                              );
                               uploadImage.append("oidword", data._id);
                               let responseImage = await axios({
                                 method: "post",
@@ -376,13 +383,18 @@ export default function RegisterWords({ token }) {
                                 </Label>
                                 <Field
                                   name="category"
-                                  type="text"
+                                  as="select"
                                   className={`form-control ${
                                     errors.category && touched.category
                                       ? " is-invalid"
                                       : ""
                                   }`}
-                                />
+                                >
+                                  <option selected="selecione" disabled >Selecione</option>
+                                  <option value="categoria_1">Categoria 1</option>
+                                  <option value="categoria_2">Categoria 2</option>
+                                  <option value="categoria_3">Categoria 3</option>
+                                </Field>
                                 <ErrorMessage
                                   name="category"
                                   component="div"

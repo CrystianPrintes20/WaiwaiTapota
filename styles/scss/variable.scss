@@ -5,11 +5,16 @@ $headingfont: "DM Sans";
 
 /*Theme Colors*/
 $bodycolor: #eef5f9;
+$bodycolorSecundary: #fff;
 $headingtext: #3e4555;
 $bodytext: #8d97ad;
 $themecolor: #37664A;
 $themecolor-alt: #26c6da;
 $themecolor-dark: #028ee1;
+
+$theme-colors: (
+  "bodycolorSecundary": $bodycolorSecundary,
+);
 
 /*bootstrap Color*/
 $danger: #ff4d7e;
@@ -74,7 +79,7 @@ $banner-image: url("../../src/assets/images/landingpage/banner-bg.jpg");
 $c2a-image: url(../../src/assets/images/landingpage/comingsoon.jpg);
 $banner-slider: url("../../src/assets/images/staticslider/slider/hero-banner.jpg");
 $form-banner: "url(../../src/assets/images/form-banners/banner1/banner-bg.jpg)";
-$t1: url(../../src/assets/images/team/t1.jpg);
-$t2: url(../../src/assets/images/team/t2.jpg);
-$t3: url(../../src/assets/images/team/t3.jpg);
-$t4: url(../../src/assets/images/team/t4.jpg);
+$t1: url("https://img.freepik.com/vetores-premium/homem-perfil-caricatura_18591-58484.jpg?w=2000");
+$t2: url("https://img.freepik.com/vetores-premium/desenho-de-perfil-de-mulher_18591-58476.jpg?w=360");
+$t3: url("https://img.freepik.com/vetores-premium/homem-perfil-caricatura_18591-58484.jpg?w=2000");
+$t4: url("https://img.freepik.com/vetores-premium/desenho-de-rosto-de-mulher-jovem_18591-59100.jpg?w=360");

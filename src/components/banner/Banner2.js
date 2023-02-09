@@ -11,17 +11,17 @@ const Banner2 = () => {
         <Row className="">
           <Col lg="6" md="6" className="align-self-center">
             <h1 className="title">
-            What is Lorem Ipsum?
+              Traduza e se comunique com praticidade
             </h1>
             <h4 className="subtitle font-light">
-              FLorem Ipsum is simply dummy text of the printing and typesetting industry. 
-              <br /> Lorem Ipsum has been the  standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book
+              Economize tempo com as suas traduções e concentre-se nas tarefas que realmente importam.  <br /> 
+              Com o WaiwaiTapota, você tem  traduções da lingua indigena Waiwai para o portugues.
             </h4>
             <a
               href="https://wrappixel.com/templates/nextkit-nextjs-free-uikit"
               className="btn btn-danger m-r-20 btn-md m-t-30 "
             >
-              Download Free
+              Download App
             </a>
             {/* <Link href="/#coming">
               <a className="btn btn-md m-t-30  btn-outline-light ">

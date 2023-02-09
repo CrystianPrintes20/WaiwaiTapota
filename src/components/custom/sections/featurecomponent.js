@@ -10,7 +10,7 @@ import img5 from "../../../assets/images/features/feature30/feature-img.jpg";
 
 const FeatureComponent = () => {
   return (
-    <div>
+    <div className="bg-bodycolorSecundary">
    {/*    <div className="spacer bg-light">
         <Container>
           <Row className="justify-content-center">
@@ -30,32 +30,30 @@ const FeatureComponent = () => {
           <Row className="justify-content-center">
             <Col md="7" className="text-center">
               <span className="label label-danger label-rounded">
-                Feature 1
+                Sobre o projeto WaiwaiTapota
               </span>
-              <h2 className="title">Where does it come from?</h2>
+              <h2 className="title">Titulo sobre o projeto</h2>
               <h6 className="subtitle">
-                You can relay on our amazing features list and also our customer
-                services will be great experience for you without doubt and in
-                no-time
+                Aqui você pode escrever uma breve descrição sobre as motivações, inspirações, desafios
+                e resultados alcançados pelo projeto.
               </h6>
             </Col>
           </Row>
           <Row className="m-t-40">
             <Col md="6" className="wrap-feature4-box">
-              <Card>
+              <Card >
                 <CardBody>
                   <div className="icon-round bg-light-info">
                     <i className="fa fa-star"></i>
                   </div>
-                  <h5 className="font-medium">Lorem ipsum</h5>
+                  <h5 className="font-medium">Destaques</h5>
                   <p className="m-t-20">
-                    You can relay on our amazing features list and also our
-                    customer services will be great experience. Lorem ipsum
+                  Descreva aqui fatos interesantes e relevantes para o projeto. Lorem ipsum
                     dolor sit amet, consectetur adipiscing elit. Praesent
                     tristique pellentesque ipsum.
                   </p>
                   <a href="#" className="linking text-themecolor">
-                    Explore More<i className="ti-arrow-right"></i>
+                    Leia mais<i className="ti-arrow-right"></i>
                   </a>
                 </CardBody>
               </Card>
@@ -66,15 +64,14 @@ const FeatureComponent = () => {
                   <div className="icon-round bg-light-info">
                     <i className="fa fa-check-circle"></i>
                   </div>
-                  <h5 className="font-medium">Lorem ipsum </h5>
+                  <h5 className="font-medium">Destaques </h5>
                   <p className="m-t-20">
-                    You can relay on our amazing features list and also our
-                    customer services will be great experience. Lorem ipsum
+                    Descreva aqui fatos interesantes e relevantes para o projeto. Lorem ipsum
                     dolor sit amet, consectetur adipiscing elit. Praesent
                     tristique pellentesque ipsum.{" "}
                   </p>
                   <a className="linking text-themecolor" href="#">
-                    Explore More <i className="ti-arrow-right"></i>
+                    Leia mais <i className="ti-arrow-right"></i>
                   </a>
                 </CardBody>
               </Card>

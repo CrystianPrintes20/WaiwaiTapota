@@ -45,7 +45,7 @@ const RegisterFormik = () => {
     ),
   });
   return (
-    <Container fluid className="h-100 py-5">
+    <Container fluid className="h-100 py-5" style={{backgroundColor: "#eef5f9"}}>
       <div className="d-flex justify-content-center">
         <Col sm="6" md="4">
           <div className="p-4 d-flex justify-content-center gap-2">
