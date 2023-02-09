@@ -19,8 +19,8 @@ O projeto ainda está em desenvolvimento e as próximas atualizações serão vo
 - [ ] Enviar email ao usuário para confirmar cadastro na plataforma.
 - [ ] Trocar o input "categoria" por um combobox trazendo da API todas as categorias cadastradas e caso a que o usuário procure não esteja listada, deverá ser adicionado o campo para adicionar no banco de dados.
 
-
 ## Sobre o Waiwai Tapota
+
 Waiwai Tapota é um projeto de tradução de linguas maternas brasileiras faciltando dividido em três partes principais: API manager, Aplicativo mobile e sistema web.
 
 Vá para http://www.ufopa.edu.br/ufopa/ para obter mais informações e documentação.
@@ -35,10 +35,13 @@ Para instalar o Waiwai Tapota web, siga estas etapas:
 git clone https://github.com/CrystianSkalena/WaiwaiTranslator/tree/Develop
 cd WaiwaiTranslator
 ```
+
 ### 2. Instalação do NVM
-> *Caso ja tenha o node.js na versão v16 e NVM instado pode pular para o proximo passo.*
+
+> _Caso ja tenha o node.js na versão v16 e NVM instado pode pular para o proximo passo._
 
 Instalação do NVM Linux e macOS:
+
 ```
 $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 
@@ -48,15 +51,21 @@ $ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | ba
 ```
 
 Instalação do NVM Windows:
+
 ```
 Acesse para instalar o nvm: https://learn.microsoft.com/pt-br/windows/dev-environment/javascript/nodejs-on-windows
 ```
+
 Instalar a versão do Node.js
+
 ```
  nvm install v16.13.0
 ```
+
 ### 3. Instalando as depencias do projeto
+
 Ainda dentro da pasta WaiwaiTranslator execute o comando abaixo
+
 ```
  nvm install
 
@@ -75,6 +84,21 @@ npm run dev
 ou
 
 yarn dev
+```
+
+## Executando com Docker
+
+### Montando imagem
+
+```
+# Necessário instalar pacote
+docker build -t waiwaitapota-frontend .
+```
+
+### Executando imagem
+
+```
+docker run -p 3000:3000 waiwaitapota-frontend
 ```
 
 ## 📝 Licença

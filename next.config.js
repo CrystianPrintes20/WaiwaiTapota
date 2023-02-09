@@ -25,4 +25,5 @@ module.exports = {
     domains: ["via.placeholder.com", "localhost"], // Adding localhost devtest "embrapa-dev.skalena.com.br"
   },
   env: envData,
+  output: "standalone",
 };
