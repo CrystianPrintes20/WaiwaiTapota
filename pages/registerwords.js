@@ -111,7 +111,15 @@ export default function RegisterWords({ token }) {
     return (
       <>
         <Head>
-          <script>{getLocalStream()}</script>
+          <script>
+            {
+              (document.onreadystatechange = () => {
+                if (document.readyState === "complete") {
+                  getLocalStream();
+                }
+              })
+            }
+          </script>
         </Head>
         <Layout>
           <Banner3 />
