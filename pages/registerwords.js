@@ -40,19 +40,6 @@ const MyInput = ({ field, form, ...props }) => {
   return <Input {...field} {...props} />;
 };
 
-function getLocalStream() {
-  navigator.mediaDevices
-    .getUserMedia({ video: false, audio: true })
-    .then((stream) => {
-      window.localStream = stream;
-      window.localAudio.srcObject = stream;
-      window.localAudio.autoplay = true;
-    })
-    .catch((err) => {
-      console.error(`you got an error: ${err}`);
-    });
-}
-
 export default function RegisterWords({ token }) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -110,17 +97,6 @@ export default function RegisterWords({ token }) {
   if (session) {
     return (
       <>
-        <Head>
-          <script>
-            {
-              (document.onreadystatechange = () => {
-                if (document.readyState === "complete") {
-                  getLocalStream();
-                }
-              })
-            }
-          </script>
-        </Head>
         <Layout>
           <Banner3 />
           <Card className="feature4">

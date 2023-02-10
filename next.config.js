@@ -18,6 +18,19 @@ Object.keys(process.env).forEach((env) => {
   }
 });
 
+// You can choose which headers to add to the list
+// after learning more below.
+const securityHeaders = [
+  {
+    key: "Permissions-Policy",
+    value: "microphone=(), browsing-topics=()",
+  },
+  {
+    key: "Referrer-Policy",
+    value: "no-referrer-when-downgrade",
+  },
+];
+
 module.exports = {
   /* config options here */
   reactStrictMode: false,
@@ -26,4 +39,13 @@ module.exports = {
   },
   env: envData,
   output: "standalone",
+  async headers() {
+    return [
+      {
+        // Apply these headers to all routes in your application.
+        source: "/(.*)",
+        headers: securityHeaders,
+      },
+    ];
+  },
 };
