@@ -32,7 +32,6 @@ const Header = () => {
     <div className="topbar" id="top">
       <div className="header6">
         <Container className="po-relative">
-
           <Navbar className="navbar-expand-lg h6-nav-bar">
             <NavbarBrand href="/">
               {/* <Image src={logo} alt="wrapkit" /> */}
@@ -100,7 +99,6 @@ const Header = () => {
                     </a>
                   </Link>
                 </NavItem>
-
               </Nav>
               {session ? (
                 <>
@@ -115,28 +113,43 @@ const Header = () => {
                     </Link>
                   </div> */}
 
-                  <UncontrolledDropdown >
-                    <DropdownToggle
-                      color="transparent"
-                    >
+                  <UncontrolledDropdown>
+                    <DropdownToggle color="transparent">
                       <div className="d-flex gap-3 border-bottom border-danger p-0">
                         <span className="text-truncate mr-3">
-                          <h6 className="mb-0 text-white text-uppercase">{session.user.username}</h6>
-                          <small className="elipsis">{session.user.email}</small>
+                          <h6 className="mb-0 text-white text-uppercase">
+                            {session.user.username}
+                          </h6>
+                          <small className="elipsis">
+                            {session.user.email}
+                          </small>
                         </span>
-                 
-                        <User className="border rounded-circle" size={40} color="white" />
+
+                        <User
+                          className="border rounded-circle"
+                          size={40}
+                          color="white"
+                        />
                       </div>
-
-
                     </DropdownToggle>
 
                     <DropdownMenu dark>
                       <DropdownItem>
                         <User className="mr-2" size={25} /> Meu perfil
                       </DropdownItem>
-                      <DropdownItem onClick={() => signOut()}>
-                        <LogOut className="mr-2" size={25} />Sair
+
+                      <DropdownItem>
+                        <Link href={"/"}>
+                          <a
+                            onClick={(e) => {
+                              e.preventDefault();
+                              signOut();
+                            }}
+                          >
+                            <LogOut className="mr-2" size={25} />
+                            Sair
+                          </a>
+                        </Link>
                       </DropdownItem>
                     </DropdownMenu>
                   </UncontrolledDropdown>
