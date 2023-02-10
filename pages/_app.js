@@ -13,8 +13,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         />
         <link rel="icon" href="/ufopa.ico" />
         <script>
-          /** * Deployed on Netlify */ window.NETLIFY_PUBLIC_VARIABLE =
-          "http://34.95.153.197";
+          {(window.NETLIFY_PUBLIC_VARIABLE = "http://34.95.153.197")}
         </script>
       </Head>
       <Component {...pageProps} />
