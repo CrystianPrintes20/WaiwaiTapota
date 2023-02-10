@@ -137,21 +137,9 @@ const Header = () => {
                       <DropdownItem>
                         <User className="mr-2" size={25} /> Meu perfil
                       </DropdownItem>
-
-                      <DropdownItem>
-                        <Link href={"/"}>
-                          <a
-                            onClick={(e) => {
-                              e.preventDefault();
-                              signOut({
-                                callbackUrl: `${window.location.origin}/`,
-                              });
-                            }}
-                          >
-                            <LogOut className="mr-2" size={25} />
-                            Sair
-                          </a>
-                        </Link>
+                      <DropdownItem onClick={() => signOut()}>
+                        <LogOut className="mr-2" size={25} />
+                        Sair
                       </DropdownItem>
                     </DropdownMenu>
                   </UncontrolledDropdown>
