@@ -40,6 +40,7 @@ module.exports = {
       {
         // Apply these headers to all routes in your application.
         source: "/(.*)",
+        headers: [],
         // headers: securityHeaders,
       },
     ];
