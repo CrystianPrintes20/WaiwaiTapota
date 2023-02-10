@@ -143,7 +143,9 @@ const Header = () => {
                           <a
                             onClick={(e) => {
                               e.preventDefault();
-                              signOut();
+                              signOut({
+                                callbackUrl: `${window.location.origin}/`,
+                              });
                             }}
                           >
                             <LogOut className="mr-2" size={25} />
