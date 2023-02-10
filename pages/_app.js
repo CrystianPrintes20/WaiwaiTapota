@@ -1,5 +1,6 @@
 import "../styles/scss/style.scss";
 import Head from "next/head";
+import Script from "next/script";
 import { SessionProvider } from "next-auth/react";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
@@ -12,7 +13,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           content="Waiwai Translator| O seu tradutor de linguas maternas"
         />
         <link rel="icon" href="/ufopa.ico" />
-        <script type="text/javascript" src="/static/script.js"></script>
+        <Script src="static/script.js" strategy="beforeInteractive"></Script>
       </Head>
       <Component {...pageProps} />
     </SessionProvider>
