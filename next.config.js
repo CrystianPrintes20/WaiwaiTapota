@@ -25,10 +25,6 @@ const securityHeaders = [
     key: "Permissions-Policy",
     value: "microphone=(self)",
   },
-  {
-    key: "Referrer-Policy",
-    value: "no-referrer-when-downgrade",
-  },
 ];
 
 module.exports = {
@@ -44,7 +40,7 @@ module.exports = {
       {
         // Apply these headers to all routes in your application.
         source: "/(.*)",
-        headers: securityHeaders,
+        // headers: securityHeaders,
       },
     ];
   },
