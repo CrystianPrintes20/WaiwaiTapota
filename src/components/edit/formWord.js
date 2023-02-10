@@ -126,7 +126,7 @@ const FormWord = ({
     axios
       .get(
         `${
-          process.env.NEXT_PUBLIC_API_URL || window.NETLIFY_PUBLIC_VARIABLE
+          process.env.NEXT_PUBLIC_API_URL || "http://34.95.153.197"
         }/palavras/me`,
         {
           headers: {
@@ -146,7 +146,7 @@ const FormWord = ({
     try {
       await axios({
         url: `${
-          process.env.NEXT_PUBLIC_API_URL || window.NETLIFY_PUBLIC_VARIABLE
+          process.env.NEXT_PUBLIC_API_URL || "http://34.95.153.197"
         }/palavras/${data["id"]}`,
         method: "DELETE",
         headers: {
@@ -179,7 +179,7 @@ const FormWord = ({
       axios
         .get(
           `${
-            process.env.NEXT_PUBLIC_API_URL || window.NETLIFY_PUBLIC_VARIABLE
+            process.env.NEXT_PUBLIC_API_URL || "http://34.95.153.197"
           }/palavras/${data["id"]}`,
           {
             headers: {
@@ -204,8 +204,7 @@ const FormWord = ({
             setImage({
               id: json.image,
               src: `${
-                process.env.NEXT_PUBLIC_API_URL ||
-                window.NETLIFY_PUBLIC_VARIABLE
+                process.env.NEXT_PUBLIC_API_URL || "http://34.95.153.197"
               }/uploads/${json.image}`,
               name: json.image,
             });
@@ -213,8 +212,7 @@ const FormWord = ({
           if (json.audio)
             setRecord(
               `${
-                process.env.NEXT_PUBLIC_API_URL ||
-                window.NETLIFY_PUBLIC_VARIABLE
+                process.env.NEXT_PUBLIC_API_URL || "http://34.95.153.197"
               }/uploads/${json.audio}`
             );
         });
@@ -245,7 +243,7 @@ const FormWord = ({
                     const response = await axios.put(
                       `${
                         process.env.NEXT_PUBLIC_API_URL ||
-                        window.NETLIFY_PUBLIC_VARIABLE
+                        "http://34.95.153.197"
                       }/palavras/${data["id"]}`,
                       JSON.stringify(fields),
                       {
@@ -267,7 +265,7 @@ const FormWord = ({
                             method: "delete",
                             url: `${
                               process.env.NEXT_PUBLIC_API_URL ||
-                              window.NETLIFY_PUBLIC_VARIABLE
+                              "http://34.95.153.197"
                             }/uploads/${formValues.image}`,
                             headers: {
                               Authorization: `Bearer ${token}`,
@@ -283,7 +281,7 @@ const FormWord = ({
                             method: "post",
                             url: `${
                               process.env.NEXT_PUBLIC_API_URL ||
-                              window.NETLIFY_PUBLIC_VARIABLE
+                              "http://34.95.153.197"
                             }/uploads/`,
                             data: uploadImage,
                             headers: {
@@ -296,7 +294,7 @@ const FormWord = ({
                             method: "delete",
                             url: `${
                               process.env.NEXT_PUBLIC_API_URL ||
-                              window.NETLIFY_PUBLIC_VARIABLE
+                              "http://34.95.153.197"
                             }/uploads/${formValues.image}`,
                             headers: {
                               Authorization: `Bearer ${token}`,
@@ -315,7 +313,7 @@ const FormWord = ({
                             method: "post",
                             url: `${
                               process.env.NEXT_PUBLIC_API_URL ||
-                              window.NETLIFY_PUBLIC_VARIABLE
+                              "http://34.95.153.197"
                             }/uploads/`,
                             data: uploadImage,
                             headers: {
@@ -333,7 +331,7 @@ const FormWord = ({
                             method: "delete",
                             url: `${
                               process.env.NEXT_PUBLIC_API_URL ||
-                              window.NETLIFY_PUBLIC_VARIABLE
+                              "http://34.95.153.197"
                             }/uploads/${formValues.audio}`,
                             headers: {
                               Authorization: `Bearer ${token}`,
@@ -351,7 +349,7 @@ const FormWord = ({
                             method: "post",
                             url: `${
                               process.env.NEXT_PUBLIC_API_URL ||
-                              window.NETLIFY_PUBLIC_VARIABLE
+                              "http://34.95.153.197"
                             }/uploads/`,
                             data: uploadRecord,
                             headers: {
@@ -364,7 +362,7 @@ const FormWord = ({
                             method: "delete",
                             url: `${
                               process.env.NEXT_PUBLIC_API_URL ||
-                              window.NETLIFY_PUBLIC_VARIABLE
+                              "http://34.95.153.197"
                             }/uploads/${formValues.audio}`,
                             headers: {
                               Authorization: `Bearer ${token}`,
@@ -385,7 +383,7 @@ const FormWord = ({
                             method: "post",
                             url: `${
                               process.env.NEXT_PUBLIC_API_URL ||
-                              window.NETLIFY_PUBLIC_VARIABLE
+                              "http://34.95.153.197"
                             }/uploads/`,
                             data: uploadRecord,
                             headers: {

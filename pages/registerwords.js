@@ -139,7 +139,7 @@ export default function RegisterWords({ token }) {
                             const response = await axios.post(
                               `${
                                 process.env.NEXT_PUBLIC_API_URL ||
-                                window.NETLIFY_PUBLIC_VARIABLE
+                                "http://34.95.153.197"
                               }/palavras/`,
                               JSON.stringify(fields),
                               {
@@ -166,7 +166,7 @@ export default function RegisterWords({ token }) {
                                 method: "post",
                                 url: `${
                                   process.env.NEXT_PUBLIC_API_URL ||
-                                  window.NETLIFY_PUBLIC_VARIABLE
+                                  "http://34.95.153.197"
                                 }/uploads/`,
                                 data: uploadImage,
                                 headers: {
@@ -188,7 +188,7 @@ export default function RegisterWords({ token }) {
                                 method: "post",
                                 url: `${
                                   process.env.NEXT_PUBLIC_API_URL ||
-                                  window.NETLIFY_PUBLIC_VARIABLE
+                                  "http://34.95.153.197"
                                 }/uploads/`,
                                 data: uploadRecord,
                                 headers: {

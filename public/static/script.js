@@ -1,1 +1,0 @@
-window.NETLIFY_PUBLIC_VARIABLE = "http://34.95.153.197";

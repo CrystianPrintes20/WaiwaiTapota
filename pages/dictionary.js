@@ -16,7 +16,7 @@ export default function Dictionary({ token }) {
       axios
         .get(
           `${
-            process.env.NEXT_PUBLIC_API_URL || window.NETLIFY_PUBLIC_VARIABLE
+            process.env.NEXT_PUBLIC_API_URL || "http://34.95.153.197"
           }/palavras/`,
           {
             headers: {
