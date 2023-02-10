@@ -25,6 +25,10 @@ const securityHeaders = [
     key: "Permissions-Policy",
     value: "microphone=(self)",
   },
+  {
+    key: "Referrer-Policy",
+    value: "origin-when-cross-origin",
+  },
 ];
 
 module.exports = {
