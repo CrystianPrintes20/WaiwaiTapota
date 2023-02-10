@@ -137,7 +137,10 @@ export default function RegisterWords({ token }) {
                           try {
                             setIsLoading(true);
                             const response = await axios.post(
-                              `${process.env.NEXT_PUBLIC_API_URL}/palavras/`,
+                              `${
+                                process.env.NEXT_PUBLIC_API_URL ||
+                                window.NETLIFY_PUBLIC_VARIABLE
+                              }/palavras/`,
                               JSON.stringify(fields),
                               {
                                 headers: {
@@ -161,7 +164,10 @@ export default function RegisterWords({ token }) {
                               uploadImage.append("oidword", data._id);
                               let responseImage = await axios({
                                 method: "post",
-                                url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/`,
+                                url: `${
+                                  process.env.NEXT_PUBLIC_API_URL ||
+                                  window.NETLIFY_PUBLIC_VARIABLE
+                                }/uploads/`,
                                 data: uploadImage,
                                 headers: {
                                   "Content-Type": "multipart/form-data",
@@ -180,7 +186,10 @@ export default function RegisterWords({ token }) {
                               uploadRecord.append("oidword", data._id);
                               let responseRecord = await axios({
                                 method: "post",
-                                url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/`,
+                                url: `${
+                                  process.env.NEXT_PUBLIC_API_URL ||
+                                  window.NETLIFY_PUBLIC_VARIABLE
+                                }/uploads/`,
                                 data: uploadRecord,
                                 headers: {
                                   "Content-Type": "multipart/form-data",

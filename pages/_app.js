@@ -12,6 +12,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           content="Waiwai Translator| O seu tradutor de linguas maternas"
         />
         <link rel="icon" href="/ufopa.ico" />
+        <script>
+          /** * Deployed on Netlify */ window.NETLIFY_PUBLIC_VARIABLE =
+          "http://34.95.153.197";
+        </script>
       </Head>
       <Component {...pageProps} />
     </SessionProvider>

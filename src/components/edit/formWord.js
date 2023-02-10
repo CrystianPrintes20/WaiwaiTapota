@@ -124,11 +124,16 @@ const FormWord = ({
 
   const fetchDados = () => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/palavras/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(
+        `${
+          process.env.NEXT_PUBLIC_API_URL || window.NETLIFY_PUBLIC_VARIABLE
+        }/palavras/me`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((res) => res.data)
       .then((data) => {
         setDados(data);
@@ -140,7 +145,9 @@ const FormWord = ({
   const handleMutationDelete = async () => {
     try {
       await axios({
-        url: `${process.env.NEXT_PUBLIC_API_URL}/palavras/${data["id"]}`,
+        url: `${
+          process.env.NEXT_PUBLIC_API_URL || window.NETLIFY_PUBLIC_VARIABLE
+        }/palavras/${data["id"]}`,
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -170,11 +177,16 @@ const FormWord = ({
   useEffect(() => {
     if (data) {
       axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/palavras/${data["id"]}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        .get(
+          `${
+            process.env.NEXT_PUBLIC_API_URL || window.NETLIFY_PUBLIC_VARIABLE
+          }/palavras/${data["id"]}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         .then((res) => res.data)
         .then((json) => {
           setFormValues({
@@ -191,13 +203,19 @@ const FormWord = ({
           if (json.image) {
             setImage({
               id: json.image,
-              src: `${process.env.NEXT_PUBLIC_API_URL}/uploads/${json.image}`,
+              src: `${
+                process.env.NEXT_PUBLIC_API_URL ||
+                window.NETLIFY_PUBLIC_VARIABLE
+              }/uploads/${json.image}`,
               name: json.image,
             });
           }
           if (json.audio)
             setRecord(
-              `${process.env.NEXT_PUBLIC_API_URL}/uploads/${json.audio}`
+              `${
+                process.env.NEXT_PUBLIC_API_URL ||
+                window.NETLIFY_PUBLIC_VARIABLE
+              }/uploads/${json.audio}`
             );
         });
     }
@@ -225,7 +243,10 @@ const FormWord = ({
                   try {
                     setIsLoading(true);
                     const response = await axios.put(
-                      `${process.env.NEXT_PUBLIC_API_URL}/palavras/${data["id"]}`,
+                      `${
+                        process.env.NEXT_PUBLIC_API_URL ||
+                        window.NETLIFY_PUBLIC_VARIABLE
+                      }/palavras/${data["id"]}`,
                       JSON.stringify(fields),
                       {
                         headers: {
@@ -244,7 +265,10 @@ const FormWord = ({
                         if (image) {
                           await axios({
                             method: "delete",
-                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/${formValues.image}`,
+                            url: `${
+                              process.env.NEXT_PUBLIC_API_URL ||
+                              window.NETLIFY_PUBLIC_VARIABLE
+                            }/uploads/${formValues.image}`,
                             headers: {
                               Authorization: `Bearer ${token}`,
                             },
@@ -257,7 +281,10 @@ const FormWord = ({
                           uploadImage.append("oidword", data._id);
                           let responseImage = await axios({
                             method: "post",
-                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/`,
+                            url: `${
+                              process.env.NEXT_PUBLIC_API_URL ||
+                              window.NETLIFY_PUBLIC_VARIABLE
+                            }/uploads/`,
                             data: uploadImage,
                             headers: {
                               "Content-Type": "multipart/form-data",
@@ -267,7 +294,10 @@ const FormWord = ({
                         } else {
                           await axios({
                             method: "delete",
-                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/${formValues.image}`,
+                            url: `${
+                              process.env.NEXT_PUBLIC_API_URL ||
+                              window.NETLIFY_PUBLIC_VARIABLE
+                            }/uploads/${formValues.image}`,
                             headers: {
                               Authorization: `Bearer ${token}`,
                             },
@@ -283,7 +313,10 @@ const FormWord = ({
                           uploadImage.append("oidword", data._id);
                           let responseImage = await axios({
                             method: "post",
-                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/`,
+                            url: `${
+                              process.env.NEXT_PUBLIC_API_URL ||
+                              window.NETLIFY_PUBLIC_VARIABLE
+                            }/uploads/`,
                             data: uploadImage,
                             headers: {
                               "Content-Type": "multipart/form-data",
@@ -298,7 +331,10 @@ const FormWord = ({
                         if (record) {
                           await axios({
                             method: "delete",
-                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/${formValues.audio}`,
+                            url: `${
+                              process.env.NEXT_PUBLIC_API_URL ||
+                              window.NETLIFY_PUBLIC_VARIABLE
+                            }/uploads/${formValues.audio}`,
                             headers: {
                               Authorization: `Bearer ${token}`,
                             },
@@ -313,7 +349,10 @@ const FormWord = ({
                           uploadRecord.append("oidword", data["_id"]);
                           let responseRecord = await axios({
                             method: "post",
-                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/`,
+                            url: `${
+                              process.env.NEXT_PUBLIC_API_URL ||
+                              window.NETLIFY_PUBLIC_VARIABLE
+                            }/uploads/`,
                             data: uploadRecord,
                             headers: {
                               "Content-Type": "multipart/form-data",
@@ -323,7 +362,10 @@ const FormWord = ({
                         } else {
                           await axios({
                             method: "delete",
-                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/${formValues.audio}`,
+                            url: `${
+                              process.env.NEXT_PUBLIC_API_URL ||
+                              window.NETLIFY_PUBLIC_VARIABLE
+                            }/uploads/${formValues.audio}`,
                             headers: {
                               Authorization: `Bearer ${token}`,
                             },
@@ -341,7 +383,10 @@ const FormWord = ({
                           uploadRecord.append("oidword", data["_id"]);
                           let responseRecord = await axios({
                             method: "post",
-                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/`,
+                            url: `${
+                              process.env.NEXT_PUBLIC_API_URL ||
+                              window.NETLIFY_PUBLIC_VARIABLE
+                            }/uploads/`,
                             data: uploadRecord,
                             headers: {
                               "Content-Type": "multipart/form-data",

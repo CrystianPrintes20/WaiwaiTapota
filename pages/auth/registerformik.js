@@ -74,7 +74,10 @@ const RegisterFormik = () => {
                     setIsLoading(true);
 
                     response = await axios({
-                      url: `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+                      url: `${
+                        process.env.NEXT_PUBLIC_API_URL ||
+                        window.NETLIFY_PUBLIC_VARIABLE
+                      }/auth/register`,
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       data: JSON.stringify(fields),

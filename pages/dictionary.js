@@ -14,11 +14,16 @@ export default function Dictionary({ token }) {
   useEffect(() => {
     if (token) {
       axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/palavras/`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        .get(
+          `${
+            process.env.NEXT_PUBLIC_API_URL || window.NETLIFY_PUBLIC_VARIABLE
+          }/palavras/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         .then((res) => res.data)
         .then((data) => {
           setDados(data);
