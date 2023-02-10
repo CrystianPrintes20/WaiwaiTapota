@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Layout from "../src/layout/Layout";
 import Banner from "../src/components/banner/Banner";
 import {
@@ -23,10 +23,8 @@ import "react-toastify/dist/ReactToastify.css";
 import React, { useCallback } from "react";
 import Dropzone from "../src/components/dragDrop";
 import ImagePrev from "../src/components/PreviewImagem";
-import Image from "next/image";
 import ReactAudioPlayer from "react-audio-player";
-import { getCookie, getCookies } from "cookies-next";
-import Head from "next/head";
+import connectionWaiwai from "../src/services/waiwaiApi";
 
 /**
  * Importações para entrada de áudio
@@ -134,22 +132,14 @@ export default function RegisterWords({ token }) {
                         initialValues={initialValues}
                         validationSchema={validationSchema}
                         onSubmit={async (fields) => {
+                          const apiObj = new connectionWaiwai(token);
                           try {
                             setIsLoading(true);
-                            const response = await axios.post(
-                              `${
-                                process.env.NEXT_PUBLIC_API_URL ||
-                                "http://34.95.153.197"
-                              }/palavras/`,
-                              JSON.stringify(fields),
-                              {
-                                headers: {
-                                  "Content-Type": "application/json",
-                                  Authorization: `Bearer ${token}`,
-                                },
-                              }
+
+                            let data = await apiObj.createPalavra(
+                              JSON.stringify(fields)
                             );
-                            const { data } = response;
+
                             if (imageWord) {
                               // https://stackoverflow.com/questions/12168909/blob-from-dataurl
                               const blobData = await (
@@ -162,18 +152,9 @@ export default function RegisterWords({ token }) {
                                 imageWord.name
                               );
                               uploadImage.append("oidword", data._id);
-                              let responseImage = await axios({
-                                method: "post",
-                                url: `${
-                                  process.env.NEXT_PUBLIC_API_URL ||
-                                  "http://34.95.153.197"
-                                }/uploads/`,
-                                data: uploadImage,
-                                headers: {
-                                  "Content-Type": "multipart/form-data",
-                                  Authorization: `Bearer ${token}`,
-                                },
-                              });
+                              let responseImage = await apiObj.createUpload(
+                                uploadImage
+                              );
                             }
                             if (record) {
                               const event = new Date();
@@ -184,18 +165,9 @@ export default function RegisterWords({ token }) {
                                 `${event.toISOString()}.weba`
                               );
                               uploadRecord.append("oidword", data._id);
-                              let responseRecord = await axios({
-                                method: "post",
-                                url: `${
-                                  process.env.NEXT_PUBLIC_API_URL ||
-                                  "http://34.95.153.197"
-                                }/uploads/`,
-                                data: uploadRecord,
-                                headers: {
-                                  "Content-Type": "multipart/form-data",
-                                  Authorization: `Bearer ${token}`,
-                                },
-                              });
+                              let responseRecord = await apiObj.createUpload(
+                                uploadRecord
+                              );
                             }
 
                             if (response.status === 201) {

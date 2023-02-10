@@ -5,7 +5,7 @@ import Banner from "../src/components/banner/Banner";
 import { Card, CardBody, Row, Col } from "reactstrap";
 import { useSession } from "next-auth/react";
 import DataTable from "../src/components/table/Mui_datatables";
-import axios from "axios";
+import connectionWaiwai from "../src/services/waiwaiApi";
 
 export default function Dictionary({ token }) {
   const { data: session } = useSession();
@@ -13,21 +13,10 @@ export default function Dictionary({ token }) {
 
   useEffect(() => {
     if (token) {
-      axios
-        .get(
-          `${
-            process.env.NEXT_PUBLIC_API_URL || "http://34.95.153.197"
-          }/palavras/`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((res) => res.data)
-        .then((data) => {
-          setDados(data);
-        });
+      const apiObj = new connectionWaiwai(token);
+      apiObj.allPalavras().then((data) => {
+        setDados(data);
+      });
     }
   }, [token]);
 

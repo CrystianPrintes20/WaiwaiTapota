@@ -5,9 +5,9 @@ import Banner3 from "../src/components/banner/Banner3";
 import Banner from "../src/components/banner/Banner";
 import { Card, CardBody, Row, Col } from "reactstrap";
 import DataTable from "../src/components/table/Mui_datatables";
-import axios from "axios";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
+import connectionWaiwai from "../src/services/waiwaiApi";
 
 export default function MyWord({ token }) {
   const [dados, setDados] = useState(null);
@@ -15,21 +15,10 @@ export default function MyWord({ token }) {
 
   useEffect(() => {
     if (token) {
-      axios
-        .get(
-          `${
-            process.env.NEXT_PUBLIC_API_URL || "http://34.95.153.197"
-          }/palavras/me`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((res) => res.data)
-        .then((data) => {
-          setDados(data);
-        });
+      const apiObj = new connectionWaiwai(token);
+      apiObj.palavrasMe().then((data) => {
+        setDados(data);
+      });
     }
   }, [token]);
 

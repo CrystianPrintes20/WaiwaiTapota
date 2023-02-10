@@ -23,7 +23,7 @@ Object.keys(process.env).forEach((env) => {
 const securityHeaders = [
   {
     key: "Permissions-Policy",
-    value: "microphone=(), browsing-topics=()",
+    value: "microphone=()",
   },
   {
     key: "Referrer-Policy",
