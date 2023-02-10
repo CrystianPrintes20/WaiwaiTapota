@@ -35,14 +35,14 @@ module.exports = {
   },
   env: envData,
   output: "standalone",
-  async headers() {
-    return [
-      {
-        // Apply these headers to all routes in your application.
-        source: "/(.*)",
-        headers: [],
-        // headers: securityHeaders,
-      },
-    ];
-  },
+  // async headers() {
+  //   return [
+  //     {
+  //       // Apply these headers to all routes in your application.
+  //       source: "/(.*)",
+  //       headers: [],
+  //       // headers: securityHeaders,
+  //     },
+  //   ];
+  // },
 };
