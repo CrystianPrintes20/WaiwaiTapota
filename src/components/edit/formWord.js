@@ -24,6 +24,7 @@ import Image from "../PreviewImagem";
 import cuid from "cuid";
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 import ReactAudioPlayer from "react-audio-player";
+import connectionWaiwai from "../../services/waiwaiApi";
 
 const MyInput = ({ field, form, ...props }) => {
   return <Input {...field} {...props} />;
@@ -67,6 +68,8 @@ const FormWord = ({
 
   const toggleExcluir = () => setModalExcluir(!modalExcluir);
   const toggleEditar = () => setModalEditar(!modalEditar);
+
+  const apiObj = new connectionWaiwai(token);
 
   const removeImage = () => {
     if (showAction) {
@@ -123,37 +126,15 @@ const FormWord = ({
   };
 
   const fetchDados = () => {
-    axios
-      .get(
-        `${
-          process.env.NEXT_PUBLIC_API_URL || "http://34.95.153.197"
-        }/palavras/me`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => res.data)
-      .then((data) => {
-        setDados(data);
-        setModal(!modal);
-        // toast.success("Palavra atualizada com sucesso!", options);
-      });
+    apiObj.palavrasMe().then((data) => {
+      setDados(data);
+      setModal(!modal);
+    });
   };
 
   const handleMutationDelete = async () => {
     try {
-      await axios({
-        url: `${
-          process.env.NEXT_PUBLIC_API_URL || "http://34.95.153.197"
-        }/palavras/${data["id"]}`,
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await apiObj.deletePalavra(data["id"]);
       setModal(!modal);
       toast.success("Palavra excluida com sucesso!", options);
       fetchDados();
@@ -176,46 +157,27 @@ const FormWord = ({
 
   useEffect(() => {
     if (data) {
-      axios
-        .get(
-          `${
-            process.env.NEXT_PUBLIC_API_URL || "http://34.95.153.197"
-          }/palavras/${data["id"]}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((res) => res.data)
-        .then((json) => {
-          setFormValues({
-            ...json,
-            wordPort: json.wordPort || formValues.wordPort,
-            translationWaiwai:
-              json.translationWaiwai || formValues.translationWaiwai,
-            category: json.category || formValues.category,
-            meaningPort: json.meaningPort || formValues.meaningPort,
-            meaningWaiwai: json.meaningWaiwai || formValues.meaningWaiwai,
-            synonymPort: json.synonymPort || formValues.synonymPort,
-            synonymWaiwai: json.synonymWaiwai || formValues.synonymWaiwai,
-          });
-          if (json.image) {
-            setImage({
-              id: json.image,
-              src: `${
-                process.env.NEXT_PUBLIC_API_URL || "http://34.95.153.197"
-              }/uploads/${json.image}`,
-              name: json.image,
-            });
-          }
-          if (json.audio)
-            setRecord(
-              `${
-                process.env.NEXT_PUBLIC_API_URL || "http://34.95.153.197"
-              }/uploads/${json.audio}`
-            );
+      apiObj.getByIdPalavra(data["id"]).then((json) => {
+        setFormValues({
+          ...json,
+          wordPort: json.wordPort || formValues.wordPort,
+          translationWaiwai:
+            json.translationWaiwai || formValues.translationWaiwai,
+          category: json.category || formValues.category,
+          meaningPort: json.meaningPort || formValues.meaningPort,
+          meaningWaiwai: json.meaningWaiwai || formValues.meaningWaiwai,
+          synonymPort: json.synonymPort || formValues.synonymPort,
+          synonymWaiwai: json.synonymWaiwai || formValues.synonymWaiwai,
         });
+        if (json.image) {
+          setImage({
+            id: json.image,
+            src: `${apiObj.baseURL}/uploads/${json.image}`,
+            name: json.image,
+          });
+        }
+        if (json.audio) setRecord(`${apiObj.baseURL}/uploads/${json.audio}`);
+      });
     }
   }, [data]);
 
@@ -240,18 +202,9 @@ const FormWord = ({
                 onSubmit={async (fields) => {
                   try {
                     setIsLoading(true);
-                    const response = await axios.put(
-                      `${
-                        process.env.NEXT_PUBLIC_API_URL ||
-                        "http://34.95.153.197"
-                      }/palavras/${data["id"]}`,
-                      JSON.stringify(fields),
-                      {
-                        headers: {
-                          "Content-Type": "application/json",
-                          Authorization: `Bearer ${token}`,
-                        },
-                      }
+                    const response = await apiObj.updatePalavra(
+                      data["id"],
+                      JSON.stringify(fields)
                     );
 
                     if (response.status === 204) {
@@ -261,45 +214,18 @@ const FormWord = ({
                     if (imageChanged) {
                       if (formValues.image) {
                         if (image) {
-                          await axios({
-                            method: "delete",
-                            url: `${
-                              process.env.NEXT_PUBLIC_API_URL ||
-                              "http://34.95.153.197"
-                            }/uploads/${formValues.image}`,
-                            headers: {
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          await apiObj.deleteUpload(formValues.image);
                           const blobData = await (
                             await fetch(image.src)
                           ).blob();
                           let uploadImage = new FormData();
                           uploadImage.append("file", blobData, image.name);
                           uploadImage.append("oidword", data._id);
-                          let responseImage = await axios({
-                            method: "post",
-                            url: `${
-                              process.env.NEXT_PUBLIC_API_URL ||
-                              "http://34.95.153.197"
-                            }/uploads/`,
-                            data: uploadImage,
-                            headers: {
-                              "Content-Type": "multipart/form-data",
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          let responseImage = await apiObj.createUpload(
+                            uploadImage
+                          );
                         } else {
-                          await axios({
-                            method: "delete",
-                            url: `${
-                              process.env.NEXT_PUBLIC_API_URL ||
-                              "http://34.95.153.197"
-                            }/uploads/${formValues.image}`,
-                            headers: {
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          await apiObj.deleteUpload(formValues.image);
                         }
                       } else {
                         if (image) {
@@ -309,34 +235,16 @@ const FormWord = ({
                           let uploadImage = new FormData();
                           uploadImage.append("file", blobData, image.name);
                           uploadImage.append("oidword", data._id);
-                          let responseImage = await axios({
-                            method: "post",
-                            url: `${
-                              process.env.NEXT_PUBLIC_API_URL ||
-                              "http://34.95.153.197"
-                            }/uploads/`,
-                            data: uploadImage,
-                            headers: {
-                              "Content-Type": "multipart/form-data",
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          let responseImage = await apiObj.createUpload(
+                            uploadImage
+                          );
                         }
                       }
                     }
                     if (audioChanged) {
                       if (formValues.audio) {
                         if (record) {
-                          await axios({
-                            method: "delete",
-                            url: `${
-                              process.env.NEXT_PUBLIC_API_URL ||
-                              "http://34.95.153.197"
-                            }/uploads/${formValues.audio}`,
-                            headers: {
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          await apiObj.deleteUpload(formValues.audio);
                           const event = new Date();
                           let uploadRecord = new FormData();
                           uploadRecord.append(
@@ -345,29 +253,11 @@ const FormWord = ({
                             `${event.toISOString()}.weba`
                           );
                           uploadRecord.append("oidword", data["_id"]);
-                          let responseRecord = await axios({
-                            method: "post",
-                            url: `${
-                              process.env.NEXT_PUBLIC_API_URL ||
-                              "http://34.95.153.197"
-                            }/uploads/`,
-                            data: uploadRecord,
-                            headers: {
-                              "Content-Type": "multipart/form-data",
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          let responseRecord = await apiObj.createUpload(
+                            uploadRecord
+                          );
                         } else {
-                          await axios({
-                            method: "delete",
-                            url: `${
-                              process.env.NEXT_PUBLIC_API_URL ||
-                              "http://34.95.153.197"
-                            }/uploads/${formValues.audio}`,
-                            headers: {
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          await apiObj.deleteUpload(formValues.audio);
                         }
                       } else {
                         if (record) {
@@ -379,18 +269,9 @@ const FormWord = ({
                             `${event.toISOString()}.weba`
                           );
                           uploadRecord.append("oidword", data["_id"]);
-                          let responseRecord = await axios({
-                            method: "post",
-                            url: `${
-                              process.env.NEXT_PUBLIC_API_URL ||
-                              "http://34.95.153.197"
-                            }/uploads/`,
-                            data: uploadRecord,
-                            headers: {
-                              "Content-Type": "multipart/form-data",
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          let responseRecord = await apiObj.createUpload(
+                            uploadRecord
+                          );
                         }
                       }
                     }

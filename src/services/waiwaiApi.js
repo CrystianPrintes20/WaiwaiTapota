@@ -12,6 +12,9 @@ export default class connectionWaiwai {
    *
    * @returns {object} Palavras cadastradas pelo usuário
    */
+  get baseURL() {
+    return instanceApi.defaults.baseURL;
+  }
   async palavrasMe() {
     let response = await instanceApi.get(
       "/palavras/me",
@@ -23,6 +26,23 @@ export default class connectionWaiwai {
   async allPalavras() {
     let response = await instanceApi.get(
       "/palavras",
+      headersAuthorization(this.accessToken)
+    );
+    const bodyRes = response.data;
+    return bodyRes;
+  }
+  async updatePalavra(uid, data) {
+    let response = await instanceApi.put(
+      `/palavras/${uid}`,
+      data,
+      headersAuthorization(this.accessToken)
+    );
+    const bodyRes = response.data;
+    return bodyRes;
+  }
+  async getByIdPalavra(uid) {
+    let response = await instanceApi.get(
+      `/palavras/${uid}`,
       headersAuthorization(this.accessToken)
     );
     const bodyRes = response.data;
@@ -53,11 +73,8 @@ export default class connectionWaiwai {
     const bodyRes = response.data;
     return bodyRes;
   }
-
-  async uploadAudio(data) {
-    let response = await instanceApi.post("/uploads/", data, {
-      "Content-Type": "multipart/form-data",
-    });
+  async deleteUpload(uuid) {
+    let response = await instanceApi.delete(`/uploads/${uuid}`);
     const bodyRes = response.data;
     return bodyRes;
   }
