@@ -124,7 +124,7 @@ const FormWord = ({
 
   const fetchDados = () => {
     axios
-      .get(`${process.env.NEXTAUTH_URL_LOCAL}/palavras/me`, {
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/palavras/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -140,7 +140,7 @@ const FormWord = ({
   const handleMutationDelete = async () => {
     try {
       await axios({
-        url: `${process.env.NEXTAUTH_URL_LOCAL}/palavras/${data["id"]}`,
+        url: `${process.env.NEXT_PUBLIC_API_URL}/palavras/${data["id"]}`,
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -170,7 +170,7 @@ const FormWord = ({
   useEffect(() => {
     if (data) {
       axios
-        .get(`${process.env.NEXTAUTH_URL_LOCAL}/palavras/${data["id"]}`, {
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/palavras/${data["id"]}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -191,12 +191,14 @@ const FormWord = ({
           if (json.image) {
             setImage({
               id: json.image,
-              src: `${process.env.NEXTAUTH_URL_LOCAL}/uploads/${json.image}`,
+              src: `${process.env.NEXT_PUBLIC_API_URL}/uploads/${json.image}`,
               name: json.image,
             });
           }
           if (json.audio)
-            setRecord(`${process.env.NEXTAUTH_URL_LOCAL}/uploads/${json.audio}`);
+            setRecord(
+              `${process.env.NEXT_PUBLIC_API_URL}/uploads/${json.audio}`
+            );
         });
     }
   }, [data]);
@@ -223,7 +225,7 @@ const FormWord = ({
                   try {
                     setIsLoading(true);
                     const response = await axios.put(
-                      `${process.env.NEXTAUTH_URL_LOCAL}/palavras/${data["id"]}`,
+                      `${process.env.NEXT_PUBLIC_API_URL}/palavras/${data["id"]}`,
                       JSON.stringify(fields),
                       {
                         headers: {
@@ -242,7 +244,7 @@ const FormWord = ({
                         if (image) {
                           await axios({
                             method: "delete",
-                            url: `${process.env.NEXTAUTH_URL_LOCAL}/uploads/${formValues.image}`,
+                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/${formValues.image}`,
                             headers: {
                               Authorization: `Bearer ${token}`,
                             },
@@ -255,7 +257,7 @@ const FormWord = ({
                           uploadImage.append("oidword", data._id);
                           let responseImage = await axios({
                             method: "post",
-                            url: `${process.env.NEXTAUTH_URL_LOCAL}/uploads/`,
+                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/`,
                             data: uploadImage,
                             headers: {
                               "Content-Type": "multipart/form-data",
@@ -265,7 +267,7 @@ const FormWord = ({
                         } else {
                           await axios({
                             method: "delete",
-                            url: `${process.env.NEXTAUTH_URL_LOCAL}/uploads/${formValues.image}`,
+                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/${formValues.image}`,
                             headers: {
                               Authorization: `Bearer ${token}`,
                             },
@@ -281,7 +283,7 @@ const FormWord = ({
                           uploadImage.append("oidword", data._id);
                           let responseImage = await axios({
                             method: "post",
-                            url: `${process.env.NEXTAUTH_URL_LOCAL}/uploads/`,
+                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/`,
                             data: uploadImage,
                             headers: {
                               "Content-Type": "multipart/form-data",
@@ -296,7 +298,7 @@ const FormWord = ({
                         if (record) {
                           await axios({
                             method: "delete",
-                            url: `${process.env.NEXTAUTH_URL_LOCAL}/uploads/${formValues.audio}`,
+                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/${formValues.audio}`,
                             headers: {
                               Authorization: `Bearer ${token}`,
                             },
@@ -311,7 +313,7 @@ const FormWord = ({
                           uploadRecord.append("oidword", data["_id"]);
                           let responseRecord = await axios({
                             method: "post",
-                            url: `${process.env.NEXTAUTH_URL_LOCAL}/uploads/`,
+                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/`,
                             data: uploadRecord,
                             headers: {
                               "Content-Type": "multipart/form-data",
@@ -321,7 +323,7 @@ const FormWord = ({
                         } else {
                           await axios({
                             method: "delete",
-                            url: `${process.env.NEXTAUTH_URL_LOCAL}/uploads/${formValues.audio}`,
+                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/${formValues.audio}`,
                             headers: {
                               Authorization: `Bearer ${token}`,
                             },
@@ -339,7 +341,7 @@ const FormWord = ({
                           uploadRecord.append("oidword", data["_id"]);
                           let responseRecord = await axios({
                             method: "post",
-                            url: `${process.env.NEXTAUTH_URL_LOCAL}/uploads/`,
+                            url: `${process.env.NEXT_PUBLIC_API_URL}/uploads/`,
                             data: uploadRecord,
                             headers: {
                               "Content-Type": "multipart/form-data",

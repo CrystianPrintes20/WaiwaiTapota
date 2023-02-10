@@ -16,12 +16,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import AuthLogo from "../../src/assets/images/logos/ufopa.png";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RegisterFormik = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
   const initialValues = {
     username: "",
     email: "",
@@ -45,7 +45,11 @@ const RegisterFormik = () => {
     ),
   });
   return (
-    <Container fluid className="h-100 py-5" style={{backgroundColor: "#eef5f9"}}>
+    <Container
+      fluid
+      className="h-100 py-5"
+      style={{ backgroundColor: "#eef5f9" }}
+    >
       <div className="d-flex justify-content-center">
         <Col sm="6" md="4">
           <div className="p-4 d-flex justify-content-center gap-2">
@@ -59,8 +63,7 @@ const RegisterFormik = () => {
             <CardBody className="p-4 m-1">
               <h4 className="mb-0 fw-bold">Cadastro</h4>
               <small className="pb-4 d-block">
-                Já tem uma conta?{" "}
-                <Link href="/auth/loginformik">Login</Link>
+                Já tem uma conta? <Link href="/auth/loginformik">Login</Link>
               </small>
               <Formik
                 initialValues={initialValues}
@@ -69,9 +72,9 @@ const RegisterFormik = () => {
                   let response;
                   try {
                     setIsLoading(true);
-                 
+
                     response = await axios({
-                      url: `${process.env.NEXTAUTH_URL_LOCAL}/auth/register`,
+                      url: `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       data: JSON.stringify(fields),
@@ -79,12 +82,16 @@ const RegisterFormik = () => {
                     if (response.status === 201) {
                       /* sessionStorage.setItem("token", response.data.token);
                       router.push("/api/auth/signin"); */
-                      router.push("./loginformik")
+                      router.push("./loginformik");
                     }
                   } catch (err) {
                     if (
-                      err?.response.status === 409 || err?.response?.data?.message) {
-                        toast.error("Email ou nome de usuario ja cadastrados! Verifique-os e tente novamente.", {
+                      err?.response.status === 409 ||
+                      err?.response?.data?.message
+                    ) {
+                      toast.error(
+                        "Email ou nome de usuario ja cadastrados! Verifique-os e tente novamente.",
+                        {
                           position: "top-right",
                           autoClose: 5000,
                           hideProgressBar: false,
@@ -92,7 +99,8 @@ const RegisterFormik = () => {
                           pauseOnHover: false,
                           draggable: true,
                           progress: undefined,
-                      });
+                        }
+                      );
                       console.log({
                         type: "error",
                         message: err.response.data.message,
@@ -106,7 +114,7 @@ const RegisterFormik = () => {
                         pauseOnHover: false,
                         draggable: true,
                         progress: undefined,
-                    });
+                      });
                       console.log({
                         type: "error",
                         message: "An error ocurred. Please, try again.",
@@ -122,10 +130,11 @@ const RegisterFormik = () => {
                       <Field
                         name="username"
                         type="text"
-                        className={`form-control ${errors.username && touched.username
-                          ? " is-invalid"
-                          : ""
-                          }`}
+                        className={`form-control ${
+                          errors.username && touched.username
+                            ? " is-invalid"
+                            : ""
+                        }`}
                       />
                       <ErrorMessage
                         name="username"
@@ -139,8 +148,9 @@ const RegisterFormik = () => {
                       <Field
                         name="email"
                         type="text"
-                        className={`form-control${errors.email && touched.email ? " is-invalid" : ""
-                          }`}
+                        className={`form-control${
+                          errors.email && touched.email ? " is-invalid" : ""
+                        }`}
                       />
                       <ErrorMessage
                         name="email"
@@ -153,10 +163,11 @@ const RegisterFormik = () => {
                       <Field
                         name="password"
                         type="password"
-                        className={`form-control${errors.password && touched.password
-                          ? " is-invalid"
-                          : ""
-                          }`}
+                        className={`form-control${
+                          errors.password && touched.password
+                            ? " is-invalid"
+                            : ""
+                        }`}
                       />
                       <ErrorMessage
                         name="password"
@@ -165,16 +176,15 @@ const RegisterFormik = () => {
                       />
                     </FormGroup>
                     <FormGroup>
-                      <Label htmlFor="confirmPassword">
-                        Confirmar Senha
-                      </Label>
+                      <Label htmlFor="confirmPassword">Confirmar Senha</Label>
                       <Field
                         name="confirmPassword"
                         type="password"
-                        className={`form-control${errors.confirmPassword && touched.confirmPassword
-                          ? " is-invalid"
-                          : ""
-                          }`}
+                        className={`form-control${
+                          errors.confirmPassword && touched.confirmPassword
+                            ? " is-invalid"
+                            : ""
+                        }`}
                       />
                       <ErrorMessage
                         name="confirmPassword"
@@ -187,15 +197,13 @@ const RegisterFormik = () => {
                         type="checkbox"
                         name="acceptTerms"
                         id="acceptTerms"
-                        className={`form-check-input ${errors.acceptTerms && touched.acceptTerms
-                          ? " is-invalid"
-                          : ""
-                          }`}
+                        className={`form-check-input ${
+                          errors.acceptTerms && touched.acceptTerms
+                            ? " is-invalid"
+                            : ""
+                        }`}
                       />
-                      <Label
-                        htmlFor="acceptTerms"
-                        className="form-check-label"
-                      >
+                      <Label htmlFor="acceptTerms" className="form-check-label">
                         Aceitar Termos & Condições
                       </Label>
                       <ErrorMessage
@@ -205,10 +213,20 @@ const RegisterFormik = () => {
                       />
                     </FormGroup>
                     <FormGroup>
-                      <Button type="submit" color="primary" className="me-2" disabled={isLoading}>
+                      <Button
+                        type="submit"
+                        color="primary"
+                        className="me-2"
+                        disabled={isLoading}
+                      >
                         Cadastrar
                       </Button>
-                      <Button type="reset" color="secondary" className="mx-3" disabled={isLoading}>
+                      <Button
+                        type="reset"
+                        color="secondary"
+                        className="mx-3"
+                        disabled={isLoading}
+                      >
                         Cancelar
                       </Button>
                     </FormGroup>
@@ -221,7 +239,6 @@ const RegisterFormik = () => {
         </Col>
       </div>
     </Container>
-
   );
 };
 

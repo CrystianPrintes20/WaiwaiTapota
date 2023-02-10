@@ -16,7 +16,7 @@ export default function MyWord({ token }) {
   useEffect(() => {
     if (token) {
       axios
-        .get(`${process.env.NEXTAUTH_URL_LOCAL}/palavras/me`, {
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/palavras/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -34,14 +34,15 @@ export default function MyWord({ token }) {
         <Banner3 />
         <Card>
           <CardBody>
-          <Row className="justify-content-center mb-3">
+            <Row className="justify-content-center mb-3">
               <Col md="7" className="text-center">
                 <span className="label label-danger label-rounded">
                   Tela de Minhas palavras
                 </span>
                 <h2 className="title">Palavras cadastradas por você.</h2>
                 <h6 className="subtitle">
-                  Encontre aqui todas as suas palavras cadastradas! Veja os detalhes, expressões, imagens, áudio e significados em um
+                  Encontre aqui todas as suas palavras cadastradas! Veja os
+                  detalhes, expressões, imagens, áudio e significados em um
                   formato prático e fácil de usar.
                 </h6>
               </Col>

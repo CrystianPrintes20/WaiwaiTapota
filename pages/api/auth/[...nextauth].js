@@ -20,7 +20,7 @@ const auth = (req, res) => {
         authorize: async (credentials) => {
           try {
             const { data } = await axios.post(
-              `${process.env.NEXTAUTH_URL_LOCAL}/auth/login`,
+              `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
               {
                 email: credentials.email,
                 password: credentials.password,
@@ -70,7 +70,7 @@ const auth = (req, res) => {
         },
       }),
     ],
-    secret: process.env.NEXT_PUBLIC_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
       jwt: async (jwt) => {
         let objCookies = req.cookies;

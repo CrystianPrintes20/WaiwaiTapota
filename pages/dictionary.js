@@ -14,7 +14,7 @@ export default function Dictionary({ token }) {
   useEffect(() => {
     if (token) {
       axios
-        .get(`${process.env.NEXTAUTH_URL_LOCAL}/palavras/`, {
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/palavras/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -39,9 +39,10 @@ export default function Dictionary({ token }) {
                 </span>
                 <h2 className="title">Está procurando alguma palavra?</h2>
                 <h6 className="subtitle">
-                  Seja bem-vindo ao nosso dicionário online! Aqui você encontrará uma lista de palavras,
-                   frases, expressões e termos usados na língua materna Waiwai. 
-                   Nosso objetivo é preservar a língua indígena, incentivando o uso da língua e sua cultura.
+                  Seja bem-vindo ao nosso dicionário online! Aqui você
+                  encontrará uma lista de palavras, frases, expressões e termos
+                  usados na língua materna Waiwai. Nosso objetivo é preservar a
+                  língua indígena, incentivando o uso da língua e sua cultura.
                 </h6>
               </Col>
             </Row>
