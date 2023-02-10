@@ -13,7 +13,14 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           content="Waiwai Translator| O seu tradutor de linguas maternas"
         />
         <link rel="icon" href="/ufopa.ico" />
-        <Script src="/static/script.js" strategy="beforeInteractive"></Script>
+        <Script
+          src="/static/script.js"
+          strategy="beforeInteractive"
+          onLoad={() =>
+            console.log(`script loaded correctly, window.FB has been populated`)
+          }
+        />
+        {/* <Script src="/static/script.js" strategy="beforeInteractive"></Script> */}
       </Head>
       <Component {...pageProps} />
     </SessionProvider>
