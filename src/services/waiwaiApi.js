@@ -25,7 +25,7 @@ export default class connectionWaiwai {
   }
   async allPalavras() {
     let response = await instanceApi.get(
-      "/palavras",
+      "/palavras/",
       headersAuthorization(this.accessToken)
     );
     const bodyRes = response.data;
@@ -50,7 +50,7 @@ export default class connectionWaiwai {
   }
   async createPalavra(data) {
     let response = await instanceApi.post(
-      "/palavras",
+      "/palavras/",
       data,
       headersAuthorization(this.accessToken)
     );
