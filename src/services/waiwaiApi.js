@@ -67,14 +67,23 @@ export default class connectionWaiwai {
   }
 
   async createUpload(data) {
-    let response = await instanceApi.post("/uploads/", data, {
-      "Content-Type": "multipart/form-data",
-    });
+    let response = await instanceApi.post(
+      "/uploads/",
+      data,
+      headersAuthorization(this.accessToken, {
+        "Content-Type": "multipart/form-data",
+      })
+    );
     const bodyRes = response.data;
     return bodyRes;
   }
   async deleteUpload(uuid) {
-    let response = await instanceApi.delete(`/uploads/${uuid}`);
+    let response = await instanceApi.delete(
+      `/uploads/${uuid}`,
+      headersAuthorization(this.accessToken, {
+        "Content-Type": "multipart/form-data",
+      })
+    );
     const bodyRes = response.data;
     return bodyRes;
   }
