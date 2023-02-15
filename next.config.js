@@ -31,7 +31,7 @@ module.exports = {
   /* config options here */
   reactStrictMode: false,
   images: {
-    domains: ["via.placeholder.com", "localhost"], // Adding localhost devtest "embrapa-dev.skalena.com.br"
+    domains: ["via.placeholder.com", "localhost", "waiwaitapota.homes"], 
   },
   env: envData,
   output: "standalone",
