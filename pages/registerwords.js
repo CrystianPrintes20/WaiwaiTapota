@@ -101,21 +101,22 @@ export default function RegisterWords({ token }) {
             <Container>
               <Row className="justify-content-center">
                 <h2 className="mx-3 my-5 text-center">
-                  Contribua e melhore o Wai-Wai Translator!
+                  Contribua e melhore o WaiWai Tapota!
                 </h2>
               </Row>
               <Row>
                 <Col sm="4">
                   <Card>
                     <img
-                      className="img-fluid"
+                      className="rounded mx-auto d-block"
                       alt="Card"
-                      src="./tradutor.jpg"
+                      src="./tapotaIcon.png"
+                      height={200}
                     />
                     <CardBody>
                       <p>
                         A sua colaboração é uma parte importante no processo de
-                        inclusão de novas palavras no Wai-Wai Translator. Se
+                        inclusão de novas palavras no WaiWai Tapota. Se
                         você fala ou conhece palavras na língua nativa Wai-Wai e
                         identificou que ela ainda não está presente aqui,
                         ajude-nos preenchendo o formulário ao lado e adicionando
@@ -458,7 +459,7 @@ export default function RegisterWords({ token }) {
                               <FormGroup>
                                 <Button
                                   type="submit"
-                                  color="success"
+                                  color="danger"
                                   className="me-2"
                                   disabled={isLoading}
                                 >
@@ -466,7 +467,7 @@ export default function RegisterWords({ token }) {
                                 </Button>
                                 <Button
                                   type="reset"
-                                  color="danger"
+                                  color="success"
                                   className="mx-3"
                                   disabled={isLoading}
                                 >

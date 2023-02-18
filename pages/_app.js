@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           name="description"
           content="Waiwai Translator| O seu tradutor de linguas maternas"
         />
-        <link rel="icon" href="/ufopa.ico" />
+        <link rel="icon" href="/tapotaIcon.png" />
       </Head>
       <Component {...pageProps} />
     </SessionProvider>

@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Container, Row, Col } from "reactstrap";
 import Image from "next/image";
-import bannerimg from "../../assets/images/landingpage/banner-img.png";
+import bannerimg from "../../assets/aplicativoTapota/icones-logo-tapota/tapotaBranco.png";
 
 const Banner2 = () => {
   return (
@@ -10,12 +10,12 @@ const Banner2 = () => {
       <Container>
         <Row className="">
           <Col lg="6" md="6" className="align-self-center">
-            <h1 className="title">
-              Traduza e se comunique com praticidade
-            </h1>
+            <h1 className="title">Traduza e se comunique com praticidade</h1>
             <h4 className="subtitle font-light">
-              Economize tempo com as suas traduções e concentre-se nas tarefas que realmente importam.  <br /> 
-              Com o WaiwaiTapota, você tem  traduções da lingua indigena Waiwai para o portugues.
+              Economize tempo com as suas traduções e concentre-se nas tarefas
+              que realmente importam. <br />
+              Com o WaiwaiTapota, você tem traduções da lingua indigena Waiwai
+              para o portugues.
             </h4>
             <a
               href="https://wrappixel.com/templates/nextkit-nextjs-free-uikit"
@@ -30,8 +30,7 @@ const Banner2 = () => {
             </Link> */}
           </Col>
           <Col lg="6" md="6" className="py-4">
-            {/* <Image src={bannerimg} alt="hero banner" /> */}
-            <img className="img-fluid"  src="https://placehold.jp/514x510.png"></img>
+            <Image src={bannerimg} alt="hero banner" width={400} height={400} />
           </Col>
         </Row>
       </Container>

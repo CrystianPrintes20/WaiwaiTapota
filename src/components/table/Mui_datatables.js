@@ -20,25 +20,29 @@ const DataTable = ({ dados, setDados, showAction, token, disabled }) => {
   const [rows, setRows] = useState([]);
 
   let columns = [
-    { field: "wordPort", headerName: "Em Português", minWidth: 250 },
-    { field: "translationWaiwai", headerName: "Em Waiwai", minWidth: 250 },
+    { field: "wordPort", headerName: <strong>Em Português</strong>, minWidth: 250 },
+    {
+      field: "translationWaiwai",
+      headerName: <strong>Em Waiwai</strong>,
+      minWidth: 250,
+    },
     {
       field: "created",
-      headerName: "Cadastrado em",
+      headerName: <strong>Cadastrado em</strong>,
       minWidth: 200,
       type: "dateTime",
       valueGetter: ({ value }) => value && new Date(value),
     },
     {
       field: "updated",
-      headerName: "Ultima modificação",
+      headerName: <strong>Ultima modificação</strong>,
       minWidth: 200,
       type: "dateTime",
       valueGetter: ({ value }) => value && new Date(value),
     },
     {
       field: "action",
-      headerName: "Ação",
+      headerName: <strong>Ação</strong>,
       minWidth: 200,
       sortable: false,
       disableClickEventBubbling: true,
@@ -50,7 +54,7 @@ const DataTable = ({ dados, setDados, showAction, token, disabled }) => {
         };
         return (
           <div>
-            <Button variant="outlined" color="success" onClick={onClick}>
+            <Button variant="outlined" color="danger" onClick={onClick}>
               Detalhes
             </Button>
           </div>

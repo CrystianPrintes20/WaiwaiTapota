@@ -20,6 +20,8 @@ import {
   NavbarToggler,
   Collapse,
 } from "reactstrap";
+import Image from "next/image";
+import versaoWeb from "../../assets/aplicativoTapota/icones-logo-tapota/tapotaIconSF.png";
 import { getSession, useSession, signIn, signOut } from "next-auth/react";
 
 const Header = () => {
@@ -34,8 +36,8 @@ const Header = () => {
         <Container className="po-relative">
           <Navbar className="navbar-expand-lg h6-nav-bar">
             <NavbarBrand href="/">
-              {/* <Image src={logo} alt="wrapkit" /> */}
-              <img src="https://placehold.jp/170x80.png"></img>
+              <Image src={versaoWeb} alt="wrapkit" /> 
+              
             </NavbarBrand>
             <NavbarToggler onClick={toggle}>
               <span className="ti-menu"></span>
@@ -56,7 +58,11 @@ const Header = () => {
                           : "nav-link"
                       }
                     >
-                      Home
+                      <b className={
+                        router.pathname == "/"
+                          ? "border-bottom border-danger pb-0"
+                          : null
+                      }>Home </b>
                     </a>
                   </Link>
                 </NavItem>
@@ -69,7 +75,11 @@ const Header = () => {
                           : "nav-link"
                       }
                     >
-                      Minhas palavras
+                      <b className={
+                        router.pathname == "/myWord"
+                          ? "border-bottom border-danger pb-0"
+                          : null
+                      }>Minhas palavras</b>
                     </a>
                   </Link>
                 </NavItem>
@@ -82,7 +92,11 @@ const Header = () => {
                           : "nav-link"
                       }
                     >
-                      Dicionario
+                      <b className={
+                        router.pathname == "/dictionary"
+                          ? "border-bottom border-danger pb-0"
+                          : null
+                      }>Dicionario</b>
                     </a>
                   </Link>
                 </NavItem>
@@ -95,7 +109,11 @@ const Header = () => {
                           : "nav-link"
                       }
                     >
-                      Cadastrar Palavras
+                      <b className={
+                        router.pathname == "/registerwords"
+                          ? "border-bottom border-danger pb-0"
+                          : null
+                      }>Cadastrar Palavras</b>
                     </a>
                   </Link>
                 </NavItem>
@@ -134,9 +152,9 @@ const Header = () => {
                     </DropdownToggle>
 
                     <DropdownMenu dark>
-                      <DropdownItem>
+                      {/* <DropdownItem>
                         <User className="mr-2" size={25} /> Meu perfil
-                      </DropdownItem>
+                      </DropdownItem> */}
                       <DropdownItem onClick={() => signOut()}>
                         <LogOut className="mr-2" size={25} />
                         Sair

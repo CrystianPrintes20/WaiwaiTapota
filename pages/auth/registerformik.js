@@ -15,7 +15,7 @@ import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import AuthLogo from "../../src/assets/images/logos/ufopa.png";
+import AuthLogo from "../../src/assets/aplicativoTapota/icones-logo-tapota/tapotaIcone.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -59,7 +59,7 @@ const RegisterFormik = () => {
               </a>
             </Link>
           </div>
-          <Card>
+          <Card className="border border-success">
             <CardBody className="p-4 m-1">
               <h4 className="mb-0 fw-bold">Cadastro</h4>
               <small className="pb-4 d-block">

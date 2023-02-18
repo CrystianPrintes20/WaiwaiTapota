@@ -11,28 +11,14 @@ import FeatureComponent from "./sections/featurecomponent";
 import PortfolioComponent from "./sections/portfoliocomponent";
 import PricingComponent from "./sections/pricingcomponent";
 import TeamComponent from "./sections/teamcomponent";
-import TestimonialComponent from "./sections/testimonialcomponent";
-import BlogComponent from "./sections/blogcomponent";
-import C2aComponent from "./sections/c2acomponent";
-import ContactComponent from "./sections/contactcomponent";
-import CallToAction from "../../components/call-to-action/CallToAction";
 
 const CustomComponents = () => {
   return (
     <div>
       <Banner2 />
-       {/* <HeaderComponent />  
-      <BannerComponent />
-      <FormBannerComponent />*/}
       <FeatureComponent />
       <TeamComponent />
-      {/* <PortfolioComponent />
-      <PricingComponent />
-      <TestimonialComponent />
-      <BlogComponent />
-      <C2aComponent />
-       <ContactComponent />
-      <CallToAction />  */}
+    
     </div>
   );
 };

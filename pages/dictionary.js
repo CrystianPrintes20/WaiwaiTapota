@@ -23,7 +23,7 @@ export default function Dictionary({ token }) {
   if (session) {
     return (
       <Layout>
-        <Banner3 />
+        <Banner3/>
         <Card>
           <CardBody>
             <Row className="justify-content-center mb-3">

@@ -16,7 +16,7 @@ import * as Yup from "yup";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
-import AuthLogo from "../../src/assets/images/logos/ufopa.png";
+import AuthLogo from "../../src/assets/aplicativoTapota/icones-logo-tapota/tapotaIcone.png";;
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -63,7 +63,7 @@ const LoginFormik = () => {
             </Link>
           </div>
 
-          <Card className="bg-white">
+          <Card className="bg-white border border-success">
             <CardBody className="p-4 m-1">
               <h4 className="mb-0 fw-bold">Login</h4>
               <small className="pb-4 d-block">
