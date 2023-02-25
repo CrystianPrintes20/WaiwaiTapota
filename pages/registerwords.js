@@ -73,21 +73,21 @@ export default function RegisterWords({ token }) {
   }, []);
 
   const initialValues = {
-    wordPort: "",
-    translationWaiwai: "",
-    category: "",
-    meaningPort: "",
     meaningWaiwai: "",
+    meaningPort: "",
+    phonemicWaiwai: "",
+    exampleSentence: "",
+    category: "",
     synonymPort: "",
     synonymWaiwai: "",
   };
 
   const validationSchema = Yup.object().shape({
-    wordPort: Yup.string().required("Este campo é obrigatorio."),
-    translationWaiwai: Yup.string().required("Este campo é obrigatorio."),
-    category: Yup.string().required("Este campo é obrigatorio."),
-    meaningPort: Yup.string().required("Este campo é obrigatorio."),
     meaningWaiwai: Yup.string().required("Este campo é obrigatorio."),
+    meaningPort: Yup.string().required("Este campo é obrigatorio."),
+    phonemicWaiwai: Yup.string().required("Este campo é obrigatorio."),
+    exampleSentence: Yup.string().required("Este campo é obrigatorio."),
+    category: Yup.string().required("Este campo é obrigatorio."),
     synonymPort: Yup.string().required("Este campo é obrigatorio."),
     synonymWaiwai: Yup.string().required("Este campo é obrigatorio."),
   });
@@ -116,8 +116,8 @@ export default function RegisterWords({ token }) {
                     <CardBody>
                       <p>
                         A sua colaboração é uma parte importante no processo de
-                        inclusão de novas palavras no WaiWai Tapota. Se
-                        você fala ou conhece palavras na língua nativa Wai-Wai e
+                        inclusão de novas palavras no WaiWai Tapota. Se você
+                        fala ou conhece palavras na língua nativa Wai-Wai e
                         identificou que ela ainda não está presente aqui,
                         ajude-nos preenchendo o formulário ao lado e adicionando
                         elas ao nosso tradutor.
@@ -137,7 +137,7 @@ export default function RegisterWords({ token }) {
                           try {
                             setIsLoading(true);
 
-                            let data = await apiObj.createPalavra(
+                            let response = await apiObj.createPalavra(
                               JSON.stringify(fields)
                             );
 
@@ -152,7 +152,7 @@ export default function RegisterWords({ token }) {
                                 blobData,
                                 imageWord.name
                               );
-                              uploadImage.append("oidword", data._id);
+                              uploadImage.append("oidword", response.data._id);
                               let responseImage = await apiObj.createUpload(
                                 uploadImage
                               );
@@ -165,12 +165,12 @@ export default function RegisterWords({ token }) {
                                 record,
                                 `${event.toISOString()}.weba`
                               );
-                              uploadRecord.append("oidword", data._id);
+                              uploadRecord.append("oidword", response.data._id);
                               let responseRecord = await apiObj.createUpload(
                                 uploadRecord
                               );
                             }
-
+                            console.log("ss",response)
                             if (response.status === 201) {
                               toast.success(
                                 "Nova palavra adicionada com sucesso!",
@@ -228,87 +228,96 @@ export default function RegisterWords({ token }) {
                         render={({ errors, touched }) => (
                           <Form>
                             <Row>
-                              <FormGroup className="pr-3 col-md-6 col-sm-12">
-                                <Label htmlFor="wordPort">
-                                  Palavra em português
-                                </Label>
-                                <Field
-                                  name="wordPort"
-                                  type="text"
-                                  className={`form-control ${
-                                    errors.wordPort && touched.wordPort
-                                      ? " is-invalid"
-                                      : ""
-                                  }`}
-                                />
-                                <ErrorMessage
-                                  name="wordPort"
-                                  component="div"
-                                  className="invalid-feedback"
-                                />
-                              </FormGroup>
-                              <FormGroup className="col-md-6 col-sm-12">
-                                <Label htmlFor="translationWaiwai">
-                                  Tradução em Waiwai
-                                </Label>
-                                <Field
-                                  name="translationWaiwai"
-                                  type="text"
-                                  className={`form-control ${
-                                    errors.translationWaiwai &&
-                                    touched.translationWaiwai
-                                      ? " is-invalid"
-                                      : ""
-                                  }`}
-                                />
-                                <ErrorMessage
-                                  name="translationWaiwai"
-                                  component="div"
-                                  className="invalid-feedback"
-                                />
-                              </FormGroup>
-                            </Row>
-                            <Row>
-                              <FormGroup className="col-md-6 col-sm-12">
-                                <Label htmlFor="meaningPort">
-                                  Significado em português
-                                </Label>
-                                <Field
-                                  name="meaningPort"
-                                  type="textarea"
-                                  rows="3"
-                                  id="meaningPort"
-                                  className={`form-control ${
-                                    errors.meaningPort && touched.meaningPort
-                                      ? " is-invalid"
-                                      : ""
-                                  }`}
-                                  component={MyInput}
-                                />
-                                <ErrorMessage
-                                  name="meaningPort"
-                                  component="div"
-                                  className="invalid-feedback"
-                                />
-                              </FormGroup>
                               <FormGroup className="col-md-6 col-sm-12">
                                 <Label htmlFor="meaningWaiwai">
-                                  Significado em Waiwai
+                                  Palavra em Waiwai
                                 </Label>
                                 <Field
                                   name="meaningWaiwai"
-                                  type="textarea"
-                                  rows="3"
+                                  type="text"
                                   className={`form-control ${
                                     errors.meaningWaiwai &&
                                     touched.meaningWaiwai
                                       ? " is-invalid"
                                       : ""
                                   }`}
-                                  component={MyInput}
                                 />
                                 <ErrorMessage
                                   name="meaningWaiwai"
+                                  component="div"
+                                  className="invalid-feedback"
+                                />
+                              </FormGroup>
+                              <FormGroup className="col-md-6 col-sm-12">
+                                <Label htmlFor="meaningPort">
+                                  Significado em português
+                                </Label>
+                                <Field
+                                  name="meaningPort"
+                                  type="text"
+                                  id="meaningPort"
+                                  className={`form-control ${
+                                    errors.meaningPort && touched.meaningPort
+                                      ? " is-invalid"
+                                      : ""
+                                  }`}
+                                />
+                                <ErrorMessage
+                                  name="meaningPort"
+                                  component="div"
+                                  className="invalid-feedback"
+                                />
+                              </FormGroup>
+                            </Row>
+                            <Row>
+                              <FormGroup className="pr-3 col-md-6 col-sm-12">
+                                <Label htmlFor="phonemicWaiwai">
+                                  Pronuncia em Waiwai
+                                </Label>
+                                <Field
+                                  name="phonemicWaiwai"
+                                  type="text"
+                                  className={`form-control ${
+                                    errors.phonemicWaiwai &&
+                                    touched.phonemicWaiwai
+                                      ? " is-invalid"
+                                      : ""
+                                  }`}
+                                />
+                                <ErrorMessage
+                                  name="phonemicWaiwai"
+                                  component="div"
+                                  className="invalid-feedback"
+                                />
+                              </FormGroup>
+                              <FormGroup className="col-md-6 col-sm-12">
+                                <Label htmlFor="category">
+                                  Categoria da palavra
+                                </Label>
+                                <Field
+                                  name="category"
+                                  as="select"
+                                  className={`form-control ${
+                                    errors.category && touched.category
+                                      ? " is-invalid"
+                                      : ""
+                                  }`}
+                                >
+                                  <option selected value="sem registro">
+                                    Selecione
+                                  </option>
+                                  <option value="geral">
+                                    Geral
+                                  </option>
+                                  <option value="categoria_2">
+                                    Categoria 2
+                                  </option>
+                                  <option value="categoria_3">
+                                    Categoria 3
+                                  </option>
+                                </Field>
+                                <ErrorMessage
+                                  name="category"
                                   component="div"
                                   className="invalid-feedback"
                                 />
@@ -357,33 +366,24 @@ export default function RegisterWords({ token }) {
                             </Row>
                             <Row>
                               <FormGroup className="col-md-12 col-sm-12">
-                                <Label htmlFor="category">
-                                  Categoria da palavra
+                                <Label htmlFor="exampleSentence">
+                                  Exemplo em uma sentença
                                 </Label>
                                 <Field
-                                  name="category"
-                                  as="select"
+                                  name="exampleSentence"
+                                  type="textarea"
+                                  rows="3"
+                                  id="exampleSentence"
                                   className={`form-control ${
-                                    errors.category && touched.category
+                                    errors.exampleSentence &&
+                                    touched.exampleSentence
                                       ? " is-invalid"
                                       : ""
                                   }`}
-                                >
-                                  <option selected="selecione" disabled>
-                                    Selecione
-                                  </option>
-                                  <option value="categoria_1">
-                                    Categoria 1
-                                  </option>
-                                  <option value="categoria_2">
-                                    Categoria 2
-                                  </option>
-                                  <option value="categoria_3">
-                                    Categoria 3
-                                  </option>
-                                </Field>
+                                  component={MyInput}
+                                />
                                 <ErrorMessage
-                                  name="category"
+                                  name="exampleSentence"
                                   component="div"
                                   className="invalid-feedback"
                                 />

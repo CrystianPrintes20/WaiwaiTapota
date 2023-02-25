@@ -76,7 +76,7 @@ const RegisterFormik = () => {
                     response = await axios({
                       url: `${
                         process.env.NEXT_PUBLIC_API_URL ||
-                        "http://34.95.153.197"
+                        "https://waiwaitapota.homes"
                       }/auth/register`,
                       method: "POST",
                       headers: { "Content-Type": "application/json" },

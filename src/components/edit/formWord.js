@@ -41,11 +41,11 @@ const FormWord = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formValues, setFormValues] = useState({
-    wordPort: "",
-    translationWaiwai: "",
-    category: "",
-    meaningPort: "",
     meaningWaiwai: "",
+    meaningPort: "",
+    phonemicWaiwai: "",
+    exampleSentence: "",
+    category: "",
     synonymPort: "",
     synonymWaiwai: "",
   });
@@ -106,11 +106,11 @@ const FormWord = ({
   }, []);
 
   const validationSchema = Yup.object().shape({
-    wordPort: Yup.string().required("Este campo é obrigatorio."),
-    translationWaiwai: Yup.string().required("Este campo é obrigatorio."),
-    category: Yup.string().required("Este campo é obrigatorio."),
-    meaningPort: Yup.string().required("Este campo é obrigatorio."),
     meaningWaiwai: Yup.string().required("Este campo é obrigatorio."),
+    meaningPort: Yup.string().required("Este campo é obrigatorio."),
+    phonemicWaiwai: Yup.string().required("Este campo é obrigatorio."),
+    exampleSentence: Yup.string().required("Este campo é obrigatorio."),
+    category: Yup.string().required("Este campo é obrigatorio."),
     synonymPort: Yup.string().required("Este campo é obrigatorio."),
     synonymWaiwai: Yup.string().required("Este campo é obrigatorio."),
   });
@@ -160,12 +160,11 @@ const FormWord = ({
       apiObj.getByIdPalavra(data["id"]).then((json) => {
         setFormValues({
           ...json,
-          wordPort: json.wordPort || formValues.wordPort,
-          translationWaiwai:
-            json.translationWaiwai || formValues.translationWaiwai,
-          category: json.category || formValues.category,
-          meaningPort: json.meaningPort || formValues.meaningPort,
           meaningWaiwai: json.meaningWaiwai || formValues.meaningWaiwai,
+          meaningPort: json.meaningPort || formValues.meaningPort,
+          phonemicWaiwai: json.phonemicWaiwai || formValues.phonemicWaiwai,
+          exampleSentence: json.exampleSentence || formValues.exampleSentence,
+          category: json.category || formValues.category,
           synonymPort: json.synonymPort || formValues.synonymPort,
           synonymWaiwai: json.synonymWaiwai || formValues.synonymWaiwai,
         });
@@ -189,11 +188,11 @@ const FormWord = ({
             <CardBody>
               <Formik
                 initialValues={{
-                  wordPort: formValues.wordPort,
-                  translationWaiwai: formValues.translationWaiwai,
-                  category: formValues.category,
-                  meaningPort: formValues.meaningPort,
                   meaningWaiwai: formValues.meaningWaiwai,
+                  meaningPort: formValues.meaningPort,
+                  phonemicWaiwai: formValues.phonemicWaiwai,
+                  exampleSentence: formValues.exampleSentence,
+                  category: formValues.category,
                   synonymPort: formValues.synonymPort,
                   synonymWaiwai: formValues.synonymWaiwai,
                 }}
@@ -206,11 +205,9 @@ const FormWord = ({
                       data["id"],
                       JSON.stringify(fields)
                     );
-
                     if (response.status === 204) {
                       toast.success("Palavra atualizada com sucesso!", options);
                     }
-
                     if (imageChanged) {
                       if (formValues.image) {
                         if (image) {
@@ -297,44 +294,38 @@ const FormWord = ({
                   <Form>
                     <Row>
                       <FormGroup className="w-50 pr-3">
-                        <Label htmlFor="wordPort">Palavra em português</Label>
+                        <Label htmlFor="meaningWaiwai">Palavra em Waiwai</Label>
                         <Field
                           disabled={disabled}
-                          name="wordPort"
-                          type="text"
-                          onChange={(e) => {
-                            setFieldValue("wordPort", e.target.value, true);
-                          }}
+                          name="meaningWaiwai"
                           className={`form-control ${
-                            errors.wordPort && touched.wordPort
+                            errors.meaningWaiwai && touched.meaningWaiwai
                               ? " is-invalid"
                               : ""
                           }`}
                         />
                         <ErrorMessage
-                          name="wordPort"
+                          name="meaningWaiwai"
                           component="div"
                           className="invalid-feedback"
                         />
                       </FormGroup>
 
                       <FormGroup className="w-50">
-                        <Label htmlFor="translationWaiwai">
-                          Tradução em Waiwai
+                        <Label htmlFor="meaningPort">
+                          Significado em português
                         </Label>
                         <Field
                           disabled={disabled}
-                          name="translationWaiwai"
-                          type="text"
+                          name="meaningPort"
                           className={`form-control ${
-                            errors.translationWaiwai &&
-                            touched.translationWaiwai
+                            errors.meaningPort && touched.meaningPort
                               ? " is-invalid"
                               : ""
                           }`}
                         />
                         <ErrorMessage
-                          name="translationWaiwai"
+                          name="meaningPort"
                           component="div"
                           className="invalid-feedback"
                         />
@@ -343,44 +334,47 @@ const FormWord = ({
 
                     <Row>
                       <FormGroup className="w-50 pr-3">
-                        <Label htmlFor="meaningPort">
-                          Significado em português
+                        <Label htmlFor="phonemicWaiwai">
+                          Pronuncia em Waiwai
                         </Label>
                         <Field
                           disabled={disabled}
-                          name="meaningPort"
-                          type="textarea"
+                          name="phonemicWaiwai"
+                          type="text"
+                          onChange={(e) => {
+                            setFieldValue(
+                              "phonemicWaiwai",
+                              e.target.value,
+                              true
+                            );
+                          }}
                           className={`form-control ${
-                            errors.meaningPort && touched.meaningPort
+                            errors.phonemicWaiwai && touched.phonemicWaiwai
                               ? " is-invalid"
                               : ""
                           }`}
-                          component={MyInput}
                         />
                         <ErrorMessage
-                          name="meaningPort"
+                          name="phonemicWaiwai"
                           component="div"
                           className="invalid-feedback"
                         />
                       </FormGroup>
 
                       <FormGroup className="w-50">
-                        <Label htmlFor="meaningWaiwai">
-                          Significado em Waiwai
-                        </Label>
+                        <Label htmlFor="category">Categoria da palavra</Label>
                         <Field
                           disabled={disabled}
-                          name="meaningWaiwai"
-                          type="textarea"
+                          name="category"
+                          type="text"
                           className={`form-control ${
-                            errors.meaningWaiwai && touched.meaningWaiwai
+                            errors.category && touched.category
                               ? " is-invalid"
                               : ""
                           }`}
-                          component={MyInput}
                         />
                         <ErrorMessage
-                          name="meaningWaiwai"
+                          name="category"
                           component="div"
                           className="invalid-feedback"
                         />
@@ -431,19 +425,23 @@ const FormWord = ({
 
                     <Row>
                       <FormGroup className="w-100">
-                        <Label htmlFor="category">Categoria da palavra</Label>
+                        <Label htmlFor="exampleSentence">
+                          Exemplo em uma sentença
+                        </Label>
                         <Field
                           disabled={disabled}
-                          name="category"
-                          type="text"
+                          name="exampleSentence"
+                          type="textarea"
+                          
                           className={`form-control ${
-                            errors.category && touched.category
+                            errors.exampleSentence && touched.exampleSentence
                               ? " is-invalid"
                               : ""
                           }`}
+                          component={MyInput}
                         />
                         <ErrorMessage
-                          name="category"
+                          name="exampleSentence"
                           component="div"
                           className="invalid-feedback"
                         />

@@ -20,12 +20,12 @@ const DataTable = ({ dados, setDados, showAction, token, disabled }) => {
   const [rows, setRows] = useState([]);
 
   let columns = [
-    { field: "wordPort", headerName: <strong>Em Português</strong>, minWidth: 250 },
     {
-      field: "translationWaiwai",
+      field: "meaningWaiwai",
       headerName: <strong>Em Waiwai</strong>,
       minWidth: 250,
     },
+    { field: "meaningPort", headerName: <strong>Em Português</strong>, minWidth: 250 },
     {
       field: "created",
       headerName: <strong>Cadastrado em</strong>,

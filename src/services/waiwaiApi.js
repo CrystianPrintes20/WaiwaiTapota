@@ -37,7 +37,7 @@ export default class connectionWaiwai {
       data,
       headersAuthorization(this.accessToken)
     );
-    const bodyRes = response.data;
+    const bodyRes = response;
     return bodyRes;
   }
   async getByIdPalavra(uid) {
@@ -54,7 +54,7 @@ export default class connectionWaiwai {
       data,
       headersAuthorization(this.accessToken)
     );
-    const bodyRes = response.data;
+    const bodyRes = response;
     return bodyRes;
   }
   async deletePalavra(uid) {
