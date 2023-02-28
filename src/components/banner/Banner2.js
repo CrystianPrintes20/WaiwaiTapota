@@ -5,20 +5,11 @@ import {
   Row,
   Col,
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Badge,
 } from "reactstrap";
 import Image from "next/image";
 import bannerimg from "../../assets/aplicativoTapota/icones-logo-tapota/logoTipoBranco.png";
 
 const Banner2 = () => {
-  const [modal, setModal] = useState(false);
-
-  const toggle = () => setModal(!modal);
-
   return (
     <div className="static-slider-head banner2">
       <Container>
@@ -31,12 +22,10 @@ const Banner2 = () => {
               Com o WaiwaiTapota, você tem traduções da lingua indigena Waiwai
               para o portugues.
             </h4>
-            <Button
-              className="btn btn-danger m-r-20 btn-md m-t-30 "
-              onClick={toggle}
-            >
+            <a href="https://drive.google.com/drive/folders/1B51A-b1nJ2z0fYYGPTiCAuO88XIGExjZ?usp=sharing" className="btn btn-danger m-r-20 btn-md m-t-30">
               Download App
-            </Button>
+              </a>
+           
             {/* <Link href="/#coming">
               <a className="btn btn-md m-t-30  btn-outline-light ">
                 Upgrade To Pro
@@ -47,20 +36,6 @@ const Banner2 = () => {
             <Image src={bannerimg} alt="hero banner" width={450} height={450} />
           </Col>
         </Row>
-
-        <Modal isOpen={modal} toggle={toggle}>
-          <ModalHeader toggle={toggle}>Baixe o nosso aplicativo</ModalHeader>
-          <ModalBody className="d-block">
-            <Badge href="../downloasApk/app-arm64-v8a-release.apk" className="mx-3">App 64-v8a</Badge>
-            <Badge href="../downloasApk/app-arm64-v8a-release.apk" className="mx-3">App 64-v8a</Badge>
-            <Badge href="../downloasApk/app-arm64-v8a-release.apk" className="mx-3">App 64-v8a</Badge>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="danger" onClick={toggle}>
-              Cancel
-            </Button>
-          </ModalFooter>
-        </Modal>
       </Container>
     </div>
   );

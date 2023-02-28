@@ -13,7 +13,7 @@ import { useModalDicionario } from "../../hooks/useModalDicionario";
 import Dicionario from "../edit/Dicionario";
 import FormWord from "../edit/formWord";
 
-const DataTable = ({ dados, setDados, showAction, token, disabled }) => {
+const DataTable = ({ dados, setDados, showAction, token, disabled, setIsLoading }) => {
   const [modal, setModal] = useModalDicionario();
   const toggle = () => setModal(!modal);
   const [word, setWord] = useState(null);
@@ -68,6 +68,7 @@ const DataTable = ({ dados, setDados, showAction, token, disabled }) => {
       setRows(() => {
         return dados.map((item) => ({ ...item, id: item["_id"] }));
       });
+      setIsLoading(false)
     }
   }, [dados]);
 

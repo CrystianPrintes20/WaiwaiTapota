@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/material": "^5.10.17",
@@ -37,6 +38,7 @@
     "react-toastify": "^9.1.1",
     "reactstrap": "8.10.0",
     "sass": "^1.29.0",
+    "styled-components": "^5.3.6",
     "uuidv4": "^6.2.13",
     "winston": "^3.8.1",
     "yup": "^0.32.11"

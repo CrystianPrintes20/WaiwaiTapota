@@ -8,14 +8,17 @@ import DataTable from "../src/components/table/Mui_datatables";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import connectionWaiwai from "../src/services/waiwaiApi";
+import { SpinLoader } from "../src/components/loading";
 
 export default function MyWord({ token }) {
+  const [isLoading, setIsLoading] = useState(false)
   const [dados, setDados] = useState(null);
   const { data: session } = useSession();
 
   useEffect(() => {
     if (token) {
       const apiObj = new connectionWaiwai(token);
+      setIsLoading(true)
       apiObj.palavrasMe().then((data) => {
         setDados(data);
       });
@@ -41,8 +44,10 @@ export default function MyWord({ token }) {
                 </h6>
               </Col>
             </Row>
+            {isLoading && <SpinLoader/>}
             <DataTable
               dados={dados}
+              setIsLoading={setIsLoading}
               setDados={setDados}
               token={token}
               showAction

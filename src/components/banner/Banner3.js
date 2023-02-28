@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Container, Row, Col, CardImg } from "reactstrap";
 import Image from "next/image";
-import bannerimg from "../../assets/aplicativoTapota/background/smartphone2.png";
+import bannerimg from "../../assets/aplicativoTapota/background/smartphone3.png";
 
 const Banner3 = () => {
   return (
@@ -24,11 +24,7 @@ const Banner3 = () => {
           <Col lg="6" md="6" className="align-self-center">
             <h1 className="title">Já instalou o nosso App?</h1>
             <h5 className="subtitle font-light">
-              Conheça o aplicativo{" "}
-              <b color="danger" className="fw-bolder">
-                {" "}
-                Waiwai Tapota
-              </b>{" "}
+              Conheça o aplicativo Dicionario Waiwai
               que vai revolucionar a forma como você se comunica com as pessoas
               o ao seu redor. Com funcionalidades simples e uma interface
               intuitiva, este aplicativo é a escolha perfeita para quem busca

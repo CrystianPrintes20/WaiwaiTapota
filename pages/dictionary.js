@@ -6,14 +6,17 @@ import { Card, CardBody, Row, Col } from "reactstrap";
 import { useSession } from "next-auth/react";
 import DataTable from "../src/components/table/Mui_datatables";
 import connectionWaiwai from "../src/services/waiwaiApi";
+import { SpinLoader } from "../src/components/loading";
 
 export default function Dictionary({ token }) {
+  const [isLoading, setIsLoading] = useState(false)
   const { data: session } = useSession();
   const [dados, setDados] = useState(null);
 
   useEffect(() => {
     if (token) {
       const apiObj = new connectionWaiwai(token);
+      setIsLoading(true)
       apiObj.allPalavras().then((data) => {
         setDados(data);
       });
@@ -40,7 +43,10 @@ export default function Dictionary({ token }) {
                 </h6>
               </Col>
             </Row>
-            <DataTable dados={dados} token={token} disabled />
+            {isLoading && <SpinLoader/>}
+            <DataTable dados={dados} token={token} disabled
+              setIsLoading={setIsLoading}
+              />
           </CardBody>
         </Card>
       </Layout>
