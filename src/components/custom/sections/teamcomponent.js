@@ -118,6 +118,7 @@ const TeamComponent = () => {
                         <a
                           href="https://www.linkedin.com/in/crystian-printes-b052691b7/"
                           target="_blank"
+                          rel="noreferrer"
                         >
                           <i className="fa fa-linkedin"></i>
                         </a>
@@ -156,6 +157,7 @@ const TeamComponent = () => {
                         <a
                           href="https://br.linkedin.com/in/marcos-vinicius-de-castro-printes-b22442201"
                           target="_blank"
+                          rel="noreferrer"
                         >
                           <i className="fa fa-linkedin"></i>
                         </a>
@@ -198,6 +200,7 @@ const TeamComponent = () => {
                         <a
                           href="http://lattes.cnpq.br/1806104313800692"
                           target="_blank"
+                          rel="noreferrer"
                         >
                           <i className="fa fa-linkedin"></i>
                         </a>
@@ -248,6 +251,7 @@ const TeamComponent = () => {
                         <a
                           href="http://buscatextual.cnpq.br/buscatextual/visualizacv.do?id=K4762839U8"
                           target="_blank"
+                          rel="noreferrer"
                         >
                           <i className="fa fa-linkedin"></i>
                         </a>
@@ -299,6 +303,7 @@ const TeamComponent = () => {
                         <a
                           href="http://lattes.cnpq.br/3434022917410660"
                           target="_blank"
+                          rel="noreferrer"
                         >
                           <i className="fa fa-linkedin"></i>
                         </a>
@@ -361,6 +366,7 @@ const TeamComponent = () => {
                         <a
                           href="https://www.linkedin.com/in/crystian-printes-b052691b7/"
                           target="_blank"
+                          rel="noreferrer"
                         >
                           <i className="fa fa-linkedin"></i>
                         </a>
@@ -383,6 +389,7 @@ const TeamComponent = () => {
                             <a
                               href="http://lattes.cnpq.br/3712448942978626"
                               target="_blank"
+                              rel="noreferrer"
                             >
                               <i className="fa fa-linkedin"></i>
                             </a>

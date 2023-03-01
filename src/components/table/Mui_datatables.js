@@ -70,7 +70,7 @@ const DataTable = ({ dados, setDados, showAction, token, disabled, setIsLoading 
       });
       setIsLoading(false)
     }
-  }, [dados]);
+  }, [dados, setIsLoading]);
 
   return (
     <Container>
