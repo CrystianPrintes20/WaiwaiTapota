@@ -234,13 +234,15 @@ export default function RegisterWords({ token }) {
                                 </Label>
                                 <Field
                                   name="meaningWaiwai"
-                                  type="text"
+                                  type="textarea"
+                                  rows="1"
                                   className={`form-control ${
                                     errors.meaningWaiwai &&
                                     touched.meaningWaiwai
                                       ? " is-invalid"
                                       : ""
                                   }`}
+                                  component={MyInput}
                                 />
                                 <ErrorMessage
                                   name="meaningWaiwai"
@@ -254,13 +256,15 @@ export default function RegisterWords({ token }) {
                                 </Label>
                                 <Field
                                   name="meaningPort"
-                                  type="text"
+                                  type="textarea"
+                                  rows="1"
                                   id="meaningPort"
                                   className={`form-control ${
                                     errors.meaningPort && touched.meaningPort
                                       ? " is-invalid"
                                       : ""
                                   }`}
+                                  component={MyInput}
                                 />
                                 <ErrorMessage
                                   name="meaningPort"

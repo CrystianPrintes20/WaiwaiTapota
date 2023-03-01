@@ -298,11 +298,14 @@ const FormWord = ({
                         <Field
                           disabled={disabled}
                           name="meaningWaiwai"
+                          type="textarea"
+                          rows="1"
                           className={`form-control ${
                             errors.meaningWaiwai && touched.meaningWaiwai
                               ? " is-invalid"
                               : ""
                           }`}
+                          component={MyInput}
                         />
                         <ErrorMessage
                           name="meaningWaiwai"
@@ -318,11 +321,14 @@ const FormWord = ({
                         <Field
                           disabled={disabled}
                           name="meaningPort"
+                          type="textarea"
+                          rows="1"
                           className={`form-control ${
                             errors.meaningPort && touched.meaningPort
                               ? " is-invalid"
                               : ""
                           }`}
+                          component={MyInput}
                         />
                         <ErrorMessage
                           name="meaningPort"
