@@ -409,7 +409,7 @@ const TeamComponent = () => {
 
                     <CardTitle tag="h5">Mazzile Tavares Rodrigues</CardTitle>
                     <CardSubtitle className="mb-2 text-muted" tag="h6">
-                      Gerente e Projetista de Software
+                    Designer Gráfico
                     </CardSubtitle>
                     <ul className="list-inline">
                       <li className="list-inline-item">
