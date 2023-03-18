@@ -48,7 +48,7 @@ const ArrowBtn = styled.span`
 const TeamComponent = () => {
   return (
     <div>
-      <div className="spacer bg-light">
+  {/*     <div className="spacer bg-light">
         <Container>
           <Row className="justify-content-center">
             <Col md="7" className="text-center">
@@ -61,7 +61,7 @@ const TeamComponent = () => {
             </Col>
           </Row>
         </Container>
-      </div>
+      </div> */}
       <div className="spacer team2 bg-bodycolorSecundary">
         <Container>
           <Row className="justify-content-center">
@@ -97,7 +97,7 @@ const TeamComponent = () => {
                   <CardBody>
                     <img
                       alt="Sample"
-                      src="./team1.png"
+                      src="./team01.png"
                       width={160}
                       height={150}
                       className="mb-2"
@@ -139,7 +139,7 @@ const TeamComponent = () => {
                   <CardBody>
                     <img
                       alt="Sample"
-                      src="./team2.jpg"
+                      src="./team02.png"
                       width={150}
                       height={150}
                       className="mb-2"
@@ -178,7 +178,7 @@ const TeamComponent = () => {
                   <CardBody>
                     <img
                       alt="Sample"
-                      src="./team3.jpeg"
+                      src="./team03.png"
                       width={150}
                       height={150}
                       className="mb-2"
@@ -221,7 +221,7 @@ const TeamComponent = () => {
                   <CardBody>
                     <img
                       alt="Sample"
-                      src="./team4.jpg"
+                      src="./team04.png"
                       width={150}
                       height={150}
                       className="mb-2"
@@ -272,7 +272,7 @@ const TeamComponent = () => {
                   <CardBody>
                     <img
                       alt="Sample"
-                      src="./team5.jpg"
+                      src="./team05.png"
                       width={150}
                       className="mb-2"
                     />
@@ -281,23 +281,6 @@ const TeamComponent = () => {
                     <CardSubtitle className="mb-2 text-muted" tag="h6">
                       Gerente e Projetista de Software
                     </CardSubtitle>
-                   {/*  <CardText >
-                      Atualmente Professora do curso de bacharelado em Sistemas
-                      de Informação na Universidade Federal do Oeste do Pará
-                      (UFOPA), lotada no campus de Oriximiná, bem no coração da
-                      Amazônia. Doutora em Engenharia Elétrica na área de
-                      Sistemas de Energia pela ...
-                      {/* Universidade Federal do Pará no Programa de
-                          Pós-Graduação em Engenharia Elétrica - PPGEE, em 2019.
-                          Mestre em Engenharia Elétrica com área de concentração
-                          em Computação Aplicada com linha de pesquisa em
-                          Inteligência Computacional. Bacharel em Engenharia da
-                          Computação pelo Instituto de Ensino Superior da
-                          Amazônia (IESAM) no ano de 2014. Atua nas seguintes
-                          linhas: computação aplicada a sistemas de energia,
-                          tecnologias sociais, Data Science e aprendizagem de
-                          máquina. 
-                    </CardText> */}
                     <ul className="list-inline">
                       <li className="list-inline-item">
                         <a
@@ -324,7 +307,7 @@ const TeamComponent = () => {
                   <CardBody>
                     <img
                       alt="Sample"
-                      src="./team6.jpg"
+                      src="./team06.png"
                       width={150}
                       className="mb-2"
                     />
@@ -333,34 +316,6 @@ const TeamComponent = () => {
                     <CardSubtitle className="mb-2 text-muted" tag="h6">
                       Pesquisadora
                     </CardSubtitle>
-                 {/*    <CardText>
-                      Possui graduação em Ciências Biológicas pela Universidade
-                      Federal de Pelotas (2006), mestrado em Biologia Vegetal
-                      pela Universidade Federal de Santa Catarina (2009),
-                      doutorado em Botânica pela Universidade Federal do Rio
-                      Grande do Sul (2014) e pós- ...
-                      doutorado em Sociedade,
-                      Natureza e Desenvolvimento
-                         pela Universidade Federal do Oeste do Pará
-                          (2015-2017). Tem experiência na área de Botânica, com
-                          ênfase em Botânica criptogâmica, atuando
-                          principalmente nos seguintes temas: perifíton,
-                          fitoplâncton, microfitobentos, taxonomia, organismos
-                          bioindicadores da qualidade e condições ambientais de
-                          ecossistemas aquáticos, e ecologia de microalgas e
-                          cianobactérias. Atualmente é Professora Adjunta na
-                          área de Botânica, do curso de Ciências Biológicas do
-                          Campus de Oriximiná da Universidade Federal do Oeste
-                          do Pará e integra, como membro permanente, o PPG
-                          Biociências da mesma Universidade, onde é orientadora
-                          de mestrado. Ministra disciplinas de taxonomia,
-                          ecologia e fisiologia de algas e plantas amazônicas,
-                          atua orientando estudos que versam sobre a relação de
-                          algas, cianobactérias, plantas aquáticas e terrestres
-                          com as condições ambientais do meio que estão
-                          inseridas, levantamentos florísticos e ecologia de
-                          comunidades.{" "}
-                    </CardText> */}
                     <ul className="list-inline">
                       <li className="list-inline-item">
                         <a
@@ -440,6 +395,41 @@ const TeamComponent = () => {
                     </Col>
                   </Row>
                 </Col> */}
+              </Carousel.Item>
+
+              <Carousel.Item>
+                <Card>
+                  <CardBody>
+                    <img
+                      alt="Sample"
+                      src="./team07.png"
+                      width={150}
+                      className="mb-2"
+                    />
+
+                    <CardTitle tag="h5">Mazzile Tavares Rodrigues</CardTitle>
+                    <CardSubtitle className="mb-2 text-muted" tag="h6">
+                      Gerente e Projetista de Software
+                    </CardSubtitle>
+                    <ul className="list-inline">
+                      <li className="list-inline-item">
+                        <a
+                          href="http://lattes.cnpq.br/1803108295629145"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <i className="fa fa-linkedin"></i>
+                        </a>
+                      </li>
+
+                      <li className="list-inline-item">
+                        <a href="mailto:mazziletavaresrodrigues@gmail.com">
+                          <i className="fa fa-envelope"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </CardBody>
+                </Card>
               </Carousel.Item>
             </Carousel>
           </Row>

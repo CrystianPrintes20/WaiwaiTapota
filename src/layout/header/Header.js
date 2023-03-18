@@ -117,24 +117,6 @@ const Header = () => {
                     </a>
                   </Link>
                 </NavItem>
-
-                <NavItem>
-                  <Link href="/admin/">
-                    <a
-                      className={
-                        router.pathname == "/admin/"
-                          ? "text-white nav-link"
-                          : "nav-link"
-                      }
-                    >
-                      <b className={
-                        router.pathname == "/admin/"
-                          ? "border-bottom border-danger pb-0"
-                          : null
-                      }>Cadastrar Palavras</b>
-                    </a>
-                  </Link>
-                </NavItem>
               </Nav>
               {session ? (
                 <>

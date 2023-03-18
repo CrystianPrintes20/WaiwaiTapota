@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import {
-  Container,
-  Row,
-  Col,
-  Button,
-} from "reactstrap";
+import { Container, Row, Col, Button } from "reactstrap";
 import Image from "next/image";
 import bannerimg from "../../assets/aplicativoTapota/icones-logo-tapota/logoTipoBranco.png";
 
@@ -15,17 +10,23 @@ const Banner2 = () => {
       <Container>
         <Row className="">
           <Col lg="6" md="6" className="align-self-center">
-            <h1 className="title">Traduza e se comunique com praticidade</h1>
-            <h4 className="subtitle font-light">
-              Economize tempo com as suas traduções e concentre-se nas tarefas
-              que realmente importam. <br />
-              Com o WaiwaiTapota, você tem traduções da lingua indigena Waiwai
-              para o portugues.
-            </h4>
-            <a href="https://drive.google.com/drive/folders/1B51A-b1nJ2z0fYYGPTiCAuO88XIGExjZ?usp=sharing" className="btn btn-danger m-r-20 btn-md m-t-30">
-              Download App
-              </a>
-           
+            <h1 className="title">
+              Dicionário Wai Wai: tradução, conhecimento e interculturalidade
+            </h1>
+            <h5 className="subtitle font-light">
+              Venha conhecer e aprender termos e conceitos da língua indígena
+              Wai Wai, por meio de sua tradução para português. <br /> Tudo foi pensado
+              para facilitar a comunicação do aluno indígena a assuntos técnicos
+              de sua área de estudo, e na preparação de material de aula
+              inclusivo pelo professor.
+            </h5>
+            <a
+              href="https://drive.google.com/drive/folders/1B51A-b1nJ2z0fYYGPTiCAuO88XIGExjZ?usp=sharing"
+              className="btn btn-danger m-r-20 btn-md m-t-30"
+            >
+              Baixe aqui o App dic. Wai Wai
+            </a>
+
             {/* <Link href="/#coming">
               <a className="btn btn-md m-t-30  btn-outline-light ">
                 Upgrade To Pro
