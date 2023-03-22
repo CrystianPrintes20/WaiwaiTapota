@@ -324,6 +324,7 @@ export default function RegisterWords({ token }) {
                                 >
                                   {defaultCategories.map((category) => (
                                     <option
+                                      key={category.value}
                                       value={category.value}
                                       selected={
                                         category.value === "sem_registro"

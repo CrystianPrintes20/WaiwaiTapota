@@ -398,6 +398,7 @@ const FormWord = ({
                         >
                           {defaultCategories.map((category) => (
                             <option
+                              key={category.value}
                               value={category.value}
                               selected={
                                 category.value === formValues.category
