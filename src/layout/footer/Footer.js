@@ -8,7 +8,7 @@ const Footer = () => {
     <div className="footer4 b-t spacer">
       <Container>
         <Row>
-          <Col lg="4" md="6" className="m-b-30">
+       {/*    <Col lg="4" md="6" className="m-b-30">
             <h5 className="m-b-20">Endereço</h5>
             <p>
               Universidade Federal do Oeste do Pará
@@ -16,20 +16,13 @@ const Footer = () => {
               Reitoria: Rua Vera Paz, s/n (Unidade Tapajós) Bairro Salé,
               Santarém, Pará, Brasil
             </p>
-          </Col>
-          {/* <Col lg="3" md="6" className="m-b-30">
-            <h5 className="m-b-20">Phone</h5>
-            <p>
-              Reception : +205 123 4567 <br />
-              Office : +207 235 7890
-            </p>
           </Col> */}
           <Col lg="4" md="6" className="m-b-30">
             <h5 className="m-b-20">Email</h5>
             <p>
               Office:
-              <Link href="mailto:reitoria@ufopa.edu.br">
-                <a className="link"> reitoria@ufopa.edu.br</a>
+              <Link href="mailto:dicionariowaiwai@ufopa.edu.br">
+                <a className="link"> dicionariowaiwai@ufopa.edu.br</a>
               </Link>
               <br />
               Site:
@@ -38,7 +31,7 @@ const Footer = () => {
               </Link>
             </p>
           </Col>
-          <Col lg="4" md="6">
+       {/*    <Col lg="4" md="6">
             <h5 className="m-b-20">Social</h5>
             <div className="round-social light">
               <Link href="#">
@@ -67,7 +60,7 @@ const Footer = () => {
                 </a>
               </Link>
             </div>
-          </Col>
+          </Col> */}
         </Row>
         <div className="f4-bottom-bar">
           <Row>

@@ -9,14 +9,14 @@ import connectionWaiwai from "../src/services/waiwaiApi";
 import { SpinLoader } from "../src/components/loading";
 
 export default function Dictionary({ token }) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const { data: session } = useSession();
   const [dados, setDados] = useState(null);
 
   useEffect(() => {
     if (token) {
       const apiObj = new connectionWaiwai(token);
-      setIsLoading(true)
+      setIsLoading(true);
       apiObj.allPalavras().then((data) => {
         setDados(data);
       });
@@ -26,7 +26,7 @@ export default function Dictionary({ token }) {
   if (session) {
     return (
       <Layout>
-        <Banner3/>
+        <Banner3 />
         <Card>
           <CardBody>
             <Row className="justify-content-center mb-3">
@@ -43,10 +43,13 @@ export default function Dictionary({ token }) {
                 </h6>
               </Col>
             </Row>
-            {isLoading && <SpinLoader/>}
-            <DataTable dados={dados} token={token} disabled
+            {isLoading && <SpinLoader />}
+            <DataTable
+              dados={dados}
+              token={token}
+              disabled
               setIsLoading={setIsLoading}
-              />
+            />
           </CardBody>
         </Card>
       </Layout>

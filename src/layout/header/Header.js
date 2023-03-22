@@ -96,7 +96,7 @@ const Header = () => {
                         router.pathname == "/dictionary"
                           ? "border-bottom border-danger pb-0"
                           : null
-                      }>Dicionario</b>
+                      }>Dicionário</b>
                     </a>
                   </Link>
                 </NavItem>

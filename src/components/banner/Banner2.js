@@ -14,11 +14,11 @@ const Banner2 = () => {
               Dicionário Wai Wai: tradução, conhecimento e interculturalidade
             </h1>
             <h5 className="subtitle font-light">
-              Venha conhecer e aprender termos e conceitos da língua indígena
-              Wai Wai, por meio de sua tradução para português. <br /> Tudo foi pensado
-              para facilitar a comunicação do aluno indígena a assuntos técnicos
-              de sua área de estudo, e na preparação de material de aula
-              inclusivo pelo professor.
+              Venha conhecer e aprender palavras, termos e conceitos da língua
+              indígena Wai Wai.<br/> O aplicativo foi pensado para facilitar a
+              comunicação do aluno indígena no estudo de assuntos técnicos de
+              sua área de estudo, e na preparação de material de aula pelo
+              professor.
             </h5>
             <a
               href="https://drive.google.com/drive/folders/1B51A-b1nJ2z0fYYGPTiCAuO88XIGExjZ?usp=sharing"

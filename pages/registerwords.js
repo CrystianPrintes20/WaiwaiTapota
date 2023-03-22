@@ -85,11 +85,11 @@ export default function RegisterWords({ token }) {
   const validationSchema = Yup.object().shape({
     meaningWaiwai: Yup.string().required("Este campo é obrigatorio."),
     meaningPort: Yup.string().required("Este campo é obrigatorio."),
-    phonemicWaiwai: Yup.string().required("Este campo é obrigatorio."),
+    /* phonemicWaiwai: Yup.string().required("Este campo é obrigatorio."), */
     exampleSentence: Yup.string().required("Este campo é obrigatorio."),
     category: Yup.string().required("Este campo é obrigatorio."),
-    synonymPort: Yup.string().required("Este campo é obrigatorio."),
-    synonymWaiwai: Yup.string().required("Este campo é obrigatorio."),
+    /*   synonymPort: Yup.string().required("Este campo é obrigatorio."),
+    synonymWaiwai: Yup.string().required("Este campo é obrigatorio."), */
   });
 
   if (session) {
@@ -101,7 +101,7 @@ export default function RegisterWords({ token }) {
             <Container>
               <Row className="justify-content-center">
                 <h2 className="mx-3 my-5 text-center">
-                  Contribua e melhore o WaiWai Tapota!
+                  Contribua e melhore o Dicionário WaiWai!
                 </h2>
               </Row>
               <Row>
@@ -113,14 +113,11 @@ export default function RegisterWords({ token }) {
                       src="./tapotaIcon.png"
                       height={200}
                     />
-                    <CardBody>
+                    <CardBody className="text-justify">
                       <p>
-                        A sua colaboração é uma parte importante no processo de
-                        inclusão de novas palavras no WaiWai Tapota. Se você
-                        fala ou conhece palavras na língua nativa Wai-Wai e
-                        identificou que ela ainda não está presente aqui,
-                        ajude-nos preenchendo o formulário ao lado e adicionando
-                        elas ao nosso tradutor.
+                        Aprenda Wai Wai de uma forma inovadora. Com o Dicionário
+                        Wai Wai você encontra termos de Wai Wai para o Português
+                        em um aplicativo fácil de usar.
                       </p>
                     </CardBody>
                   </Card>
@@ -170,7 +167,7 @@ export default function RegisterWords({ token }) {
                                 uploadRecord
                               );
                             }
-                            console.log("ss",response)
+                            console.log("ss", response);
                             if (response.status === 201) {
                               toast.success(
                                 "Nova palavra adicionada com sucesso!",
@@ -310,14 +307,14 @@ export default function RegisterWords({ token }) {
                                   <option selected value="sem registro">
                                     Selecione
                                   </option>
-                                  <option value="geral">
-                                    Geral
+                                  <option value="Cien_Saude">
+                                    Ciências da Saúde
                                   </option>
-                                  <option value="categoria_2">
-                                    Categoria 2
+                                  <option value="Cien_Bio">
+                                    Ciências Biológicas
                                   </option>
-                                  <option value="categoria_3">
-                                    Categoria 3
+                                  <option value="arqueo">
+                                    Arqueologia
                                   </option>
                                 </Field>
                                 <ErrorMessage

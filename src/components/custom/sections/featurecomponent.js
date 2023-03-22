@@ -16,7 +16,7 @@ const FeatureComponent = () => {
           <Row className="justify-content-center">
             <Col md="auto" className="text-center">
               <span className="label label-danger label-rounded">
-                Sobre o projeto WaiwaiTapota
+                Sobre o projeto Dicionário Waiwai
               </span>
               <h2 className="title mb-4">
                 Quais são as motivações para criação do Projeto?
@@ -48,17 +48,22 @@ const FeatureComponent = () => {
           </Row>
         </Container>
       </div>
-      <div className="spacer feature4">
+      <div className="mt-5 feature4">
         <Container>
-          <Row className="m-t-40">
+          <Row className="justify-content-center">
+            <Col md="7" className="text-center mt-0">
+              <span className="label label-warning label-rounded">Objetivos</span>
+              <h2 className="title">Objetivos e Metas</h2>
+            </Col>
+          </Row>
+          <Row className="m-t-10">
             <Col md="4" className="wrap-feature4-box">
               <Card>
                 <CardBody>
                   <div className="icon-round bg-light-info">
                     <i className="fa fa-commenting"></i>
                   </div>
-                  <h5 className="font-medium">Objetivo Nº 1</h5>
-                  <p className="m-t-20">
+                  <p className="m-t-20 text-justify">
                     Possibilitar a discussão sobre o processo de documentação,
                     revitalização e tradução entre o wai wai e português na
                     forma coloquial, culta e técnico-científica
@@ -72,8 +77,7 @@ const FeatureComponent = () => {
                   <div className="icon-round bg-light-info">
                     <i className="fa fa-graduation-cap"></i>
                   </div>
-                  <h5 className="font-medium">Objetivo Nº 2</h5>
-                  <p className="m-t-20">
+                  <p className="m-t-20 text-justify">
                     Capacitar estudantes dentro da universidade em um processo
                     reflexivo e crítico do processo de documentação linguística,
                     tradução e aprendizagem em contexto intercultural
@@ -87,8 +91,7 @@ const FeatureComponent = () => {
                   <div className="icon-round bg-light-info">
                     <i className="fa fa-comments-o"></i>
                   </div>
-                  <h5 className="font-medium">Objetivo Nº 2</h5>
-                  <p className="m-t-20">
+                  <p className="m-t-20 text-justify">
                     Socializar com a educação fundamental e sociedade em geral
                     materiais que reflitam as traduções e interfaces entre a
                     língua wai wai e o português.
