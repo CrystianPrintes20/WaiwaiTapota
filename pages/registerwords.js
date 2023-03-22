@@ -307,10 +307,10 @@ export default function RegisterWords({ token }) {
                                   <option selected value="sem registro">
                                     Selecione
                                   </option>
-                                  <option value="Cien_Saude">
+                                  <option value="cien_Saude">
                                     Ciências da Saúde
                                   </option>
-                                  <option value="Cien_Bio">
+                                  <option value="cien_Bio">
                                     Ciências Biológicas
                                   </option>
                                   <option value="arqueo">
