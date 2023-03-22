@@ -77,7 +77,7 @@ export default function RegisterWords({ token }) {
     meaningPort: "",
     phonemicWaiwai: "",
     exampleSentence: "",
-    category: "",
+    category: "sem_registro",
     synonymPort: "",
     synonymWaiwai: "",
   };
@@ -91,6 +91,24 @@ export default function RegisterWords({ token }) {
     /*   synonymPort: Yup.string().required("Este campo é obrigatorio."),
     synonymWaiwai: Yup.string().required("Este campo é obrigatorio."), */
   });
+  const defaultCategories = [
+    {
+      value: "sem_registro",
+      label: "Selecione",
+    },
+    {
+      value: "cien_Saude",
+      label: "Ciências da Saúde",
+    },
+    {
+      value: "cien_Bio",
+      label: "Ciências Biológicas",
+    },
+    {
+      value: "arqueo",
+      label: "Arqueologia",
+    },
+  ];
 
   if (session) {
     return (
@@ -200,7 +218,7 @@ export default function RegisterWords({ token }) {
                                   progress: undefined,
                                 }
                               );
-                              console.log({
+                              console.error({
                                 type: "error",
                                 message: err.response.data.message,
                               });
@@ -304,18 +322,18 @@ export default function RegisterWords({ token }) {
                                       : ""
                                   }`}
                                 >
-                                  <option selected value="sem registro">
-                                    Selecione
-                                  </option>
-                                  <option value="cien_Saude">
-                                    Ciências da Saúde
-                                  </option>
-                                  <option value="cien_Bio">
-                                    Ciências Biológicas
-                                  </option>
-                                  <option value="arqueo">
-                                    Arqueologia
-                                  </option>
+                                  {defaultCategories.map((category) => (
+                                    <option
+                                      value={category.value}
+                                      selected={
+                                        category.value === "sem_registro"
+                                          ? true
+                                          : false
+                                      }
+                                    >
+                                      {category.label}
+                                    </option>
+                                  ))}
                                 </Field>
                                 <ErrorMessage
                                   name="category"

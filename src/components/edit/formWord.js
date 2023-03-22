@@ -70,7 +70,24 @@ const FormWord = ({
   const toggleEditar = () => setModalEditar(!modalEditar);
 
   const apiObj = new connectionWaiwai(token);
-
+  const defaultCategories = [
+    {
+      value: "sem_registro",
+      label: "Selecione",
+    },
+    {
+      value: "cien_Saude",
+      label: "Ciências da Saúde",
+    },
+    {
+      value: "cien_Bio",
+      label: "Ciências Biológicas",
+    },
+    {
+      value: "arqueo",
+      label: "Arqueologia",
+    },
+  ];
   const removeImage = () => {
     if (showAction) {
       setImageChanged(true);
@@ -372,13 +389,36 @@ const FormWord = ({
                         <Field
                           disabled={disabled}
                           name="category"
+                          as="select"
+                          className={`form-control ${
+                            errors.category && touched.category
+                              ? " is-invalid"
+                              : ""
+                          }`}
+                        >
+                          {defaultCategories.map((category) => (
+                            <option
+                              value={category.value}
+                              selected={
+                                category.value === formValues.category
+                                  ? true
+                                  : false
+                              }
+                            >
+                              {category.label}
+                            </option>
+                          ))}
+                        </Field>
+                        {/* <Field
+                          disabled={disabled}
+                          name="category"
                           type="text"
                           className={`form-control ${
                             errors.category && touched.category
                               ? " is-invalid"
                               : ""
                           }`}
-                        />
+                        /> */}
                         <ErrorMessage
                           name="category"
                           component="div"
@@ -438,7 +478,6 @@ const FormWord = ({
                           disabled={disabled}
                           name="exampleSentence"
                           type="textarea"
-                          
                           className={`form-control ${
                             errors.exampleSentence && touched.exampleSentence
                               ? " is-invalid"
