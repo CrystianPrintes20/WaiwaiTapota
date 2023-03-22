@@ -125,11 +125,9 @@ const FormWord = ({
   const validationSchema = Yup.object().shape({
     meaningWaiwai: Yup.string().required("Este campo é obrigatorio."),
     meaningPort: Yup.string().required("Este campo é obrigatorio."),
-    phonemicWaiwai: Yup.string().required("Este campo é obrigatorio."),
     exampleSentence: Yup.string().required("Este campo é obrigatorio."),
     category: Yup.string().required("Este campo é obrigatorio."),
-    synonymPort: Yup.string().required("Este campo é obrigatorio."),
-    synonymWaiwai: Yup.string().required("Este campo é obrigatorio."),
+
   });
 
   const getUrlElement = (object) => {
