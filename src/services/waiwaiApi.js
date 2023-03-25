@@ -87,4 +87,13 @@ export default class connectionWaiwai {
     const bodyRes = response.data;
     return bodyRes;
   }
+
+  async allUsers() {
+    let response = await instanceApi.get(
+      "/usuarios/",
+      headersAuthorization(this.accessToken)
+    );
+    const bodyRes = response.data;
+    return bodyRes;
+  }
 }

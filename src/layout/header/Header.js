@@ -2,12 +2,8 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { User, LogOut } from "react-feather";
-import axios from "axios";
 import {
-  Row,
-  Col,
   UncontrolledDropdown,
-  Dropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
@@ -16,13 +12,12 @@ import {
   Navbar,
   Nav,
   NavItem,
-  NavLink,
   NavbarToggler,
   Collapse,
 } from "reactstrap";
 import Image from "next/image";
 import versaoWeb from "../../assets/aplicativoTapota/icones-logo-tapota/tapotaIconSF.png";
-import { getSession, useSession, signIn, signOut } from "next-auth/react";
+import {useSession, signOut } from "next-auth/react";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,8 +31,7 @@ const Header = () => {
         <Container className="po-relative">
           <Navbar className="navbar-expand-lg h6-nav-bar">
             <NavbarBrand href="/">
-              <Image src={versaoWeb} alt="wrapkit" /> 
-              
+              <Image src={versaoWeb} alt="wrapkit" />
             </NavbarBrand>
             <NavbarToggler onClick={toggle}>
               <span className="ti-menu"></span>
@@ -58,11 +52,15 @@ const Header = () => {
                           : "nav-link"
                       }
                     >
-                      <b className={
-                        router.pathname == "/"
-                          ? "border-bottom border-danger pb-0"
-                          : null
-                      }>Home </b>
+                      <b
+                        className={
+                          router.pathname == "/"
+                            ? "border-bottom border-danger pb-0"
+                            : null
+                        }
+                      >
+                        Home{" "}
+                      </b>
                     </a>
                   </Link>
                 </NavItem>
@@ -75,11 +73,15 @@ const Header = () => {
                           : "nav-link"
                       }
                     >
-                      <b className={
-                        router.pathname == "/myWord"
-                          ? "border-bottom border-danger pb-0"
-                          : null
-                      }>Minhas palavras</b>
+                      <b
+                        className={
+                          router.pathname == "/myWord"
+                            ? "border-bottom border-danger pb-0"
+                            : null
+                        }
+                      >
+                        Minhas palavras
+                      </b>
                     </a>
                   </Link>
                 </NavItem>
@@ -92,11 +94,15 @@ const Header = () => {
                           : "nav-link"
                       }
                     >
-                      <b className={
-                        router.pathname == "/dictionary"
-                          ? "border-bottom border-danger pb-0"
-                          : null
-                      }>Dicionário</b>
+                      <b
+                        className={
+                          router.pathname == "/dictionary"
+                            ? "border-bottom border-danger pb-0"
+                            : null
+                        }
+                      >
+                        Dicionario
+                      </b>
                     </a>
                   </Link>
                 </NavItem>
@@ -109,11 +115,37 @@ const Header = () => {
                           : "nav-link"
                       }
                     >
-                      <b className={
-                        router.pathname == "/registerwords"
-                          ? "border-bottom border-danger pb-0"
-                          : null
-                      }>Cadastrar Palavras</b>
+                      <b
+                        className={
+                          router.pathname == "/registerwords"
+                            ? "border-bottom border-danger pb-0"
+                            : null
+                        }
+                      >
+                        Cadastrar Palavras
+                      </b>
+                    </a>
+                  </Link>
+                </NavItem>
+
+                <NavItem>
+                  <Link href="/admin/">
+                    <a
+                      className={
+                        router.pathname == "/admin/"
+                          ? "text-white nav-link"
+                          : "nav-link"
+                      }
+                    >
+                      <b
+                        className={
+                          router.pathname == "/admin/"
+                            ? "border-bottom border-danger pb-0"
+                            : null
+                        }
+                      >
+                        Admin
+                      </b>
                     </a>
                   </Link>
                 </NavItem>
