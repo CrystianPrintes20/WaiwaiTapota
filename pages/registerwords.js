@@ -14,7 +14,7 @@ import {
   Input,
 } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { registerWordSchema } from "../src/schemas";
 import { useSession } from "next-auth/react";
 import Banner3 from "../src/components/banner/Banner3";
 import axios from "axios";
@@ -33,6 +33,7 @@ import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 
 // cuid is a simple library to generate unique IDs
 import cuid from "cuid";
+import { registerWordSchema } from "../src/schemas";
 
 const MyInput = ({ field, form, ...props }) => {
   return <Input {...field} {...props} />;
@@ -82,15 +83,7 @@ export default function RegisterWords({ token }) {
     synonymWaiwai: "",
   };
 
-  const validationSchema = Yup.object().shape({
-    meaningWaiwai: Yup.string().required("Este campo é obrigatorio."),
-    meaningPort: Yup.string().required("Este campo é obrigatorio."),
-    /* phonemicWaiwai: Yup.string().required("Este campo é obrigatorio."), */
-    exampleSentence: Yup.string().required("Este campo é obrigatorio."),
-    category: Yup.string().required("Este campo é obrigatorio."),
-    /*   synonymPort: Yup.string().required("Este campo é obrigatorio."),
-    synonymWaiwai: Yup.string().required("Este campo é obrigatorio."), */
-  });
+
   const defaultCategories = [
     {
       value: "sem_registro",
@@ -146,7 +139,7 @@ export default function RegisterWords({ token }) {
                     <CardBody>
                       <Formik
                         initialValues={initialValues}
-                        validationSchema={validationSchema}
+                        validationSchema={registerWordSchema}
                         onSubmit={async (fields) => {
                           const apiObj = new connectionWaiwai(token);
                           try {

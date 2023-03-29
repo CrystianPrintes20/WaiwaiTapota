@@ -14,7 +14,7 @@ import {
     ModalFooter,
   } from "reactstrap";
   import { Formik, Field, Form, ErrorMessage } from "formik";
-  import * as Yup from "yup";
+  import { registerWordSchema } from "../../../schemas";
   import { useEffect, useState, useCallback } from "react";
   import { toast } from "react-toastify";
   import "react-toastify/dist/ReactToastify.css";
@@ -104,16 +104,7 @@ import {
         return file;
       });
     }, []);
-  
-    const validationSchema = Yup.object().shape({
-      meaningWaiwai: Yup.string().required("Este campo é obrigatorio."),
-      meaningPort: Yup.string().required("Este campo é obrigatorio."),
-      phonemicWaiwai: Yup.string().required("Este campo é obrigatorio."),
-      exampleSentence: Yup.string().required("Este campo é obrigatorio."),
-      category: Yup.string().required("Este campo é obrigatorio."),
-      synonymPort: Yup.string().required("Este campo é obrigatorio."),
-      synonymWaiwai: Yup.string().required("Este campo é obrigatorio."),
-    });
+
   
     const getUrlElement = (object) => {
       if (typeof object == "string") {
@@ -196,7 +187,7 @@ import {
                     synonymPort: formValues.synonymPort,
                     synonymWaiwai: formValues.synonymWaiwai,
                   }}
-                  validationSchema={validationSchema}
+                  validationSchema={registerWordSchema}
                   enableReinitialize
                   onSubmit={async (fields) => {
                     try {

@@ -10,7 +10,7 @@ import {
   CardBody,
 } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { registerSchema } from "../../src/schemas";
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
@@ -18,6 +18,7 @@ import { useRouter } from "next/router";
 import AuthLogo from "../../src/assets/aplicativoTapota/icones-logo-tapota/tapotaIcone.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import { registerSchema } from "../../src/schemas";
 
 const RegisterFormik = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,20 +31,7 @@ const RegisterFormik = () => {
     acceptTerms: false,
   };
 
-  const validationSchema = Yup.object().shape({
-    username: Yup.string().required("username is required"),
-    email: Yup.string().email("Email is invalid").required("Email is required"),
-    password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .required("Password is required"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Passwords must match")
-      .required("Confirm Password is required"),
-    acceptTerms: Yup.bool().oneOf(
-      [true],
-      "Accept Terms & Conditions is required"
-    ),
-  });
+  
   return (
     <Container
       fluid
@@ -67,7 +55,7 @@ const RegisterFormik = () => {
               </small>
               <Formik
                 initialValues={initialValues}
-                validationSchema={validationSchema}
+                validationSchema={registerSchema}
                 onSubmit={async (fields) => {
                   let response;
                   try {

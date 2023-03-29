@@ -12,13 +12,13 @@ import {
   Input,
 } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import AuthLogo from "../../src/assets/aplicativoTapota/icones-logo-tapota/tapotaIcone.png";;
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { loginSchema } from "../../src/schemas";
 
 const LoginFormik = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -45,12 +45,7 @@ const LoginFormik = () => {
     password: "",
   };
 
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().email("Email is invalid").required("Email is required"),
-    password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .required("Password is required"),
-  });
+ 
   return (
     <Container fluid className="h-100" height="100vmax" style={{ backgroundColor: "#eef5f9" }}>
       <div className="d-flex justify-content-center">
@@ -72,7 +67,7 @@ const LoginFormik = () => {
               </small>
               <Formik
                 initialValues={initialValues}
-                validationSchema={validationSchema}
+                validationSchema={loginSchema}
                 onSubmit={async (fields) => {
                   let email = fields.email;
                   let password = fields.password;
