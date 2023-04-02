@@ -24,6 +24,7 @@ import Image from "../PreviewImagem";
 import cuid from "cuid";
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 import ReactAudioPlayer from "react-audio-player";
+import connectionWaiwai from "../../services/waiwaiApi";
 
 const MyInput = ({ field, form, ...props }) => {
   return <Input {...field} {...props} />;
@@ -40,11 +41,11 @@ const FormWord = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formValues, setFormValues] = useState({
-    wordPort: "",
-    translationWaiwai: "",
-    category: "",
-    meaningPort: "",
     meaningWaiwai: "",
+    meaningPort: "",
+    phonemicWaiwai: "",
+    exampleSentence: "",
+    category: "",
     synonymPort: "",
     synonymWaiwai: "",
   });
@@ -68,6 +69,25 @@ const FormWord = ({
   const toggleExcluir = () => setModalExcluir(!modalExcluir);
   const toggleEditar = () => setModalEditar(!modalEditar);
 
+  const apiObj = new connectionWaiwai(token);
+  const defaultCategories = [
+    {
+      value: "sem_registro",
+      label: "Selecione",
+    },
+    {
+      value: "cien_Saude",
+      label: "Ciências da Saúde",
+    },
+    {
+      value: "cien_Bio",
+      label: "Ciências Biológicas",
+    },
+    {
+      value: "arqueo",
+      label: "Arqueologia",
+    },
+  ];
   const removeImage = () => {
     if (showAction) {
       setImageChanged(true);
@@ -103,13 +123,11 @@ const FormWord = ({
   }, []);
 
   const validationSchema = Yup.object().shape({
-    wordPort: Yup.string().required("Este campo é obrigatorio."),
-    translationWaiwai: Yup.string().required("Este campo é obrigatorio."),
-    category: Yup.string().required("Este campo é obrigatorio."),
-    meaningPort: Yup.string().required("Este campo é obrigatorio."),
     meaningWaiwai: Yup.string().required("Este campo é obrigatorio."),
-    synonymPort: Yup.string().required("Este campo é obrigatorio."),
-    synonymWaiwai: Yup.string().required("Este campo é obrigatorio."),
+    meaningPort: Yup.string().required("Este campo é obrigatorio."),
+    exampleSentence: Yup.string().required("Este campo é obrigatorio."),
+    category: Yup.string().required("Este campo é obrigatorio."),
+
   });
 
   const getUrlElement = (object) => {
@@ -123,30 +141,15 @@ const FormWord = ({
   };
 
   const fetchDados = () => {
-    axios
-      .get("http://localhost:5000/palavras/me ", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => res.data)
-      .then((data) => {
-        setDados(data);
-        setModal(!modal);
-        // toast.success("Palavra atualizada com sucesso!", options);
-      });
+    apiObj.palavrasMe().then((data) => {
+      setDados(data);
+      setModal(!modal);
+    });
   };
 
   const handleMutationDelete = async () => {
     try {
-      await axios({
-        url: `http://localhost:5000/palavras/${data["id"]}`,
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await apiObj.deletePalavra(data["id"]);
       setModal(!modal);
       toast.success("Palavra excluida com sucesso!", options);
       fetchDados();
@@ -169,35 +172,26 @@ const FormWord = ({
 
   useEffect(() => {
     if (data) {
-      axios
-        .get(`http://localhost:5000/palavras/${data["id"]}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => res.data)
-        .then((json) => {
-          setFormValues({
-            ...json,
-            wordPort: json.wordPort || formValues.wordPort,
-            translationWaiwai:
-              json.translationWaiwai || formValues.translationWaiwai,
-            category: json.category || formValues.category,
-            meaningPort: json.meaningPort || formValues.meaningPort,
-            meaningWaiwai: json.meaningWaiwai || formValues.meaningWaiwai,
-            synonymPort: json.synonymPort || formValues.synonymPort,
-            synonymWaiwai: json.synonymWaiwai || formValues.synonymWaiwai,
-          });
-          if (json.image) {
-            setImage({
-              id: json.image,
-              src: `http://localhost:5000/uploads/${json.image}`,
-              name: json.image,
-            });
-          }
-          if (json.audio)
-            setRecord(`http://localhost:5000/uploads/${json.audio}`);
+      apiObj.getByIdPalavra(data["id"]).then((json) => {
+        setFormValues({
+          ...json,
+          meaningWaiwai: json.meaningWaiwai || formValues.meaningWaiwai,
+          meaningPort: json.meaningPort || formValues.meaningPort,
+          phonemicWaiwai: json.phonemicWaiwai || formValues.phonemicWaiwai,
+          exampleSentence: json.exampleSentence || formValues.exampleSentence,
+          category: json.category || formValues.category,
+          synonymPort: json.synonymPort || formValues.synonymPort,
+          synonymWaiwai: json.synonymWaiwai || formValues.synonymWaiwai,
         });
+        if (json.image) {
+          setImage({
+            id: json.image,
+            src: `${apiObj.baseURL}/uploads/${json.image}`,
+            name: json.image,
+          });
+        }
+        if (json.audio) setRecord(`${apiObj.baseURL}/uploads/${json.audio}`);
+      });
     }
   }, [data]);
 
@@ -209,11 +203,11 @@ const FormWord = ({
             <CardBody>
               <Formik
                 initialValues={{
-                  wordPort: formValues.wordPort,
-                  translationWaiwai: formValues.translationWaiwai,
-                  category: formValues.category,
-                  meaningPort: formValues.meaningPort,
                   meaningWaiwai: formValues.meaningWaiwai,
+                  meaningPort: formValues.meaningPort,
+                  phonemicWaiwai: formValues.phonemicWaiwai,
+                  exampleSentence: formValues.exampleSentence,
+                  category: formValues.category,
                   synonymPort: formValues.synonymPort,
                   synonymWaiwai: formValues.synonymWaiwai,
                 }}
@@ -222,54 +216,28 @@ const FormWord = ({
                 onSubmit={async (fields) => {
                   try {
                     setIsLoading(true);
-                    const response = await axios.put(
-                      `http://localhost:5000/palavras/${data["id"]}`,
-                      JSON.stringify(fields),
-                      {
-                        headers: {
-                          "Content-Type": "application/json",
-                          Authorization: `Bearer ${token}`,
-                        },
-                      }
+                    const response = await apiObj.updatePalavra(
+                      data["id"],
+                      JSON.stringify(fields)
                     );
-
                     if (response.status === 204) {
                       toast.success("Palavra atualizada com sucesso!", options);
                     }
-
                     if (imageChanged) {
                       if (formValues.image) {
                         if (image) {
-                          await axios({
-                            method: "delete",
-                            url: `http://localhost:5000/uploads/${formValues.image}`,
-                            headers: {
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          await apiObj.deleteUpload(formValues.image);
                           const blobData = await (
                             await fetch(image.src)
                           ).blob();
                           let uploadImage = new FormData();
                           uploadImage.append("file", blobData, image.name);
                           uploadImage.append("oidword", data._id);
-                          let responseImage = await axios({
-                            method: "post",
-                            url: "http://localhost:5000/uploads/",
-                            data: uploadImage,
-                            headers: {
-                              "Content-Type": "multipart/form-data",
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          let responseImage = await apiObj.createUpload(
+                            uploadImage
+                          );
                         } else {
-                          await axios({
-                            method: "delete",
-                            url: `http://localhost:5000/uploads/${formValues.image}`,
-                            headers: {
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          await apiObj.deleteUpload(formValues.image);
                         }
                       } else {
                         if (image) {
@@ -279,28 +247,16 @@ const FormWord = ({
                           let uploadImage = new FormData();
                           uploadImage.append("file", blobData, image.name);
                           uploadImage.append("oidword", data._id);
-                          let responseImage = await axios({
-                            method: "post",
-                            url: "http://localhost:5000/uploads/",
-                            data: uploadImage,
-                            headers: {
-                              "Content-Type": "multipart/form-data",
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          let responseImage = await apiObj.createUpload(
+                            uploadImage
+                          );
                         }
                       }
                     }
                     if (audioChanged) {
                       if (formValues.audio) {
                         if (record) {
-                          await axios({
-                            method: "delete",
-                            url: `http://localhost:5000/uploads/${formValues.audio}`,
-                            headers: {
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          await apiObj.deleteUpload(formValues.audio);
                           const event = new Date();
                           let uploadRecord = new FormData();
                           uploadRecord.append(
@@ -309,23 +265,11 @@ const FormWord = ({
                             `${event.toISOString()}.weba`
                           );
                           uploadRecord.append("oidword", data["_id"]);
-                          let responseRecord = await axios({
-                            method: "post",
-                            url: "http://localhost:5000/uploads/",
-                            data: uploadRecord,
-                            headers: {
-                              "Content-Type": "multipart/form-data",
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          let responseRecord = await apiObj.createUpload(
+                            uploadRecord
+                          );
                         } else {
-                          await axios({
-                            method: "delete",
-                            url: `http://localhost:5000/uploads/${formValues.audio}`,
-                            headers: {
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          await apiObj.deleteUpload(formValues.audio);
                         }
                       } else {
                         if (record) {
@@ -337,15 +281,9 @@ const FormWord = ({
                             `${event.toISOString()}.weba`
                           );
                           uploadRecord.append("oidword", data["_id"]);
-                          let responseRecord = await axios({
-                            method: "post",
-                            url: "http://localhost:5000/uploads/",
-                            data: uploadRecord,
-                            headers: {
-                              "Content-Type": "multipart/form-data",
-                              Authorization: `Bearer ${token}`,
-                            },
-                          });
+                          let responseRecord = await apiObj.createUpload(
+                            uploadRecord
+                          );
                         }
                       }
                     }
@@ -371,52 +309,27 @@ const FormWord = ({
                   <Form>
                     <Row>
                       <FormGroup className="w-50 pr-3">
-                        <Label htmlFor="wordPort">Palavra em português</Label>
+                        <Label htmlFor="meaningWaiwai">Palavra em Waiwai</Label>
                         <Field
                           disabled={disabled}
-                          name="wordPort"
-                          type="text"
-                          onChange={(e) => {
-                            setFieldValue("wordPort", e.target.value, true);
-                          }}
+                          name="meaningWaiwai"
+                          type="textarea"
+                          rows="1"
                           className={`form-control ${
-                            errors.wordPort && touched.wordPort
+                            errors.meaningWaiwai && touched.meaningWaiwai
                               ? " is-invalid"
                               : ""
                           }`}
+                          component={MyInput}
                         />
                         <ErrorMessage
-                          name="wordPort"
+                          name="meaningWaiwai"
                           component="div"
                           className="invalid-feedback"
                         />
                       </FormGroup>
 
                       <FormGroup className="w-50">
-                        <Label htmlFor="translationWaiwai">
-                          Tradução em Waiwai
-                        </Label>
-                        <Field
-                          disabled={disabled}
-                          name="translationWaiwai"
-                          type="text"
-                          className={`form-control ${
-                            errors.translationWaiwai &&
-                            touched.translationWaiwai
-                              ? " is-invalid"
-                              : ""
-                          }`}
-                        />
-                        <ErrorMessage
-                          name="translationWaiwai"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </FormGroup>
-                    </Row>
-
-                    <Row>
-                      <FormGroup className="w-50 pr-3">
                         <Label htmlFor="meaningPort">
                           Significado em português
                         </Label>
@@ -424,6 +337,7 @@ const FormWord = ({
                           disabled={disabled}
                           name="meaningPort"
                           type="textarea"
+                          rows="1"
                           className={`form-control ${
                             errors.meaningPort && touched.meaningPort
                               ? " is-invalid"
@@ -437,24 +351,75 @@ const FormWord = ({
                           className="invalid-feedback"
                         />
                       </FormGroup>
+                    </Row>
 
-                      <FormGroup className="w-50">
-                        <Label htmlFor="meaningWaiwai">
-                          Significado em Waiwai
+                    <Row>
+                      <FormGroup className="w-50 pr-3">
+                        <Label htmlFor="phonemicWaiwai">
+                          Pronuncia em Waiwai
                         </Label>
                         <Field
                           disabled={disabled}
-                          name="meaningWaiwai"
-                          type="textarea"
+                          name="phonemicWaiwai"
+                          type="text"
+                          onChange={(e) => {
+                            setFieldValue(
+                              "phonemicWaiwai",
+                              e.target.value,
+                              true
+                            );
+                          }}
                           className={`form-control ${
-                            errors.meaningWaiwai && touched.meaningWaiwai
+                            errors.phonemicWaiwai && touched.phonemicWaiwai
                               ? " is-invalid"
                               : ""
                           }`}
-                          component={MyInput}
                         />
                         <ErrorMessage
-                          name="meaningWaiwai"
+                          name="phonemicWaiwai"
+                          component="div"
+                          className="invalid-feedback"
+                        />
+                      </FormGroup>
+
+                      <FormGroup className="w-50">
+                        <Label htmlFor="category">Categoria da palavra</Label>
+                        <Field
+                          disabled={disabled}
+                          name="category"
+                          as="select"
+                          className={`form-control ${
+                            errors.category && touched.category
+                              ? " is-invalid"
+                              : ""
+                          }`}
+                        >
+                          {defaultCategories.map((category) => (
+                            <option
+                              key={category.value}
+                              value={category.value}
+                              selected={
+                                category.value === formValues.category
+                                  ? true
+                                  : false
+                              }
+                            >
+                              {category.label}
+                            </option>
+                          ))}
+                        </Field>
+                        {/* <Field
+                          disabled={disabled}
+                          name="category"
+                          type="text"
+                          className={`form-control ${
+                            errors.category && touched.category
+                              ? " is-invalid"
+                              : ""
+                          }`}
+                        /> */}
+                        <ErrorMessage
+                          name="category"
                           component="div"
                           className="invalid-feedback"
                         />
@@ -505,19 +470,22 @@ const FormWord = ({
 
                     <Row>
                       <FormGroup className="w-100">
-                        <Label htmlFor="category">Categoria da palavra</Label>
+                        <Label htmlFor="exampleSentence">
+                          Exemplo em uma sentença
+                        </Label>
                         <Field
                           disabled={disabled}
-                          name="category"
-                          type="text"
+                          name="exampleSentence"
+                          type="textarea"
                           className={`form-control ${
-                            errors.category && touched.category
+                            errors.exampleSentence && touched.exampleSentence
                               ? " is-invalid"
                               : ""
                           }`}
+                          component={MyInput}
                         />
                         <ErrorMessage
-                          name="category"
+                          name="exampleSentence"
                           component="div"
                           className="invalid-feedback"
                         />

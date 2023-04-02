@@ -6,7 +6,7 @@ import cookie from "cookie";
 import { TokenDecoder } from "../../../src/services/decoder";
 import { WaiwaiAuthentication } from "../../../src/services/waiwaitapota";
 
-export default (req, res) => {
+const auth = (req, res) => {
   // https://github.com/nextauthjs/next-auth/discussions/4428
   // https://github.com/vercel/next.js/discussions/22363
   return NextAuth(req, res, {
@@ -20,7 +20,7 @@ export default (req, res) => {
         authorize: async (credentials) => {
           try {
             const { data } = await axios.post(
-              "http://localhost:5000/auth/login",
+              `${process.env.NEXT_PUBLIC_API_URL || "https://waiwaitapota.homes"}/auth/login`,
               {
                 email: credentials.email,
                 password: credentials.password,
@@ -32,6 +32,9 @@ export default (req, res) => {
                 },
               }
             );
+            /**
+             * TODO: Verificar se Tokens já existem no cabeçalho;
+             */
 
             const authAccess = new TokenDecoder(data.access_token);
             const authRefresh = new TokenDecoder(data.refresh_token);
@@ -67,6 +70,7 @@ export default (req, res) => {
         },
       }),
     ],
+    secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
       jwt: async (jwt) => {
         let objCookies = req.cookies;
@@ -108,42 +112,23 @@ export default (req, res) => {
         session.user = token.user;
         return session;
       },
-      async redirect({ url, baseUrl }) {
-        const cookiesReq = cookie.parse(req.headers.cookie);
-        if (cookiesReq["next-auth.session-token"]) {
-          const accessToken = cookie.serialize("accessToken", "", {
-            maxAge: 0,
-            path: "/",
-          });
-          const refreshToken = cookie.serialize("refreshToken", "", {
-            maxAge: 0,
-            path: "/",
-          });
-          res.setHeader("Set-Cookie", [accessToken, refreshToken]);
-        }
-
-        // Allows relative callback URLs
-        if (url.startsWith("/")) return `${baseUrl}${url}`;
-        // Allows callback URLs on the same origin
-        else if (new URL(url).origin === baseUrl) return url;
-        return baseUrl;
-      },
     },
     events: {
       async signOut(message) {
         /**
          * TODO: Invalidar tokens do lado da API
          */
-        // const accessToken = cookie.serialize("accessToken", "", {
-        //   maxAge: 0,
-        //   path: "/",
-        // });
-        // const refreshToken = cookie.serialize("refreshToken", "", {
-        //   maxAge: 0,
-        //   path: "/",
-        // });
-        // res.setHeader("Set-Cookie", [accessToken, refreshToken]);
+        const accessToken = cookie.serialize("accessToken", "", {
+          maxAge: 0,
+          path: "/",
+        });
+        const refreshToken = cookie.serialize("refreshToken", "", {
+          maxAge: 0,
+          path: "/",
+        });
+        res.setHeader("Set-Cookie", [accessToken, refreshToken]);
       },
     },
   });
 };
+export default auth;

@@ -5,17 +5,22 @@ $headingfont: "DM Sans";
 
 /*Theme Colors*/
 $bodycolor: #eef5f9;
+$bodycolorSecundary: #fff;
 $headingtext: #3e4555;
 $bodytext: #8d97ad;
-$themecolor: #607df9;
+$themecolor: #D9AA71;
 $themecolor-alt: #26c6da;
 $themecolor-dark: #028ee1;
 
+$theme-colors: (
+  "bodycolorSecundary": $bodycolorSecundary,
+);
+
 /*bootstrap Color*/
-$danger: #ff4d7e;
-$success: #2cdd9b;
+$danger: #A63429;
+$success: #D9AA71;
 $warning: #fec500;
-$primary: #316ce8;
+$primary: #BF6C3B;
 $info: #0164d3;
 $inverse: #3e4555;
 $muted: #8d97ad;
@@ -25,20 +30,31 @@ $extra-light: #ebf3f5;
 $secondary: #727b84;
 $facebook: #3b5a9a;
 $twitter: #56adf2;
+/* 
+#69A62D
 
+#D9AA71
+
+#BF6C3B
+
+#0D0300
+
+#A63429
+
+*/
 /*Light colors*/
 $light-danger: #f9e7eb;
 $light-success: #e8fdeb;
 $light-warning: #fff8ec;
 $light-primary: #f1effd;
-$light-info: #cfecfe;
+$light-info: #cf5e1c;
 $light-inverse: #f6f6f6;
 $light-megna: #e0f2f4;
 
 $danger-dark: #d73e6b;
 $success-dark: #1dc8cc;
 $warning-dark: #dcaf17;
-$primary-dark: #345bcb;
+$primary-dark: #9c5a31;
 $info-dark: #2c73cb;
 $red-dark: #d61f1f;
 $inverse-dark: #232a37;
@@ -74,7 +90,9 @@ $banner-image: url("../../src/assets/images/landingpage/banner-bg.jpg");
 $c2a-image: url(../../src/assets/images/landingpage/comingsoon.jpg);
 $banner-slider: url("../../src/assets/images/staticslider/slider/hero-banner.jpg");
 $form-banner: "url(../../src/assets/images/form-banners/banner1/banner-bg.jpg)";
-$t1: url(../../src/assets/images/team/t1.jpg);
-$t2: url(../../src/assets/images/team/t2.jpg);
-$t3: url(../../src/assets/images/team/t3.jpg);
-$t4: url(../../src/assets/images/team/t4.jpg);
+$t1: url("../../src/assets/images/team/team1.png");
+$t2: url("../../src/assets/images/team/team2.jpg");
+$t3: url("../../src/assets/images/team/team3.jpeg");
+$t4: url("../../src/assets/images/team/team4.jpg");
+$t5: url("../../src/assets/images/team/team5.jpg");
+$t6: url("../../src/assets/images/team/team6.jpg");

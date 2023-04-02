@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Layout from "../src/layout/Layout";
 import Banner from "../src/components/banner/Banner";
 import {
@@ -22,10 +22,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useCallback } from "react";
 import Dropzone from "../src/components/dragDrop";
-import Image from "../src/components/PreviewImagem";
-
+import ImagePrev from "../src/components/PreviewImagem";
 import ReactAudioPlayer from "react-audio-player";
-import { getCookie, getCookies } from "cookies-next";
+import connectionWaiwai from "../src/services/waiwaiApi";
 
 /**
  * Importações para entrada de áudio
@@ -43,7 +42,7 @@ export default function RegisterWords({ token }) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
-  const [image, setImage] = useState(null);
+  const [imageWord, setImageWord] = useState(null);
 
   /*
    * Módulo para entrada de áudio
@@ -52,7 +51,7 @@ export default function RegisterWords({ token }) {
   const recorderControls = useAudioRecorder();
 
   const removeImage = () => {
-    setImage(null);
+    setImageWord(null);
   };
   const removeAudio = () => {
     setRecord(null);
@@ -66,7 +65,7 @@ export default function RegisterWords({ token }) {
     acceptedFiles.map((file) => {
       const reader = new FileReader();
       reader.onload = function (e) {
-        setImage({ id: cuid(), src: e.target.result, name: file.name });
+        setImageWord({ id: cuid(), src: e.target.result, name: file.name });
       };
       reader.readAsDataURL(file);
       return file;
@@ -74,28 +73,42 @@ export default function RegisterWords({ token }) {
   }, []);
 
   const initialValues = {
-    wordPort: "",
-    translationWaiwai: "",
-    category: "",
-    meaningPort: "",
     meaningWaiwai: "",
+    meaningPort: "",
+    phonemicWaiwai: "",
+    exampleSentence: "",
+    category: "sem_registro",
     synonymPort: "",
     synonymWaiwai: "",
   };
 
   const validationSchema = Yup.object().shape({
-    wordPort: Yup.string().required("Este campo é obrigatorio."),
-    translationWaiwai: Yup.string().required("Este campo é obrigatorio."),
-    category: Yup.string().required("Este campo é obrigatorio."),
-    meaningPort: Yup.string().required("Este campo é obrigatorio."),
     meaningWaiwai: Yup.string().required("Este campo é obrigatorio."),
-    synonymPort: Yup.string().required("Este campo é obrigatorio."),
-    synonymWaiwai: Yup.string().required("Este campo é obrigatorio."),
+    meaningPort: Yup.string().required("Este campo é obrigatorio."),
+    /* phonemicWaiwai: Yup.string().required("Este campo é obrigatorio."), */
+    exampleSentence: Yup.string().required("Este campo é obrigatorio."),
+    category: Yup.string().required("Este campo é obrigatorio."),
+    /*   synonymPort: Yup.string().required("Este campo é obrigatorio."),
+    synonymWaiwai: Yup.string().required("Este campo é obrigatorio."), */
   });
-
-  useEffect(() => {
-    console.log(record);
-  });
+  const defaultCategories = [
+    {
+      value: "sem_registro",
+      label: "Selecione",
+    },
+    {
+      value: "cien_Saude",
+      label: "Ciências da Saúde",
+    },
+    {
+      value: "cien_Bio",
+      label: "Ciências Biológicas",
+    },
+    {
+      value: "arqueo",
+      label: "Arqueologia",
+    },
+  ];
 
   if (session) {
     return (
@@ -105,66 +118,59 @@ export default function RegisterWords({ token }) {
           <Card className="feature4">
             <Container>
               <Row className="justify-content-center">
-                <h2 className="title my-5">
-                  Contribua e melhore o Wai-Wai Translator!
+                <h2 className="mx-3 my-5 text-center">
+                  Contribua e melhore o Dicionário WaiWai!
                 </h2>
               </Row>
               <Row>
                 <Col sm="4">
                   <Card>
-                    <img alt="Card" src="./tradutor.jpg" />
-                    <CardBody>
-                      <div className="h-u-text-left main__item--card__desc">
-                        <p>
-                          A sua colaboração é uma parte importante no processo
-                          de inclusão de novas palavras no Wai-Wai Translator.
-                          Se você fala ou conhece palavras na língua nativa
-                          Wai-Wai e identificou que ela ainda não está presente
-                          aqui, ajude-nos preenchendo o formulário ao lado e
-                          adicionando elas ao nosso tradutor.
-                        </p>
-                      </div>
+                    <img
+                      className="rounded mx-auto d-block"
+                      alt="Card"
+                      src="./tapotaIcon.png"
+                      height={200}
+                    />
+                    <CardBody className="text-justify">
+                      <p>
+                        Aprenda Wai Wai de uma forma inovadora. Com o Dicionário
+                        Wai Wai você encontra termos de Wai Wai para o Português
+                        em um aplicativo fácil de usar.
+                      </p>
                     </CardBody>
                   </Card>
                 </Col>
                 <Col sm="8">
                   <Card>
+                    <h4 className="mb-3 fw-bold">Cadastro de Palavras</h4>
                     <CardBody>
-                      <h4 className="mb-3 fw-bold">Cadastro de Palavras</h4>
                       <Formik
                         initialValues={initialValues}
                         validationSchema={validationSchema}
                         onSubmit={async (fields) => {
+                          const apiObj = new connectionWaiwai(token);
                           try {
                             setIsLoading(true);
-                            const response = await axios.post(
-                              "http://localhost:5000/palavras/",
-                              JSON.stringify(fields),
-                              {
-                                headers: {
-                                  "Content-Type": "application/json",
-                                  Authorization: `Bearer ${token}`,
-                                },
-                              }
+
+                            let response = await apiObj.createPalavra(
+                              JSON.stringify(fields)
                             );
-                            const { data } = response;
-                            if (image) {
+
+                            if (imageWord) {
                               // https://stackoverflow.com/questions/12168909/blob-from-dataurl
                               const blobData = await (
-                                await fetch(image.src)
+                                await fetch(imageWord.src)
                               ).blob();
                               let uploadImage = new FormData();
-                              uploadImage.append("file", blobData, image.name);
-                              uploadImage.append("oidword", data._id);
-                              let responseImage = await axios({
-                                method: "post",
-                                url: "http://localhost:5000/uploads/",
-                                data: uploadImage,
-                                headers: {
-                                  "Content-Type": "multipart/form-data",
-                                  Authorization: `Bearer ${token}`,
-                                },
-                              });
+                              uploadImage.append(
+                                "file",
+                                blobData,
+                                imageWord.name
+                              );
+                              uploadImage.append("oidword", response.data._id);
+                              let responseImage = await apiObj.createUpload(
+                                uploadImage
+                              );
                             }
                             if (record) {
                               const event = new Date();
@@ -174,18 +180,12 @@ export default function RegisterWords({ token }) {
                                 record,
                                 `${event.toISOString()}.weba`
                               );
-                              uploadRecord.append("oidword", data._id);
-                              let responseRecord = await axios({
-                                method: "post",
-                                url: "http://localhost:5000/uploads/",
-                                data: uploadRecord,
-                                headers: {
-                                  "Content-Type": "multipart/form-data",
-                                  Authorization: `Bearer ${token}`,
-                                },
-                              });
+                              uploadRecord.append("oidword", response.data._id);
+                              let responseRecord = await apiObj.createUpload(
+                                uploadRecord
+                              );
                             }
-
+                            console.log("ss", response);
                             if (response.status === 201) {
                               toast.success(
                                 "Nova palavra adicionada com sucesso!",
@@ -218,7 +218,7 @@ export default function RegisterWords({ token }) {
                                   progress: undefined,
                                 }
                               );
-                              console.log({
+                              console.error({
                                 type: "error",
                                 message: err.response.data.message,
                               });
@@ -243,77 +243,14 @@ export default function RegisterWords({ token }) {
                         render={({ errors, touched }) => (
                           <Form>
                             <Row>
-                              <FormGroup className="w-50 pr-3">
-                                <Label htmlFor="wordPort">
-                                  Palavra em português
-                                </Label>
-                                <Field
-                                  name="wordPort"
-                                  type="text"
-                                  className={`form-control ${
-                                    errors.wordPort && touched.wordPort
-                                      ? " is-invalid"
-                                      : ""
-                                  }`}
-                                />
-                                <ErrorMessage
-                                  name="wordPort"
-                                  component="div"
-                                  className="invalid-feedback"
-                                />
-                              </FormGroup>
-                              <FormGroup className="w-50">
-                                <Label htmlFor="translationWaiwai">
-                                  Tradução em Waiwai
-                                </Label>
-                                <Field
-                                  name="translationWaiwai"
-                                  type="text"
-                                  className={`form-control ${
-                                    errors.translationWaiwai &&
-                                    touched.translationWaiwai
-                                      ? " is-invalid"
-                                      : ""
-                                  }`}
-                                />
-                                <ErrorMessage
-                                  name="translationWaiwai"
-                                  component="div"
-                                  className="invalid-feedback"
-                                />
-                              </FormGroup>
-                            </Row>
-                            <Row>
-                              <FormGroup className="w-50 pr-3">
-                                <Label htmlFor="meaningPort">
-                                  Significado em português
-                                </Label>
-                                <Field
-                                  name="meaningPort"
-                                  type="textarea"
-                                  rows="3"
-                                  id="meaningPort"
-                                  className={`form-control ${
-                                    errors.meaningPort && touched.meaningPort
-                                      ? " is-invalid"
-                                      : ""
-                                  }`}
-                                  component={MyInput}
-                                />
-                                <ErrorMessage
-                                  name="meaningPort"
-                                  component="div"
-                                  className="invalid-feedback"
-                                />
-                              </FormGroup>
-                              <FormGroup className="w-50">
+                              <FormGroup className="col-md-6 col-sm-12">
                                 <Label htmlFor="meaningWaiwai">
-                                  Significado em Waiwai
+                                  Palavra em Waiwai
                                 </Label>
                                 <Field
                                   name="meaningWaiwai"
                                   type="textarea"
-                                  rows="3"
+                                  rows="1"
                                   className={`form-control ${
                                     errors.meaningWaiwai &&
                                     touched.meaningWaiwai
@@ -328,9 +265,86 @@ export default function RegisterWords({ token }) {
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
+                              <FormGroup className="col-md-6 col-sm-12">
+                                <Label htmlFor="meaningPort">
+                                  Significado em português
+                                </Label>
+                                <Field
+                                  name="meaningPort"
+                                  type="textarea"
+                                  rows="1"
+                                  id="meaningPort"
+                                  className={`form-control ${
+                                    errors.meaningPort && touched.meaningPort
+                                      ? " is-invalid"
+                                      : ""
+                                  }`}
+                                  component={MyInput}
+                                />
+                                <ErrorMessage
+                                  name="meaningPort"
+                                  component="div"
+                                  className="invalid-feedback"
+                                />
+                              </FormGroup>
                             </Row>
                             <Row>
-                              <FormGroup className="w-50 pr-3">
+                              <FormGroup className="pr-3 col-md-6 col-sm-12">
+                                <Label htmlFor="phonemicWaiwai">
+                                  Pronuncia em Waiwai
+                                </Label>
+                                <Field
+                                  name="phonemicWaiwai"
+                                  type="text"
+                                  className={`form-control ${
+                                    errors.phonemicWaiwai &&
+                                    touched.phonemicWaiwai
+                                      ? " is-invalid"
+                                      : ""
+                                  }`}
+                                />
+                                <ErrorMessage
+                                  name="phonemicWaiwai"
+                                  component="div"
+                                  className="invalid-feedback"
+                                />
+                              </FormGroup>
+                              <FormGroup className="col-md-6 col-sm-12">
+                                <Label htmlFor="category">
+                                  Categoria da palavra
+                                </Label>
+                                <Field
+                                  name="category"
+                                  as="select"
+                                  className={`form-control ${
+                                    errors.category && touched.category
+                                      ? " is-invalid"
+                                      : ""
+                                  }`}
+                                >
+                                  {defaultCategories.map((category) => (
+                                    <option
+                                      key={category.value}
+                                      value={category.value}
+                                      selected={
+                                        category.value === "sem_registro"
+                                          ? true
+                                          : false
+                                      }
+                                    >
+                                      {category.label}
+                                    </option>
+                                  ))}
+                                </Field>
+                                <ErrorMessage
+                                  name="category"
+                                  component="div"
+                                  className="invalid-feedback"
+                                />
+                              </FormGroup>
+                            </Row>
+                            <Row>
+                              <FormGroup className="col-md-6 col-sm-12">
                                 <Label htmlFor="synonymPort">
                                   Sinonimo em Portugues
                                 </Label>
@@ -349,7 +363,7 @@ export default function RegisterWords({ token }) {
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
-                              <FormGroup className="w-50">
+                              <FormGroup className="col-md-6 col-sm-12">
                                 <Label htmlFor="synonymWaiwai">
                                   Sinonimo Waiwai
                                 </Label>
@@ -371,33 +385,37 @@ export default function RegisterWords({ token }) {
                               </FormGroup>
                             </Row>
                             <Row>
-                              <FormGroup className="w-100 pr-3">
-                                <Label htmlFor="category">
-                                  Categoria da palavra
+                              <FormGroup className="col-md-12 col-sm-12">
+                                <Label htmlFor="exampleSentence">
+                                  Exemplo em uma sentença
                                 </Label>
                                 <Field
-                                  name="category"
-                                  type="text"
+                                  name="exampleSentence"
+                                  type="textarea"
+                                  rows="3"
+                                  id="exampleSentence"
                                   className={`form-control ${
-                                    errors.category && touched.category
+                                    errors.exampleSentence &&
+                                    touched.exampleSentence
                                       ? " is-invalid"
                                       : ""
                                   }`}
+                                  component={MyInput}
                                 />
                                 <ErrorMessage
-                                  name="category"
+                                  name="exampleSentence"
                                   component="div"
                                   className="invalid-feedback"
                                 />
                               </FormGroup>
                             </Row>
                             <Row>
-                              <FormGroup className="w-50 pr-3">
+                              <FormGroup className="col-md-6 col-sm-12">
                                 <Label htmlFor="img_logo">
                                   Insira uma image
                                 </Label>
                                 <div style={{ border: "3px #00806b dashed" }}>
-                                  {image ? (
+                                  {imageWord ? (
                                     <>
                                       <div className="d-flex justify-content-end">
                                         <Button
@@ -411,7 +429,7 @@ export default function RegisterWords({ token }) {
                                           </span>
                                         </Button>
                                       </div>
-                                      <Image image={image} />
+                                      <ImagePrev image={imageWord} />
                                     </>
                                   ) : (
                                     <>
@@ -423,7 +441,7 @@ export default function RegisterWords({ token }) {
                                   )}
                                 </div>
                               </FormGroup>
-                              <FormGroup className="w-50">
+                              <FormGroup className="col-md-6 col-sm-12">
                                 <Label htmlFor="audio">Gravar audio</Label>
                                 <AudioRecorder
                                   onRecordingComplete={(blob) =>
@@ -461,7 +479,7 @@ export default function RegisterWords({ token }) {
                               <FormGroup>
                                 <Button
                                   type="submit"
-                                  color="success"
+                                  color="danger"
                                   className="me-2"
                                   disabled={isLoading}
                                 >
@@ -469,7 +487,7 @@ export default function RegisterWords({ token }) {
                                 </Button>
                                 <Button
                                   type="reset"
-                                  color="danger"
+                                  color="success"
                                   className="mx-3"
                                   disabled={isLoading}
                                 >

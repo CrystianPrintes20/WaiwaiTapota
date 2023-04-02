@@ -1,10 +1,10 @@
 import React from "react";
 
 // Rendering individual images
-const Image = ({ image }) => {
+const ImagePrev = ({ image }) => {
   return (
     <div className="file-item d-flex justify-content-center">
-      <img alt={`img - ${image.id}`} src={image.src} className="file-img"width={200} height={200} />
+      <img alt={`img - ${image.id}`} src={image.src} className="img-fluid file-img"width={200} height={200} />
     </div>
   );
 };
@@ -15,7 +15,7 @@ const ImageList = ({ images }) => {
   // render each image by calling Image component
   const renderImage = (image, index) => {
     return (
-      <Image
+      <ImagePrev
         image={image}
         key={`${image.id}-image`}
       />
@@ -26,5 +26,5 @@ const ImageList = ({ images }) => {
   return <section className="file-list">{images.map(renderImage)}</section>;
 };
 
-export default Image;
+export default ImagePrev;
 

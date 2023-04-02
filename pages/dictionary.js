@@ -2,27 +2,24 @@ import { useEffect, useState } from "react";
 import Layout from "../src/layout/Layout";
 import Banner3 from "../src/components/banner/Banner3";
 import Banner from "../src/components/banner/Banner";
-import { Card, CardBody } from "reactstrap";
+import { Card, CardBody, Row, Col } from "reactstrap";
 import { useSession } from "next-auth/react";
 import DataTable from "../src/components/table/Mui_datatables";
-import axios from "axios";
+import connectionWaiwai from "../src/services/waiwaiApi";
+import { SpinLoader } from "../src/components/loading";
 
 export default function Dictionary({ token }) {
+  const [isLoading, setIsLoading] = useState(false);
   const { data: session } = useSession();
   const [dados, setDados] = useState(null);
 
   useEffect(() => {
     if (token) {
-      axios
-        .get("http://localhost:5000/palavras/", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => res.data)
-        .then((data) => {
-          setDados(data);
-        });
+      const apiObj = new connectionWaiwai(token);
+      setIsLoading(true);
+      apiObj.allPalavras().then((data) => {
+        setDados(data);
+      });
     }
   }, [token]);
 
@@ -32,7 +29,27 @@ export default function Dictionary({ token }) {
         <Banner3 />
         <Card>
           <CardBody>
-            <DataTable dados={dados} token={token} disabled />
+            <Row className="justify-content-center mb-3">
+              <Col md="7" className="text-center">
+                <span className="label label-danger label-rounded">
+                  Tela de Dicionario
+                </span>
+                <h2 className="title">Está procurando alguma palavra?</h2>
+                <h6 className="subtitle">
+                  Seja bem-vindo ao nosso dicionário online! Aqui você
+                  encontrará uma lista de palavras, frases, expressões e termos
+                  usados na língua materna Waiwai. Nosso objetivo é preservar a
+                  língua indígena, incentivando o uso da língua e sua cultura.
+                </h6>
+              </Col>
+            </Row>
+            {isLoading && <SpinLoader />}
+            <DataTable
+              dados={dados}
+              token={token}
+              disabled
+              setIsLoading={setIsLoading}
+            />
           </CardBody>
         </Card>
       </Layout>

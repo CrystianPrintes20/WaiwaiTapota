@@ -61,8 +61,8 @@ Header 6
 .static-slider-head {
   min-height: 600px;
   display: flex;
-
-  background-color: #31864d;
+  background-image: url("../../src/assets/aplicativoTapota/background/backgroundsite.png") !important;
+  //background-color: #31864d;
 
   .title {
     color: $white;
@@ -80,8 +80,7 @@ Header 6
 .static-slider-head-banner3 {
   min-height: 88px;
   display: flex;
-
-  background-color: #31864d;
+  background-image: url("../../src/assets/aplicativoTapota/background/backgroundsite.png") !important;
 
   .title {
     color: $white;
@@ -189,7 +188,6 @@ card
 
 .card {
   border: 0px;
-  margin-bottom: 30px;
 
   &.card-shadow {
     box-shadow: $card-shadow;
@@ -1494,6 +1492,7 @@ common-innerpage-banner
 Footer 4
 *******************/
 .footer4 {
+  background-color: #F4F8FA;
   .f4-bottom-bar {
     padding-top: 10px;
     margin-top: 20px;

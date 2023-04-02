@@ -16,7 +16,7 @@ import * as Yup from "yup";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
-import AuthLogo from "../../src/assets/images/logos/ufopa.png";
+import AuthLogo from "../../src/assets/aplicativoTapota/icones-logo-tapota/tapotaIcone.png";;
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -52,9 +52,9 @@ const LoginFormik = () => {
       .required("Password is required"),
   });
   return (
-    <Container fluid className="h-100">
-      <Row className="justify-content-center align-items-center h-100">
-        <Col lg="6" sm="6" md="6" className="loginContainer">
+    <Container fluid className="h-100" height="100vmax" style={{ backgroundColor: "#eef5f9" }}>
+      <div className="d-flex justify-content-center">
+        <Col sm="6" md="4">
           <div className="p-4 d-flex justify-content-center gap-2">
             <Link href="/">
               <a className="d-flex align-items-center gap-2">
@@ -63,12 +63,12 @@ const LoginFormik = () => {
             </Link>
           </div>
 
-          <Card className="bg-white">
+          <Card className="bg-white border border-success">
             <CardBody className="p-4 m-1">
               <h4 className="mb-0 fw-bold">Login</h4>
               <small className="pb-4 d-block">
-                Do not have an account?{" "}
-                <Link href="/auth/registerformik">Sign up</Link>
+                Ainda não tem uma conta?{" "}
+                <Link href="/auth/registerformik"> Registrar</Link>
               </small>
               <Formik
                 initialValues={initialValues}
@@ -187,7 +187,7 @@ const LoginFormik = () => {
             </CardBody>
           </Card>
         </Col>
-      </Row>
+      </div>
     </Container>
   );
 };

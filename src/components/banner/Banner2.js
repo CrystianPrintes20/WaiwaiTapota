@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { Container, Row, Col } from "reactstrap";
+import { Container, Row, Col, Button } from "reactstrap";
 import Image from "next/image";
-import bannerimg from "../../assets/images/landingpage/banner-img.png";
+import bannerimg from "../../assets/aplicativoTapota/icones-logo-tapota/logoTipoBranco.png";
 
 const Banner2 = () => {
   return (
@@ -11,27 +11,30 @@ const Banner2 = () => {
         <Row className="">
           <Col lg="6" md="6" className="align-self-center">
             <h1 className="title">
-            What is Lorem Ipsum?
+              Dicionário Wai Wai: tradução, conhecimento e interculturalidade
             </h1>
-            <h4 className="subtitle font-light">
-              FLorem Ipsum is simply dummy text of the printing and typesetting industry. 
-              <br /> Lorem Ipsum has been the  standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book
-            </h4>
+            <h5 className="subtitle font-light">
+              Venha conhecer e aprender palavras, termos e conceitos da língua
+              indígena Wai Wai.<br/> O aplicativo foi pensado para facilitar a
+              comunicação do aluno indígena no estudo de assuntos técnicos de
+              sua área de estudo, e na preparação de material de aula pelo
+              professor.
+            </h5>
             <a
-              href="https://wrappixel.com/templates/nextkit-nextjs-free-uikit"
-              className="btn btn-danger m-r-20 btn-md m-t-30 "
+              href="https://drive.google.com/drive/folders/1B51A-b1nJ2z0fYYGPTiCAuO88XIGExjZ?usp=sharing"
+              className="btn btn-danger m-r-20 btn-md m-t-30"
             >
-              Download Free
+              Baixe aqui o App dic. Wai Wai
             </a>
+
             {/* <Link href="/#coming">
               <a className="btn btn-md m-t-30  btn-outline-light ">
                 Upgrade To Pro
               </a>
             </Link> */}
           </Col>
-          <Col lg="6" md="6">
-            {/* <Image src={bannerimg} alt="hero banner" /> */}
-            <img src="https://placehold.jp/514x510.png"></img>
+          <Col lg="6" md="6" className="py-4">
+            <Image src={bannerimg} alt="hero banner" width={450} height={450} />
           </Col>
         </Row>
       </Container>
