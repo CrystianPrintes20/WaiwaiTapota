@@ -12,18 +12,25 @@ import { SpinLoader } from "../src/components/loading";
 
 export default function MyWord({ token }) {
   const [isLoading, setIsLoading] = useState(false)
-  const [dados, setDados] = useState(null);
   const { data: session } = useSession();
+  const [pageState, setPageState] = useState({
+    isLoading: false,
+    data: [],
+    total: 0,
+    page: 1,
+    pageSize: 10,
+  });
 
   useEffect(() => {
     if (token) {
       const apiObj = new connectionWaiwai(token);
+      setPageState(old => ({ ...old, isLoading: true}))
       setIsLoading(true)
-      apiObj.palavrasMe().then((data) => {
-        setDados(data);
+      apiObj.palavrasMe(pageState.pageSize, pageState.page).then((data) => {
+        setPageState(old => ({ ...old, isLoading: false, data: data.data, total: data.total}))
       });
     }
-  }, [token]);
+  }, [token, pageState.page, pageState.pageSize]);
 
   if (session) {
     return (
@@ -46,9 +53,9 @@ export default function MyWord({ token }) {
             </Row>
             {isLoading && <SpinLoader/>}
             <DataTable
-              dados={dados}
+              pageState={pageState}
               setIsLoading={setIsLoading}
-              setDados={setDados}
+              setPageState={setPageState}
               token={token}
               showAction
             />

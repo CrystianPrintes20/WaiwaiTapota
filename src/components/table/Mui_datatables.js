@@ -13,7 +13,14 @@ import { useModalDicionario } from "../../hooks/useModalDicionario";
 import Dicionario from "../edit/Dicionario";
 import FormWord from "../edit/formWord";
 
-const DataTable = ({ dados, setDados, showAction, token, disabled, setIsLoading }) => {
+const DataTable = ({
+  pageState,
+  setPageState,
+  showAction,
+  token,
+  disabled,
+  setIsLoading,
+}) => {
   const [modal, setModal] = useModalDicionario();
   const toggle = () => setModal(!modal);
   const [word, setWord] = useState(null);
@@ -23,27 +30,32 @@ const DataTable = ({ dados, setDados, showAction, token, disabled, setIsLoading 
     {
       field: "meaningWaiwai",
       headerName: <strong>Em Waiwai</strong>,
+      minWidth: 180,
+    },
+    {
+      field: "meaningPort",
+      headerName: <strong>Em Português</strong>,
       minWidth: 250,
     },
-    { field: "meaningPort", headerName: <strong>Em Português</strong>, minWidth: 250 },
+    { field: "user", headerName: <strong>Usuário</strong>, minWidth: 180 },
     {
       field: "created",
       headerName: <strong>Cadastrado em</strong>,
-      minWidth: 200,
+      minWidth: 180,
       type: "dateTime",
       valueGetter: ({ value }) => value && new Date(value),
     },
     {
       field: "updated",
       headerName: <strong>Ultima modificação</strong>,
-      minWidth: 200,
+      minWidth: 180,
       type: "dateTime",
       valueGetter: ({ value }) => value && new Date(value),
     },
     {
       field: "action",
       headerName: <strong>Ação</strong>,
-      minWidth: 200,
+      minWidth: 180,
       sortable: false,
       disableClickEventBubbling: true,
 
@@ -64,22 +76,36 @@ const DataTable = ({ dados, setDados, showAction, token, disabled, setIsLoading 
   ];
 
   useEffect(() => {
-    if (dados) {
+    if (pageState) {
       setRows(() => {
-        return dados.map((item) => ({ ...item, id: item["_id"] }));
+        console.log("mui",pageState)
+        return pageState.data?.map((item) => ({ ...item, id: item["_id"] }));
       });
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [dados, setIsLoading]);
+  }, [pageState, setIsLoading]);
+
 
   return (
     <Container>
-      <div style={{ height: 600, width: "100%" }}>
+      <div style={{ height: 650, width: "100%" }}>
         <DataGrid
+          //autoHeight
           rows={rows}
           columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10]}
+          rowCount={pageState.total}
+          loading={pageState.isLoading}
+          rowsPerPageOptions={[10, 30, 50, 70, 100]}
+          page={pageState.page - 1}
+          pageSize={pageState.pageSize}
+          pageSizeOptions={[5]}
+          paginationMode="server"
+          onPageChange={(newPage) => {
+            setPageState((old) => ({ ...old, page: newPage + 1}));
+          }}
+          onPageSizeChange={(newPageSize) =>
+            setPageState((old) => ({ ...old, pageSize: newPageSize }))
+          }
         />
       </div>
       <Dicionario toggle={toggle} modal={modal}>
@@ -87,7 +113,8 @@ const DataTable = ({ dados, setDados, showAction, token, disabled, setIsLoading 
           data={word}
           modal={modal}
           setModal={setModal}
-          setDados={setDados}
+          setPageState={setPageState}
+          pageState={pageState}
           showAction={showAction}
           token={token}
           disabled={disabled}

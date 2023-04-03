@@ -34,7 +34,8 @@ const FormWord = ({
   data,
   modal,
   setModal,
-  setDados,
+  pageState,
+  setPageState,
   showAction,
   token,
   disabled,
@@ -141,8 +142,9 @@ const FormWord = ({
   };
 
   const fetchDados = () => {
-    apiObj.palavrasMe().then((data) => {
-      setDados(data);
+    setPageState(old => ({ ...old, isLoading: true}))
+    apiObj.palavrasMe(pageState.pageSize, pageState.page).then((data) => {
+      setPageState(old => ({ ...old, isLoading: false, data: data.data, total: data.total}))
       setModal(!modal);
     });
   };

@@ -84,9 +84,9 @@ export default function SidebarAdmin(props) {
   };
 
   const icons = [
-    <Dashboard />,
-    <SettingsSuggest />,
-    <Group/>,
+    <Dashboard key={1}/>,
+    <SettingsSuggest key={2}/>,
+    <Group key={3}/>,
   ];
   const routes = [
     "/admin",

@@ -11,17 +11,25 @@ import { SpinLoader } from "../src/components/loading";
 export default function Dictionary({ token }) {
   const [isLoading, setIsLoading] = useState(false);
   const { data: session } = useSession();
-  const [dados, setDados] = useState(null);
+  const [pageState, setPageState] = useState({
+    isLoading: false,
+    data: [],
+    total: 0,
+    page: 1,
+    pageSize: 10,
+  });
 
   useEffect(() => {
     if (token) {
       const apiObj = new connectionWaiwai(token);
+      setPageState(old => ({ ...old, isLoading: true}))
       setIsLoading(true);
-      apiObj.allPalavras().then((data) => {
-        setDados(data);
+      apiObj.allPalavras(pageState.pageSize, pageState.page).then((data) => {
+        setPageState(old => ({ ...old, isLoading: false, data: data.data, total: data.total}))
       });
+       
     }
-  }, [token]);
+  }, [token, pageState.page, pageState.pageSize]);
 
   if (session) {
     return (
@@ -45,7 +53,8 @@ export default function Dictionary({ token }) {
             </Row>
             {isLoading && <SpinLoader />}
             <DataTable
-              dados={dados}
+              pageState={pageState}
+              setPageState={setPageState}
               token={token}
               disabled
               setIsLoading={setIsLoading}

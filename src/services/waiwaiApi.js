@@ -15,17 +15,17 @@ export default class connectionWaiwai {
   get baseURL() {
     return instanceApi.defaults.baseURL;
   }
-  async palavrasMe() {
+  async palavrasMe(pageSize,currentPage) {
     let response = await instanceApi.get(
-      "/palavras/me",
+      `/palavras/me?limit=${pageSize}&page=${currentPage}`, 
       headersAuthorization(this.accessToken)
     );
     const bodyRes = response.data;
     return bodyRes;
   }
-  async allPalavras() {
+  async allPalavras(pageSize,currentPage) {
     let response = await instanceApi.get(
-      "/palavras/",
+      `/palavras?limit=${pageSize}&page=${currentPage}`,
       headersAuthorization(this.accessToken)
     );
     const bodyRes = response.data;
