@@ -128,7 +128,7 @@ const Header = () => {
                   </Link>
                 </NavItem>
 
-                {/* <NavItem>
+                <NavItem>
                   <Link href="/admin/">
                     <a
                       className={
@@ -148,7 +148,7 @@ const Header = () => {
                       </b>
                     </a>
                   </Link>
-                </NavItem> */}
+                </NavItem>
               </Nav>
               {session ? (
                 <>

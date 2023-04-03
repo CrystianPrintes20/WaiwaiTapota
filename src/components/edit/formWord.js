@@ -410,16 +410,6 @@ const FormWord = ({
                             </option>
                           ))}
                         </Field>
-                        {/* <Field
-                          disabled={disabled}
-                          name="category"
-                          type="text"
-                          className={`form-control ${
-                            errors.category && touched.category
-                              ? " is-invalid"
-                              : ""
-                          }`}
-                        /> */}
                         <ErrorMessage
                           name="category"
                           component="div"

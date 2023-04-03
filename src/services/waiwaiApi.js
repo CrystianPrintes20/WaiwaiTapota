@@ -88,11 +88,21 @@ export default class connectionWaiwai {
     return bodyRes;
   }
 
-  async allUsers() {
+  async allUsers(pageSize,currentPage) {
     let response = await instanceApi.get(
-      "/usuarios/",
+      `/usuarios?limit=${pageSize}&page=${currentPage}`,
       headersAuthorization(this.accessToken)
     );
+    const bodyRes = response.data;
+    return bodyRes;
+  }
+
+  async getByIdUser(uid) {
+    let response = await instanceApi.get(
+      `/usuarios/${uid}`,
+      headersAuthorization(this.accessToken)
+    );
+    console.log("response",response)
     const bodyRes = response.data;
     return bodyRes;
   }

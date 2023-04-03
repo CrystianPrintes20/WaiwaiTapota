@@ -15,34 +15,63 @@ import {
 } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { userSchema } from "../../../schemas";
+import connectionWaiwai from "../../../services/waiwaiApi";
 
 const FormUsers = (
   data,
+  token,
   modal,
   setModal,
-  setDados,
-  token,
+  setPageState,
   disabled
 ) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formValues, setFormValues] = useState({
     username: "",
     email: "",
+    permission: 2
   });
   const [modalExcluir, setModalExcluir] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
 
   const toggleExcluir = () => setModalExcluir(!modalExcluir);
   const toggleEditar = () => setModalEditar(!modalEditar);
+  console.log("qde",token)
+
+
+  const apiObj = new connectionWaiwai(token)
+  const defaultPermission = [
+    {
+      value: "0",
+      label: "Administrador",
+    },
+    {
+      value: "1",
+      label: "Colaborador",
+    },
+    {
+      value: "2",
+      label: "Visitante",
+    },
+  ];
 
   useEffect(() => {
     if (data) {
-      setFormValues({
-        username: data.data.username || formValues.username,
-        email: data.data.email || formValues.email,
-      });
+      apiObj.getByIdUser(data.data["id"]).then((json) => {
+        setFormValues({
+          ...json,
+          username: json.data.username || formValues.username,
+          email: json.data.email || formValues.email,
+          permission: json.data.permission || formValues.permission
+        });
+      })
+     
     }
-  }, data);
+  }, [data]);
+
+  useEffect(()=>{
+    console.log(token)
+  }, [token])
 
   return (
     <Container>
@@ -54,6 +83,7 @@ const FormUsers = (
                 initialValues={{
                   username: formValues.username,
                   email: formValues.email,
+                  permission: formValues.permission
                 }}
                 validationSchema={userSchema}
                 enableReinitialize
@@ -185,6 +215,40 @@ const FormUsers = (
                         />
                         <ErrorMessage
                           name="email"
+                          component="div"
+                          className="invalid-feedback"
+                        />
+                      </FormGroup>
+                    </Row>
+                    <Row>
+                    <FormGroup className="w-50">
+                        <Label htmlFor="permission">Permissão de Usuário</Label>
+                        <Field
+                          disabled={disabled}
+                          name="permission"
+                          as="select"
+                          className={`form-control ${
+                            errors.permission && touched.permission
+                              ? " is-invalid"
+                              : ""
+                          }`}
+                        >
+                          {defaultPermission.map((permission) => (
+                            <option
+                              key={permission.value}
+                              value={permission.value}
+                              selected={
+                                permission.value === formValues.permission
+                                  ? true
+                                  : false
+                              }
+                            >
+                              {permission.label}
+                            </option>
+                          ))}
+                        </Field>
+                        <ErrorMessage
+                          name="permission"
                           component="div"
                           className="invalid-feedback"
                         />
