@@ -102,7 +102,25 @@ export default class connectionWaiwai {
       `/usuarios/${uid}`,
       headersAuthorization(this.accessToken)
     );
-    console.log("response",response)
+    const bodyRes = response.data;
+    return bodyRes;
+  }
+
+  async updateUsers(uid, data) {
+    let response = await instanceApi.put(
+      `/usuarios/${uid}`,
+      data,
+      headersAuthorization(this.accessToken)
+    );
+    const bodyRes = response;
+    return bodyRes;
+  }
+
+  async deleteUsers(uid) {
+    let response = await instanceApi.delete(
+      `/usuarios/${uid}`,
+      headersAuthorization(this.accessToken)
+    );
     const bodyRes = response.data;
     return bodyRes;
   }

@@ -177,7 +177,6 @@ export default function RegisterWords({ token }) {
                                 uploadRecord
                               );
                             }
-                            console.log("ss", response);
                             if (response.status === 201) {
                               toast.success(
                                 "Nova palavra adicionada com sucesso!",

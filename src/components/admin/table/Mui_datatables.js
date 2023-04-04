@@ -61,12 +61,12 @@ const DataTableAdmin = ({
         />
       </div>
       <ModalAdminCustom toggle={toggle} modal={modal}>
-        {console.log("hhhh", token)}
         <FormUsers
           data={word}
           token={token}
           modal={modal}
           setModal={setModal}
+          pageState={pageState}
           setPageState={setPageState}
           disabled={disabled}
         />

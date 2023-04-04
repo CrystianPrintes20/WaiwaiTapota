@@ -11,7 +11,6 @@ export default function ManegerWords({ token }) {
 
   useEffect(() => {
     if (token) {
-      console.log(token)
       const apiObj = new connectionWaiwai(token);
       setIsLoading(true)
       apiObj.palavrasMe().then((data) => {
@@ -28,9 +27,9 @@ export default function ManegerWords({ token }) {
               <span className="label label-danger label-rounded">
                Gereciamento de palavras
               </span>
-              <h2 className="title">Palavras cadastradas pelo usuários.</h2>
+              <h2 className="title">Palavras cadastradas pelos usuários.</h2>
               <h6 className="subtitle">
-                Encontre aqui todas as suas palavras cadastradas! Veja os
+                Encontre aqui todas as palavras cadastradas! Veja os
                 detalhes, expressões, imagens, áudio e significados em um
                 formato prático e fácil de usar.
               </h6>

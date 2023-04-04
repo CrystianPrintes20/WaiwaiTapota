@@ -24,7 +24,6 @@ export default function ListUsers({ token }) {
       setIsLoading(true);
       setPageState((old) => ({ ...old, isLoading: true }));
       apiObj.allUsers(pageState.pageSize, pageState.page).then((data) => {
-        console.log(data)
         setPageState((old) => ({
           ...old,
           isLoading: false,

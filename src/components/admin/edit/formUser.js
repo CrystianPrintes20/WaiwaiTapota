@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Button,
   Label,
@@ -14,32 +13,40 @@ import {
   ModalFooter,
 } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import { useEffect, useState } from "react";
 import { userSchema } from "../../../schemas";
 import connectionWaiwai from "../../../services/waiwaiApi";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const FormUsers = (
+const FormUsers = ({
   data,
   token,
   modal,
   setModal,
+  pageState,
   setPageState,
-  disabled
-) => {
+  disabled,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formValues, setFormValues] = useState({
     username: "",
     email: "",
-    permission: 2
+    permission: 2,
   });
   const [modalExcluir, setModalExcluir] = useState(false);
-  const [modalEditar, setModalEditar] = useState(false);
-
+  const options = {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
+  };
   const toggleExcluir = () => setModalExcluir(!modalExcluir);
-  const toggleEditar = () => setModalEditar(!modalEditar);
-  console.log("qde",token)
 
-
-  const apiObj = new connectionWaiwai(token)
+  const apiObj = new connectionWaiwai(token);
   const defaultPermission = [
     {
       value: "0",
@@ -55,26 +62,86 @@ const FormUsers = (
     },
   ];
 
+  const notify = () => {
+    toast("Default Notification !");
+
+    toast.success("Success Notification !", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+
+    toast.error("Error Notification !", {
+      position: toast.POSITION.TOP_LEFT,
+    });
+
+    toast.warn("Warning Notification !", {
+      position: toast.POSITION.BOTTOM_LEFT,
+    });
+
+    toast.info("Info Notification !", {
+      position: toast.POSITION.BOTTOM_CENTER,
+    });
+
+    toast("Custom Style Notification with css class!", {
+      position: toast.POSITION.BOTTOM_RIGHT,
+      className: "foo-bar",
+    });
+  };
+  const handleDeleteUser = async () => {
+    await handleMutationDelete();
+  };
+
+  const fetchDados = () => {
+    setPageState((old) => ({ ...old, isLoading: true }));
+    apiObj.allUsers(pageState.pageSize, pageState.page).then((data) => {
+      setPageState((old) => ({
+        ...old,
+        isLoading: false,
+        data: data.data,
+        total: data.total,
+      }));
+      setModal(!modal);
+    });
+  };
+
+  const handleMutationDelete = async () => {
+    try {
+      await apiObj.deleteUsers(data["id"]);
+      setModal(!modal);
+      toast.success("Usuário excluido com sucesso!", options);
+      fetchDados();
+    } catch (err) {
+      toast.error("Erro ao excluir usuário.", {
+        position: "top-right",
+        autoClose: 7000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+      });
+      console.error({
+        type: "error",
+        message: "An error ocurred. Please, try again.",
+      });
+    }
+  };
+
   useEffect(() => {
     if (data) {
-      apiObj.getByIdUser(data.data["id"]).then((json) => {
+      apiObj.getByIdUser(data["id"]).then((json) => {
         setFormValues({
           ...json,
-          username: json.data.username || formValues.username,
-          email: json.data.email || formValues.email,
-          permission: json.data.permission || formValues.permission
+          username: json.username || formValues.username,
+          email: json.email || formValues.email,
+          permission: json.permission || formValues.permission,
         });
-      })
-     
+      });
     }
   }, [data]);
 
-  useEffect(()=>{
-    console.log(token)
-  }, [token])
-
   return (
     <Container>
+      <ToastContainer />
       <Row>
         <Col sm="12">
           <Card>
@@ -83,86 +150,23 @@ const FormUsers = (
                 initialValues={{
                   username: formValues.username,
                   email: formValues.email,
-                  permission: formValues.permission
+                  permission: formValues.permission,
                 }}
                 validationSchema={userSchema}
                 enableReinitialize
                 onSubmit={async (fields) => {
                   try {
                     setIsLoading(true);
-                    const response = await apiObj.updatePalavra(
+                    const response = await apiObj.updateUsers(
                       data["id"],
                       JSON.stringify(fields)
                     );
+
                     if (response.status === 204) {
-                      toast.success("Palavra atualizada com sucesso!", options);
-                    }
-                    if (imageChanged) {
-                      if (formValues.image) {
-                        if (image) {
-                          await apiObj.deleteUpload(formValues.image);
-                          const blobData = await (
-                            await fetch(image.src)
-                          ).blob();
-                          let uploadImage = new FormData();
-                          uploadImage.append("file", blobData, image.name);
-                          uploadImage.append("oidword", data._id);
-                          let responseImage = await apiObj.createUpload(
-                            uploadImage
-                          );
-                        } else {
-                          await apiObj.deleteUpload(formValues.image);
-                        }
-                      } else {
-                        if (image) {
-                          const blobData = await (
-                            await fetch(image.src)
-                          ).blob();
-                          let uploadImage = new FormData();
-                          uploadImage.append("file", blobData, image.name);
-                          uploadImage.append("oidword", data._id);
-                          let responseImage = await apiObj.createUpload(
-                            uploadImage
-                          );
-                        }
-                      }
-                    }
-                    if (audioChanged) {
-                      if (formValues.audio) {
-                        if (record) {
-                          await apiObj.deleteUpload(formValues.audio);
-                          const event = new Date();
-                          let uploadRecord = new FormData();
-                          uploadRecord.append(
-                            "file",
-                            record,
-                            `${event.toISOString()}.weba`
-                          );
-                          uploadRecord.append("oidword", data["_id"]);
-                          let responseRecord = await apiObj.createUpload(
-                            uploadRecord
-                          );
-                        } else {
-                          await apiObj.deleteUpload(formValues.audio);
-                        }
-                      } else {
-                        if (record) {
-                          const event = new Date();
-                          let uploadRecord = new FormData();
-                          uploadRecord.append(
-                            "file",
-                            record,
-                            `${event.toISOString()}.weba`
-                          );
-                          uploadRecord.append("oidword", data["_id"]);
-                          let responseRecord = await apiObj.createUpload(
-                            uploadRecord
-                          );
-                        }
-                      }
+                      toast.success("Usuário Alterado com sucesso!", options);
                     }
                   } catch (err) {
-                    toast.error("Erro ao atualizar palavra.", {
+                    toast.error("Erro ao atualizar usuário.", {
                       position: "top-right",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -221,7 +225,7 @@ const FormUsers = (
                       </FormGroup>
                     </Row>
                     <Row>
-                    <FormGroup className="w-50">
+                      <FormGroup className="w-50">
                         <Label htmlFor="permission">Permissão de Usuário</Label>
                         <Field
                           disabled={disabled}
@@ -279,31 +283,16 @@ const FormUsers = (
             <div>
               <Modal isOpen={modalExcluir} toggle={toggleExcluir}>
                 <ModalHeader toggle={toggleExcluir}>
-                  Excluir palavra
+                  Excluir usuário
                 </ModalHeader>
                 <ModalBody>
-                  Tem certeza que deseja excluir esta palavra?
+                  Tem certeza que deseja excluir este usuário?
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="danger" onClick={() => handleDeleteWord()}>
+                  <Button color="danger" onClick={() => handleDeleteUser()}>
                     Sim, excluir
                   </Button>{" "}
                   <Button color="secondary" onClick={toggleExcluir}>
-                    Cancelar
-                  </Button>
-                </ModalFooter>
-              </Modal>
-
-              <Modal isOpen={modalEditar} toggle={toggleEditar}>
-                <ModalHeader toggle={toggleEditar}>Editar palavra</ModalHeader>
-                <ModalBody>
-                  Todas suas mudanças serão aplicadas, confirme as alterações.
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="success" onClick={() => handleDeleteWord()}>
-                    Confirmar
-                  </Button>{" "}
-                  <Button color="secondary" onClick={toggleEditar}>
                     Cancelar
                   </Button>
                 </ModalFooter>
