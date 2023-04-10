@@ -99,13 +99,13 @@ export default function ListUsers({ token }) {
           <DataTableAdmin
             pageState={pageState}
             setPageState={setPageState}
-            setIsLoading={setIsLoading}
             token={token}
-            showAction
+            setIsLoading={setIsLoading}
             columns={columns}
             word={word}
             modal={modal}
             setModal={setModal}
+
           />
         </CardBody>
       </Card>
