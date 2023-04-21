@@ -49,43 +49,19 @@ const FormUsers = ({
   const apiObj = new connectionWaiwai(token);
   const defaultPermission = [
     {
-      value: "0",
-      label: "Administrador",
-    },
-    {
-      value: "1",
+      value: 1,
       label: "Colaborador",
     },
     {
-      value: "2",
+      value: 2,
       label: "Visitante",
+    },
+    {
+      value: 3,
+      label: "Administrador",
     },
   ];
 
-  const notify = () => {
-    toast("Default Notification !");
-
-    toast.success("Success Notification !", {
-      position: toast.POSITION.TOP_CENTER,
-    });
-
-    toast.error("Error Notification !", {
-      position: toast.POSITION.TOP_LEFT,
-    });
-
-    toast.warn("Warning Notification !", {
-      position: toast.POSITION.BOTTOM_LEFT,
-    });
-
-    toast.info("Info Notification !", {
-      position: toast.POSITION.BOTTOM_CENTER,
-    });
-
-    toast("Custom Style Notification with css class!", {
-      position: toast.POSITION.BOTTOM_RIGHT,
-      className: "foo-bar",
-    });
-  };
   const handleDeleteUser = async () => {
     await handleMutationDelete();
   };
@@ -155,11 +131,15 @@ const FormUsers = ({
                 validationSchema={userSchema}
                 enableReinitialize
                 onSubmit={async (fields) => {
+                  const fieldsFormatted = {
+                    ...fields,
+                    permission: parseInt(fields.permission)
+                  }
                   try {
                     setIsLoading(true);
                     const response = await apiObj.updateUsers(
                       data["id"],
-                      JSON.stringify(fields)
+                      JSON.stringify(fieldsFormatted)
                     );
 
                     if (response.status === 204) {
@@ -189,7 +169,7 @@ const FormUsers = ({
                       <FormGroup className="w-50 pr-3">
                         <Label htmlFor="username">Nome de usuário</Label>
                         <Field
-                          disabled={disabled}
+                          disabled={true}
                           name="username"
                           type="textarea"
                           rows="1"
@@ -209,7 +189,7 @@ const FormUsers = ({
                       <FormGroup className="w-50">
                         <Label htmlFor="email">Email</Label>
                         <Field
-                          disabled={disabled}
+                          disabled={true}
                           name="email"
                           type="textarea"
                           rows="1"
@@ -253,6 +233,42 @@ const FormUsers = ({
                         </Field>
                         <ErrorMessage
                           name="permission"
+                          component="div"
+                          className="invalid-feedback"
+                        />
+                      </FormGroup>
+                    </Row>
+                    <Row>
+                      <FormGroup className="w-50 pr-3">
+                        <Label htmlFor="password">Alterar senha</Label>
+                        <Field
+                          name="password"
+                          type="password"
+                          className={`form-control${
+                            errors.password && touched.password
+                              ? " is-invalid"
+                              : ""
+                          }`}
+                        />
+                        <ErrorMessage
+                          name="password"
+                          component="div"
+                          className="invalid-feedback"
+                        />
+                      </FormGroup>
+                      <FormGroup className="w-50">
+                        <Label htmlFor="confirmPassword">Confirmar Senha</Label>
+                        <Field
+                          name="confirmPassword"
+                          type="password"
+                          className={`form-control${
+                            errors.confirmPassword && touched.confirmPassword
+                              ? " is-invalid"
+                              : ""
+                          }`}
+                        />
+                        <ErrorMessage
+                          name="confirmPassword"
                           component="div"
                           className="invalid-feedback"
                         />

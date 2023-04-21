@@ -62,6 +62,7 @@ const auth = (req, res) => {
             return {
               email: authAccess.getEmail,
               username: authAccess.getUsername,
+              permission: authAccess.decodedToken.permission
             };
           } catch (error) {
             console.log(error);
