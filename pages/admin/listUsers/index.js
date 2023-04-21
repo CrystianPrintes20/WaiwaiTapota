@@ -1,10 +1,10 @@
-import SidebarAdmin from "../../../src/components/sidebar";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { Card, CardBody, Row, Col, Button } from "reactstrap";
-import { useEffect, useState } from "react";
 import { SpinLoader } from "../../../src/components/loading";
 import DataTableAdmin from "../../../src/components/admin/table/Mui_datatables";
 import connectionWaiwai from "../../../src/services/waiwaiApi";
 import { useModalDicionario } from "../../../src/hooks/useModalDicionario";
+import SidebarAdmin from "../../../src/components/sidebar";
 
 export default function ListUsers({ token }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,66 +18,91 @@ export default function ListUsers({ token }) {
     pageSize: 10,
   });
 
-  useEffect(() => {
-    if (token) {
-      const apiObj = new connectionWaiwai(token);
-      setIsLoading(true);
-      setPageState((old) => ({ ...old, isLoading: true }));
-      apiObj.allUsers(pageState.pageSize, pageState.page).then((data) => {
-        setPageState((old) => ({
-          ...old,
-          isLoading: false,
-          data: data.data,
-          total: data.total,
-        }));
-      });
-    }
-  }, [token, pageState.pageSize, pageState.page]);
+  const onClick = useCallback(
+    (params) => {
+      setWord(params.row);
+      setModal(!modal);
+    },
+    [modal]
+  );
 
-  let columns = [
-    {
-      field: "username",
-      headerName: <strong>Username</strong>,
-      minWidth: 200,
-    },
-    { field: "email", headerName: <strong>Email</strong>, minWidth: 250 },
-    { field: "permission", headerName: <strong>Permissão</strong>, minWidth: 100 },
-    {
-      field: "created",
-      headerName: <strong>Cadastrado em</strong>,
-      minWidth: 200,
-      type: "dateTime",
-      valueGetter: ({ value }) => value && new Date(value),
-    },
-    {
-      field: "updated",
-      headerName: <strong>Ultima modificação</strong>,
-      minWidth: 180,
-      type: "dateTime",
-      valueGetter: ({ value }) => value && new Date(value),
-    },
-    {
-      field: "action",
-      headerName: <strong>Ação</strong>,
-      minWidth: 180,
-      sortable: false,
-      disableClickEventBubbling: true,
-
-      renderCell: (params) => {
-        const onClick = (e) => {
-          setWord(params.row);
-          setModal(!modal);
-        };
-        return (
-          <div>
-            <Button variant="outlined" color="danger" onClick={onClick}>
-              Detalhes
-            </Button>
-          </div>
-        );
+  const columns = useMemo(
+    () => [
+      {
+        field: "username",
+        headerName: <strong>Username</strong>,
+        minWidth: 200,
       },
-    },
-  ];
+      { field: "email", headerName: <strong>Email</strong>, minWidth: 250 },
+      {
+        field: "permission",
+        headerName: <strong>Permissão</strong>,
+        minWidth: 100,
+      },
+      {
+        field: "created",
+        headerName: <strong>Cadastrado em</strong>,
+        minWidth: 200,
+        type: "dateTime",
+        valueGetter: ({ value }) => value && new Date(value),
+      },
+      {
+        field: "updated",
+        headerName: <strong>Ultima modificação</strong>,
+        minWidth: 180,
+        type: "dateTime",
+        valueGetter: ({ value }) => value && new Date(value),
+      },
+      {
+        field: "action",
+        headerName: <strong>Ação</strong>,
+        minWidth: 180,
+        sortable: false,
+        disableClickEventBubbling: true,
+
+        renderCell: (params) => {
+          return (
+            <div>
+              <Button
+                variant="outlined"
+                color="danger"
+                onClick={() => onClick(params)}
+              >
+                Detalhes
+              </Button>
+            </div>
+          );
+        },
+      },
+    ],
+    [onClick]
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (token) {
+        const apiObj = new connectionWaiwai(token);
+        setIsLoading(true);
+        setPageState((old) => ({ ...old, isLoading: true }));
+        try {
+          const { data, total } = await apiObj.allUsers(
+            pageState.pageSize,
+            pageState.page
+          );
+          setPageState((old) => ({
+            ...old,
+            isLoading: false,
+            data,
+            total,
+          }));
+        } catch (error) {
+          console.error("Failed to fetch data:", error);
+          setIsLoading(false);
+        }
+      }
+    };
+    fetchData();
+  }, [token, pageState.pageSize, pageState.page]);
 
   return (
     <SidebarAdmin>
@@ -105,7 +130,6 @@ export default function ListUsers({ token }) {
             word={word}
             modal={modal}
             setModal={setModal}
-
           />
         </CardBody>
       </Card>

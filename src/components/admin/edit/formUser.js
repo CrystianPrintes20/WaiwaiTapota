@@ -50,11 +50,11 @@ const FormUsers = ({
   const defaultPermission = [
     {
       value: 1,
-      label: "Colaborador",
+      label: "Visitante",
     },
     {
       value: 2,
-      label: "Visitante",
+      label: "Colaborador",
     },
     {
       value: 3,
