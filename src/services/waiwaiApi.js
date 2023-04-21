@@ -88,9 +88,37 @@ export default class connectionWaiwai {
     return bodyRes;
   }
 
-  async allUsers() {
+  async allUsers(pageSize,currentPage) {
     let response = await instanceApi.get(
-      "/usuarios/",
+      `/usuarios?limit=${pageSize}&page=${currentPage}`,
+      headersAuthorization(this.accessToken)
+    );
+    const bodyRes = response.data;
+    return bodyRes;
+  }
+
+  async getByIdUser(uid) {
+    let response = await instanceApi.get(
+      `/usuarios/${uid}`,
+      headersAuthorization(this.accessToken)
+    );
+    const bodyRes = response.data;
+    return bodyRes;
+  }
+
+  async updateUsers(uid, data) {
+    let response = await instanceApi.put(
+      `/usuarios/${uid}`,
+      data,
+      headersAuthorization(this.accessToken)
+    );
+    const bodyRes = response;
+    return bodyRes;
+  }
+
+  async deleteUsers(uid) {
+    let response = await instanceApi.delete(
+      `/usuarios/${uid}`,
       headersAuthorization(this.accessToken)
     );
     const bodyRes = response.data;

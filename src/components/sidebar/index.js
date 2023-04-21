@@ -150,12 +150,12 @@ export default function SidebarAdmin(props) {
                 <ListItemIcon className="text-white">
                   {icons[index]}
                 </ListItemIcon>
-                <Link href={`${routes[index]}`}>
+                <Link href={`${routes[index]}`} className="mb-3">
                   <a
                     className={
                       router.pathname == `${routes[index]}`
-                        ? "text-success nav-link"
-                        : "text-white nav-link"
+                        ? "text-success"
+                        : "text-white"
                     }
                   >
                     <ListItemText primary={text} />

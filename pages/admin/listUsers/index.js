@@ -6,30 +6,42 @@ import DataTableAdmin from "../../../src/components/admin/table/Mui_datatables";
 import connectionWaiwai from "../../../src/services/waiwaiApi";
 import { useModalDicionario } from "../../../src/hooks/useModalDicionario";
 
-export default function ListUsers({token}) {
+export default function ListUsers({ token }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [dados, setDados] = useState(null);
   const [word, setWord] = useState(null);
   const [modal, setModal] = useModalDicionario();
-
+  const [pageState, setPageState] = useState({
+    isLoading: false,
+    data: [],
+    total: 0,
+    page: 1,
+    pageSize: 10,
+  });
 
   useEffect(() => {
     if (token) {
       const apiObj = new connectionWaiwai(token);
-      setIsLoading(true)
-      apiObj.allUsers().then((data) => {
-        setDados(data);
+      setIsLoading(true);
+      setPageState((old) => ({ ...old, isLoading: true }));
+      apiObj.allUsers(pageState.pageSize, pageState.page).then((data) => {
+        setPageState((old) => ({
+          ...old,
+          isLoading: false,
+          data: data.data,
+          total: data.total,
+        }));
       });
     }
-  }, [token]);
+  }, [token, pageState.pageSize, pageState.page]);
 
   let columns = [
     {
       field: "username",
       headerName: <strong>Username</strong>,
-      minWidth: 250,
+      minWidth: 200,
     },
     { field: "email", headerName: <strong>Email</strong>, minWidth: 250 },
+    { field: "permission", headerName: <strong>Permissão</strong>, minWidth: 100 },
     {
       field: "created",
       headerName: <strong>Cadastrado em</strong>,
@@ -40,14 +52,14 @@ export default function ListUsers({token}) {
     {
       field: "updated",
       headerName: <strong>Ultima modificação</strong>,
-      minWidth: 200,
+      minWidth: 180,
       type: "dateTime",
       valueGetter: ({ value }) => value && new Date(value),
     },
     {
       field: "action",
       headerName: <strong>Ação</strong>,
-      minWidth: 200,
+      minWidth: 180,
       sortable: false,
       disableClickEventBubbling: true,
 
@@ -78,22 +90,22 @@ export default function ListUsers({token}) {
               </span>
               <h2 className="title">Gerencie os usuarios de forma rápida.</h2>
               <h6 className="subtitle">
-                Encontre aqui as opções de alterar as informações de usuarios e a opção de 
-                excluir um determinado usuario.
+                Encontre aqui as opções de alterar as informações de usuarios e
+                a opção de excluir um determinado usuario.
               </h6>
             </Col>
           </Row>
           {isLoading && <SpinLoader />}
           <DataTableAdmin
-            dados={dados}
-            setIsLoading={setIsLoading}
-            setDados={setDados}
+            pageState={pageState}
+            setPageState={setPageState}
             token={token}
-            showAction
+            setIsLoading={setIsLoading}
             columns={columns}
             word={word}
             modal={modal}
             setModal={setModal}
+
           />
         </CardBody>
       </Card>

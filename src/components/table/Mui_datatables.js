@@ -78,7 +78,6 @@ const DataTable = ({
   useEffect(() => {
     if (pageState) {
       setRows(() => {
-        console.log("mui",pageState)
         return pageState.data?.map((item) => ({ ...item, id: item["_id"] }));
       });
       setIsLoading(false);

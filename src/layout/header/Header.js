@@ -17,7 +17,7 @@ import {
 } from "reactstrap";
 import Image from "next/image";
 import versaoWeb from "../../assets/aplicativoTapota/icones-logo-tapota/tapotaIconSF.png";
-import {useSession, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -127,28 +127,29 @@ const Header = () => {
                     </a>
                   </Link>
                 </NavItem>
-
-                {/* <NavItem>
-                  <Link href="/admin/">
-                    <a
-                      className={
-                        router.pathname == "/admin/"
-                          ? "text-white nav-link"
-                          : "nav-link"
-                      }
-                    >
-                      <b
+                {session?.user?.permission == 3 && (
+                  <NavItem>
+                    <Link href="/admin/">
+                      <a
                         className={
                           router.pathname == "/admin/"
-                            ? "border-bottom border-danger pb-0"
-                            : null
+                            ? "text-white nav-link"
+                            : "nav-link"
                         }
                       >
-                        Admin
-                      </b>
-                    </a>
-                  </Link>
-                </NavItem> */}
+                        <b
+                          className={
+                            router.pathname == "/admin/"
+                              ? "border-bottom border-danger pb-0"
+                              : null
+                          }
+                        >
+                          Admin
+                        </b>
+                      </a>
+                    </Link>
+                  </NavItem>
+                )}
               </Nav>
               {session ? (
                 <>

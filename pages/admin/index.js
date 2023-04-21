@@ -1,9 +1,10 @@
 import SidebarAdmin from "../../src/components/sidebar";
+import WelcomePage from "./dashboard";
 
 export default function AdminHome(props) {
   return (
     <SidebarAdmin>
-      <div><h1> telfdlfklfkldskflsd</h1></div>
+      <WelcomePage/>
     </SidebarAdmin>
   );
 }

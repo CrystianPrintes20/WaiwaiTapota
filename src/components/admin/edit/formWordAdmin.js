@@ -14,31 +14,30 @@ import {
   ModalFooter,
 } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import { useEffect, useState, useCallback } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
-import Dropzone from "../dragDrop";
-import Image from "../PreviewImagem";
+import Dropzone from "../../dragDrop";
+import Image from "../../PreviewImagem";
 import cuid from "cuid";
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 import ReactAudioPlayer from "react-audio-player";
-import connectionWaiwai from "../../services/waiwaiApi";
+import connectionWaiwai from "../../../services/waiwaiApi";
+import { registerWordsSchema } from "../../../schemas";
 
 const MyInput = ({ field, form, ...props }) => {
   return <Input {...field} {...props} />;
 };
 
-const FormWord = ({
+const FormWordAdmin = ({
   data,
+  token,
   modal,
   setModal,
   pageState,
   setPageState,
-  showAction,
-  token,
   disabled,
+  showAction
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -65,10 +64,8 @@ const FormWord = ({
     progress: undefined,
   };
   const [modalExcluir, setModalExcluir] = useState(false);
-  const [modalEditar, setModalEditar] = useState(false);
 
   const toggleExcluir = () => setModalExcluir(!modalExcluir);
-  const toggleEditar = () => setModalEditar(!modalEditar);
 
   const apiObj = new connectionWaiwai(token);
   const defaultCategories = [
@@ -123,14 +120,6 @@ const FormWord = ({
     });
   }, []);
 
-  const validationSchema = Yup.object().shape({
-    meaningWaiwai: Yup.string().required("Este campo é obrigatorio."),
-    meaningPort: Yup.string().required("Este campo é obrigatorio."),
-    exampleSentence: Yup.string().required("Este campo é obrigatorio."),
-    category: Yup.string().required("Este campo é obrigatorio."),
-
-  });
-
   const getUrlElement = (object) => {
     if (typeof object == "string") {
       return object;
@@ -142,9 +131,14 @@ const FormWord = ({
   };
 
   const fetchDados = () => {
-    setPageState(old => ({ ...old, isLoading: true}))
-    apiObj.palavrasMe(pageState.pageSize, pageState.page).then((data) => {
-      setPageState(old => ({ ...old, isLoading: false, data: data.data, total: data.total}))
+    setPageState((old) => ({ ...old, isLoading: true }));
+    apiObj.allPalavras(pageState.pageSize, pageState.page).then((data) => {
+      setPageState((old) => ({
+        ...old,
+        isLoading: false,
+        data: data.data,
+        total: data.total,
+      }));
       setModal(!modal);
     });
   };
@@ -199,6 +193,7 @@ const FormWord = ({
 
   return (
     <Container>
+      <ToastContainer />
       <Row>
         <Col sm="12">
           <Card>
@@ -213,7 +208,7 @@ const FormWord = ({
                   synonymPort: formValues.synonymPort,
                   synonymWaiwai: formValues.synonymWaiwai,
                 }}
-                validationSchema={validationSchema}
+                validationSchema={registerWordsSchema}
                 enableReinitialize
                 onSubmit={async (fields) => {
                   try {
@@ -604,21 +599,6 @@ const FormWord = ({
                   </Button>
                 </ModalFooter>
               </Modal>
-
-              <Modal isOpen={modalEditar} toggle={toggleEditar}>
-                <ModalHeader toggle={toggleEditar}>Editar palavra</ModalHeader>
-                <ModalBody>
-                  Todas suas mudanças serão aplicadas, confirme as alterações.
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="success" onClick={() => handleDeleteWord()}>
-                    Confirmar
-                  </Button>{" "}
-                  <Button color="secondary" onClick={toggleEditar}>
-                    Cancelar
-                  </Button>
-                </ModalFooter>
-              </Modal>
             </div>
           </Card>
         </Col>
@@ -627,4 +607,4 @@ const FormWord = ({
   );
 };
 
-export default FormWord;
+export default FormWordAdmin;
