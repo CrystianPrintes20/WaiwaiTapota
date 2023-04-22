@@ -17,11 +17,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
-import {
-  Dashboard,
-  SettingsSuggest,
-  Group,
-} from "@mui/icons-material";
+import { Dashboard, SettingsSuggest, Group, } from "@mui/icons-material";
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import versaoWeb from "../../assets/aplicativoTapota/icones-logo-tapota/logobrancov1.png";
 import Image from "next/image";
 import Link from "next/link";
@@ -84,20 +81,20 @@ export default function SidebarAdmin(props) {
   };
 
   const icons = [
-    <Dashboard key={1}/>,
-    <SettingsSuggest key={2}/>,
-    <Group key={3}/>,
+    <Dashboard key={1} />,
+    <SettingsSuggest key={2} />,
+    <Group key={3} />,
   ];
-  const routes = [
-    "/admin",
-    "/admin/manegerWords",
-    "/admin/listUsers",
-  ];
+  const routes = ["/admin/adminHome", "/admin/manegerWords", "/admin/listUsers"];
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="absolute" open={open} sx={{ backgroundColor: "#702119",  zIndex: "9" }}>
+      <AppBar
+        position="absolute"
+        open={open}
+        sx={{ backgroundColor: "#702119", zIndex: "9" }}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -120,7 +117,7 @@ export default function SidebarAdmin(props) {
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
-            backgroundColor: "#702119"
+            backgroundColor: "#702119",
             /* backgroundImage: "url(./androidLarge.png)", */
           },
         }}
@@ -140,49 +137,45 @@ export default function SidebarAdmin(props) {
         </DrawerHeader>
         <Divider className="bg-primary" />
         <List>
-          {[
-            "Dashboard",
-            "Gerenciar Palavras",
-            "Lista de Usuários",
-          ].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton>
-                <ListItemIcon className="text-white">
-                  {icons[index]}
-                </ListItemIcon>
-                <Link href={`${routes[index]}`} className="mb-3">
-                  <a
-                    className={
-                      router.pathname == `${routes[index]}`
-                        ? "text-success"
-                        : "text-white"
-                    }
-                  >
-                    <ListItemText primary={text} />
-                  </a>
-                </Link>
-              </ListItemButton>
-              {/*  <Link href={`${routes[index]}`}>
-                <a
-                  className={
-                    router.pathname == `${routes[index]}` ? "text-success nav-link" : "text-white nav-link"
-                  }
-                >
-                  <ListItemText
-                  primary={text} sx={{ opacity: open ? 1 : 0 }}
-                    className={
-                      router.pathname == `${routes[index]}`
-                        ? "border-bottom border-ligth pb-0"
-                        : null
-                    }
-                  />
-                </a>
-              </Link> */}
-            </ListItem>
-          ))}
+          {["Dashboard", "Gerenciar Palavras", "Lista de Usuários"].map(
+            (text, index) => (
+              <ListItem key={text} disablePadding sx={{ display: "block" }}>
+                <ListItemButton>
+                  <ListItemIcon className="text-white">
+                    {icons[index]}
+                  </ListItemIcon>
+                  <Link href={`${routes[index]}`} className="mb-3">
+                    <a
+                      className={
+                        router.pathname == `${routes[index]}`
+                          ? "text-success"
+                          : "text-white"
+                      }
+                    >
+                      <ListItemText primary={text} />
+                    </a>
+                  </Link>
+                </ListItemButton>
+              </ListItem>
+            )
+          )}
         </List>
 
         <List style={{ marginTop: `auto` }}>
+          <ListItem className="text-white my-2">
+            <ListItemIcon className="text-white"><ExitToAppIcon/></ListItemIcon>
+            <Link href={"../"}>
+              <a
+                className={
+                  router.pathname == "../"
+                    ? "text-success nav-link"
+                    : "text-white nav-link"
+                }
+              >
+                <ListItemText>Sair do admin</ListItemText>
+              </a>
+            </Link>
+          </ListItem>
           <Divider className="bg-primary" />
 
           <ListItem className="text-white my-2">

@@ -25,6 +25,7 @@ import cuid from "cuid";
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 import ReactAudioPlayer from "react-audio-player";
 import connectionWaiwai from "../../services/waiwaiApi";
+import { registerWordsSchema } from "../../schemas";
 
 const MyInput = ({ field, form, ...props }) => {
   return <Input {...field} {...props} />;
@@ -108,46 +109,52 @@ const FormWord = ({
     setRecord(blob);
   };
 
-  const onDrop = useCallback((acceptedFiles) => {
-    acceptedFiles.map((file) => {
-      const reader = new FileReader();
-      let hashImage = cuid();
-      reader.onload = function (e) {
-        if (showAction) {
-          setImageChanged(true);
-        }
-        setImage({ id: hashImage, src: e.target.result, name: file.name });
-      };
-      reader.readAsDataURL(file);
-      return file;
-    });
-  }, []);
-
-  const validationSchema = Yup.object().shape({
-    meaningWaiwai: Yup.string().required("Este campo é obrigatorio."),
-    meaningPort: Yup.string().required("Este campo é obrigatorio."),
-    exampleSentence: Yup.string().required("Este campo é obrigatorio."),
-    category: Yup.string().required("Este campo é obrigatorio."),
-
-  });
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      acceptedFiles.forEach(async (file) => {
+        const hashImage = cuid();
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          setImage((prevImage) => ({
+            ...prevImage,
+            id: hashImage,
+            src: e.target.result,
+            name: file.name,
+          }));
+          if (showAction) {
+            setImageChanged(true);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    },
+    [setImage, setImageChanged, showAction]
+  );
 
   const getUrlElement = (object) => {
-    if (typeof object == "string") {
-      return object;
-    } else return URL.createObjectURL(object);
+    return typeof object === "string" ? object : URL.createObjectURL(object);
   };
 
   const handleDeleteWord = async () => {
     await handleMutationDelete();
   };
 
-  const fetchDados = () => {
-    setPageState(old => ({ ...old, isLoading: true}))
-    apiObj.palavrasMe(pageState.pageSize, pageState.page).then((data) => {
-      setPageState(old => ({ ...old, isLoading: false, data: data.data, total: data.total}))
+  const fetchDados = async () => {
+    setPageState((old) => ({ ...old, isLoading: true }));
+    try {
+      const { data, total } = await apiObj.palavrasMe(pageState.pageSize, pageState.page);
+      setPageState((old) => ({
+        ...old,
+        isLoading: false,
+        data,
+        total,
+      }));
       setModal(!modal);
-    });
-  };
+    } catch (error) {
+      // Trate o erro de forma apropriada, por exemplo, mostrando uma mensagem de erro
+      console.error("Erro ao buscar dados:", error);
+    }
+  };  
 
   const handleMutationDelete = async () => {
     try {
@@ -172,31 +179,200 @@ const FormWord = ({
     }
   };
 
-  useEffect(() => {
-    if (data) {
-      apiObj.getByIdPalavra(data["id"]).then((json) => {
-        setFormValues({
-          ...json,
-          meaningWaiwai: json.meaningWaiwai || formValues.meaningWaiwai,
-          meaningPort: json.meaningPort || formValues.meaningPort,
-          phonemicWaiwai: json.phonemicWaiwai || formValues.phonemicWaiwai,
-          exampleSentence: json.exampleSentence || formValues.exampleSentence,
-          category: json.category || formValues.category,
-          synonymPort: json.synonymPort || formValues.synonymPort,
-          synonymWaiwai: json.synonymWaiwai || formValues.synonymWaiwai,
-        });
-        if (json.image) {
-          setImage({
-            id: json.image,
-            src: `${apiObj.baseURL}/uploads/${json.image}`,
-            name: json.image,
-          });
+  const handleUpdateWord = async (fields) => {
+    try {
+      setIsLoading(true);
+      const { status } = await apiObj.updatePalavra(
+        data["id"],
+        JSON.stringify(fields)
+      );
+      if (status === 204) {
+        toast.success("Palavra atualizada com sucesso!", options);
+      }
+      if (imageChanged) {
+        if (formValues.image) {
+          if (image) {
+            await apiObj.deleteUpload(formValues.image);
+            const blobData = await (await fetch(image.src)).blob();
+            let uploadImage = new FormData();
+            uploadImage.append("file", blobData, image.name);
+            uploadImage.append("oidword", data._id);
+            let responseImage = await apiObj.createUpload(uploadImage);
+          } else {
+            await apiObj.deleteUpload(formValues.image);
+          }
+        } else {
+          if (image) {
+            const blobData = await (await fetch(image.src)).blob();
+            let uploadImage = new FormData();
+            uploadImage.append("file", blobData, image.name);
+            uploadImage.append("oidword", data._id);
+            let responseImage = await apiObj.createUpload(uploadImage);
+          }
         }
-        if (json.audio) setRecord(`${apiObj.baseURL}/uploads/${json.audio}`);
+      }    try {
+        setIsLoading(true);
+        const response = await apiObj.updatePalavra(
+          data["id"],
+          JSON.stringify(fields)
+        );
+        if (response.status === 204) {
+          toast.success("Palavra atualizada com sucesso!", options);
+        }
+        if (imageChanged) {
+          if (formValues.image) {
+            if (image) {
+              await apiObj.deleteUpload(formValues.image);
+              const blobData = await (
+                await fetch(image.src)
+              ).blob();
+              let uploadImage = new FormData();
+              uploadImage.append("file", blobData, image.name);
+              uploadImage.append("oidword", data._id);
+              let responseImage = await apiObj.createUpload(
+                uploadImage
+              );
+            } else {
+              await apiObj.deleteUpload(formValues.image);
+            }
+          } else {
+            if (image) {
+              const blobData = await (
+                await fetch(image.src)
+              ).blob();
+              let uploadImage = new FormData();
+              uploadImage.append("file", blobData, image.name);
+              uploadImage.append("oidword", data._id);
+              let responseImage = await apiObj.createUpload(
+                uploadImage
+              );
+            }
+          }
+        }
+        if (audioChanged) {
+          if (formValues.audio) {
+            if (record) {
+              await apiObj.deleteUpload(formValues.audio);
+              const event = new Date();
+              let uploadRecord = new FormData();
+              uploadRecord.append(
+                "file",
+                record,
+                `${event.toISOString()}.weba`
+              );
+              uploadRecord.append("oidword", data["_id"]);
+              let responseRecord = await apiObj.createUpload(
+                uploadRecord
+              );
+            } else {
+              await apiObj.deleteUpload(formValues.audio);
+            }
+          } else {
+            if (record) {
+              const event = new Date();
+              let uploadRecord = new FormData();
+              uploadRecord.append(
+                "file",
+                record,
+                `${event.toISOString()}.weba`
+              );
+              uploadRecord.append("oidword", data["_id"]);
+              let responseRecord = await apiObj.createUpload(
+                uploadRecord
+              );
+            }
+          }
+        }
+      } catch (err) {
+        toast.error("Erro ao atualizar palavra.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+        });
+        console.error({
+          type: "error",
+          message: "An error ocurred. Please, try again.",
+        });
+      }
+      fetchDados();
+      setIsLoading(false);
+      if (audioChanged) {
+        if (formValues.audio) {
+          if (record) {
+            await apiObj.deleteUpload(formValues.audio);
+            const event = new Date();
+            let uploadRecord = new FormData();
+            uploadRecord.append("file", record, `${event.toISOString()}.weba`);
+            uploadRecord.append("oidword", data["_id"]);
+            let responseRecord = await apiObj.createUpload(uploadRecord);
+          } else {
+            await apiObj.deleteUpload(formValues.audio);
+          }
+        } else {
+          if (record) {
+            const event = new Date();
+            let uploadRecord = new FormData();
+            uploadRecord.append("file", record, `${event.toISOString()}.weba`);
+            uploadRecord.append("oidword", data["_id"]);
+            let responseRecord = await apiObj.createUpload(uploadRecord);
+          }
+        }
+      }
+      fetchDados();
+      setIsLoading(false);
+    } catch (err) {
+      toast.error("Erro ao atualizar palavra.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+      });
+      console.error({
+        type: "error",
+        message: "An error ocurred. Please, try again.",
       });
     }
-  }, [data]);
+  };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (data) {
+        try {
+          const json = await apiObj.getByIdPalavra(data["id"]);
+          setFormValues((prevFormValues) => ({
+            ...json,
+            meaningWaiwai: json.meaningWaiwai || prevFormValues.meaningWaiwai,
+            meaningPort: json.meaningPort || prevFormValues.meaningPort,
+            phonemicWaiwai:
+              json.phonemicWaiwai || prevFormValues.phonemicWaiwai,
+            exampleSentence:
+              json.exampleSentence || prevFormValues.exampleSentence,
+            category: json.category || prevFormValues.category,
+            synonymPort: json.synonymPort || prevFormValues.synonymPort,
+            synonymWaiwai: json.synonymWaiwai || prevFormValues.synonymWaiwai,
+          }));
+          if (json.image) {
+            setImage({
+              id: json.image,
+              src: `${apiObj.baseURL}/uploads/${json.image}`,
+              name: json.image,
+            });
+          }
+          if (json.audio) setRecord(`${apiObj.baseURL}/uploads/${json.audio}`);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+    fetchData();
+  }, [data]);
   return (
     <Container>
       <Row>
@@ -213,99 +389,17 @@ const FormWord = ({
                   synonymPort: formValues.synonymPort,
                   synonymWaiwai: formValues.synonymWaiwai,
                 }}
-                validationSchema={validationSchema}
+                validationSchema={registerWordsSchema}
                 enableReinitialize
                 onSubmit={async (fields) => {
                   try {
                     setIsLoading(true);
-                    const response = await apiObj.updatePalavra(
-                      data["id"],
-                      JSON.stringify(fields)
-                    );
-                    if (response.status === 204) {
-                      toast.success("Palavra atualizada com sucesso!", options);
-                    }
-                    if (imageChanged) {
-                      if (formValues.image) {
-                        if (image) {
-                          await apiObj.deleteUpload(formValues.image);
-                          const blobData = await (
-                            await fetch(image.src)
-                          ).blob();
-                          let uploadImage = new FormData();
-                          uploadImage.append("file", blobData, image.name);
-                          uploadImage.append("oidword", data._id);
-                          let responseImage = await apiObj.createUpload(
-                            uploadImage
-                          );
-                        } else {
-                          await apiObj.deleteUpload(formValues.image);
-                        }
-                      } else {
-                        if (image) {
-                          const blobData = await (
-                            await fetch(image.src)
-                          ).blob();
-                          let uploadImage = new FormData();
-                          uploadImage.append("file", blobData, image.name);
-                          uploadImage.append("oidword", data._id);
-                          let responseImage = await apiObj.createUpload(
-                            uploadImage
-                          );
-                        }
-                      }
-                    }
-                    if (audioChanged) {
-                      if (formValues.audio) {
-                        if (record) {
-                          await apiObj.deleteUpload(formValues.audio);
-                          const event = new Date();
-                          let uploadRecord = new FormData();
-                          uploadRecord.append(
-                            "file",
-                            record,
-                            `${event.toISOString()}.weba`
-                          );
-                          uploadRecord.append("oidword", data["_id"]);
-                          let responseRecord = await apiObj.createUpload(
-                            uploadRecord
-                          );
-                        } else {
-                          await apiObj.deleteUpload(formValues.audio);
-                        }
-                      } else {
-                        if (record) {
-                          const event = new Date();
-                          let uploadRecord = new FormData();
-                          uploadRecord.append(
-                            "file",
-                            record,
-                            `${event.toISOString()}.weba`
-                          );
-                          uploadRecord.append("oidword", data["_id"]);
-                          let responseRecord = await apiObj.createUpload(
-                            uploadRecord
-                          );
-                        }
-                      }
-                    }
+                    await handleUpdateWord(fields);
                   } catch (err) {
-                    toast.error("Erro ao atualizar palavra.", {
-                      position: "top-right",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: false,
-                      draggable: true,
-                      progress: undefined,
-                    });
-                    console.error({
-                      type: "error",
-                      message: "An error ocurred. Please, try again.",
-                    });
+                    console.error(err);
+                  } finally {
+                    setIsLoading(false);
                   }
-                  fetchDados();
-                  setIsLoading(false);
                 }}
                 render={({ errors, touched, setFieldValue }) => (
                   <Form>
