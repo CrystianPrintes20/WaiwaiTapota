@@ -1,19 +1,6 @@
-import {
-  Button,
-  Label,
-  FormGroup,
-  Container,
-  Row,
-  Col,
-  Card,
-  CardBody,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from "reactstrap";
+import React, { useState, useEffect } from "react";
+import { Button, Label, FormGroup, Container, Row, Col, Card, CardBody, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { useEffect, useState } from "react";
 import { userSchema } from "../../../schemas";
 import connectionWaiwai from "../../../services/waiwaiApi";
 import { toast, ToastContainer } from "react-toastify";
@@ -35,6 +22,9 @@ const FormUsers = ({
     permission: 2,
   });
   const [modalExcluir, setModalExcluir] = useState(false);
+  const toggleExcluir = () => setModalExcluir(!modalExcluir);
+  const apiObj = new connectionWaiwai(token);
+
   const options = {
     position: "top-right",
     autoClose: 5000,
@@ -44,9 +34,7 @@ const FormUsers = ({
     draggable: true,
     progress: undefined,
   };
-  const toggleExcluir = () => setModalExcluir(!modalExcluir);
 
-  const apiObj = new connectionWaiwai(token);
   const defaultPermission = [
     {
       value: 1,
@@ -66,17 +54,25 @@ const FormUsers = ({
     await handleMutationDelete();
   };
 
-  const fetchDados = () => {
-    setPageState((old) => ({ ...old, isLoading: true }));
-    apiObj.allUsers(pageState.pageSize, pageState.page).then((data) => {
+  const fetchDados = async () => {
+    try {
+      setIsLoading(true);
+      const {data, total} = await apiObj.allUsers(pageState.pageSize, pageState.page);
       setPageState((old) => ({
         ...old,
         isLoading: false,
-        data: data.data,
-        total: data.total,
+        data: data,
+        total: total,
       }));
       setModal(!modal);
-    });
+    } catch (err) {
+      setIsLoading(false);
+      toast.error("Erro ao buscar dados.", options);
+      console.error({
+        type: "error",
+        message: "An error occurred. Please, try again.",
+      });
+    }
   };
 
   const handleMutationDelete = async () => {
@@ -101,20 +97,19 @@ const FormUsers = ({
       });
     }
   };
-
+  
   useEffect(() => {
     if (data) {
       apiObj.getByIdUser(data["id"]).then((json) => {
-        setFormValues({
-          ...json,
-          username: json.username || formValues.username,
-          email: json.email || formValues.email,
-          permission: json.permission || formValues.permission,
-        });
+        setFormValues((prevFormValues) => ({
+          ...prevFormValues,
+          username: json.username || prevFormValues.username,
+          email: json.email || prevFormValues.email,
+          permission: json.permission || prevFormValues.permission,
+        }));
       });
     }
   }, [data]);
-
   return (
     <Container>
       <ToastContainer />
@@ -159,9 +154,11 @@ const FormUsers = ({
                       type: "error",
                       message: "An error ocurred. Please, try again.",
                     });
+                  } finally{
+                    fetchDados();
+                    setIsLoading(false);
                   }
-                  fetchDados();
-                  setIsLoading(false);
+                  
                 }}
                 render={({ errors, touched, setFieldValue }) => (
                   <Form>

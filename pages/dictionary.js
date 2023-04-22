@@ -20,58 +20,59 @@ export default function Dictionary({ token }) {
   });
 
   useEffect(() => {
-    if (token) {
-      const apiObj = new connectionWaiwai(token);
-      setPageState(old => ({ ...old, isLoading: true}))
-      setIsLoading(true);
-      apiObj.allPalavras(pageState.pageSize, pageState.page).then((data) => {
-        setPageState(old => ({ ...old, isLoading: false, data: data.data, total: data.total}))
-      });
-       
-    }
-  }, [token, pageState.page, pageState.pageSize]);
-
-  if (session) {
-    return (
-      <Layout>
-        <Banner3 />
-        <Card>
-          <CardBody>
-            <Row className="justify-content-center mb-3">
-              <Col md="7" className="text-center">
-                <span className="label label-danger label-rounded">
-                  Tela de Dicionario
-                </span>
-                <h2 className="title">Está procurando alguma palavra?</h2>
-                <h6 className="subtitle">
-                  Seja bem-vindo ao nosso dicionário online! Aqui você
-                  encontrará uma lista de palavras, frases, expressões e termos
-                  usados na língua materna Waiwai. Nosso objetivo é preservar a
-                  língua indígena, incentivando o uso da língua e sua cultura.
-                </h6>
-              </Col>
-            </Row>
-            {isLoading && <SpinLoader />}
-            <DataTable
-              pageState={pageState}
-              setPageState={setPageState}
-              token={token}
-              disabled
-              setIsLoading={setIsLoading}
-            />
-          </CardBody>
-        </Card>
-      </Layout>
-    );
-  } else {
-    return (
-      <>
-        <Layout>
-          <Banner />
-        </Layout>
-      </>
-    );
-  }
+    const fetchPalavras = async () => {
+        const apiObj = new connectionWaiwai(token);
+        setIsLoading(true);
+        setPageState((old) => ({ ...old, isLoading: true }));
+        try {
+          const { data, total } = await apiObj.allPalavras(
+            pageState.pageSize,
+            pageState.page
+          );
+          setPageState((old) => ({
+            ...old,
+            isLoading: false,
+            data,
+            total,
+          }));
+        } catch (error) {
+          console.error("Failed to fetch data:", error);
+          setIsLoading(false);
+        }
+    };
+    fetchPalavras();
+  }, [pageState.pageSize, pageState.page]);
+  return (
+    <Layout>
+      <Banner3 />
+      <Card>
+        <CardBody>
+          <Row className="justify-content-center mb-3">
+            <Col md="7" className="text-center">
+              <span className="label label-danger label-rounded">
+                Tela de Dicionario
+              </span>
+              <h2 className="title">Está procurando alguma palavra?</h2>
+              <h6 className="subtitle">
+                Seja bem-vindo ao nosso dicionário online! Aqui você encontrará
+                uma lista de palavras, frases, expressões e termos usados na
+                língua materna Waiwai. Nosso objetivo é preservar a língua
+                indígena, incentivando o uso da língua e sua cultura.
+              </h6>
+            </Col>
+          </Row>
+          {isLoading && <SpinLoader />}
+          <DataTable
+            pageState={pageState}
+            setPageState={setPageState}
+            token={token}
+            disabled
+            setIsLoading={setIsLoading}
+          />
+        </CardBody>
+      </Card>
+    </Layout>
+  );
 }
 
 export async function getServerSideProps({ req, res }) {

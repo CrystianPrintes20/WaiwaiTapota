@@ -1,14 +1,6 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { useEffect, useState } from "react";
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Container,
-} from "reactstrap";
+import { Container } from "reactstrap";
 import ModalAdminCustom from "../edit/modalCustom";
 import FormWordAdmin from "../edit/formWordAdmin";
 import FormUsers from "../edit/formUser";
@@ -25,14 +17,22 @@ const DataTableAdmin = ({
   disabled,
   showAction,
 }) => {
-  const toggle = () => setModal(!modal);
   const [rows, setRows] = useState([]);
+  const toggle = () => setModal(!modal);
+
+  const handlePageChange = (newPage) => {
+    setPageState((old) => ({ ...old, page: newPage + 1 }));
+  };
+
+  const handlePageSizeChange = (newPageSize) => {
+    setPageState((old) => ({ ...old, pageSize: newPageSize }));
+  };
 
   useEffect(() => {
     if (pageState) {
-      setRows(() => {
-        return pageState.data?.map((item) => ({ ...item, id: item["_id"] }));
-      });
+      setRows(
+        pageState.data?.map((item) => ({ ...item, id: item["_id"] })) || []
+      );
       setIsLoading(false);
     }
   }, [pageState, setIsLoading]);
@@ -41,7 +41,6 @@ const DataTableAdmin = ({
     <Container>
       <div style={{ height: 650, width: "100%" }}>
         <DataGrid
-          //autoHeight
           rows={rows}
           columns={columns}
           rowCount={pageState.total}
@@ -51,12 +50,8 @@ const DataTableAdmin = ({
           pageSize={pageState.pageSize}
           pageSizeOptions={[5]}
           paginationMode="server"
-          onPageChange={(newPage) => {
-            setPageState((old) => ({ ...old, page: newPage + 1 }));
-          }}
-          onPageSizeChange={(newPageSize) =>
-            setPageState((old) => ({ ...old, pageSize: newPageSize }))
-          }
+          onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
         />
       </div>
       <ModalAdminCustom toggle={toggle} modal={modal}>
