@@ -129,17 +129,17 @@ const Header = () => {
                 </NavItem>
                 {session?.user?.permission == 3 && (
                   <NavItem>
-                    <Link href="/admin/">
+                    <Link href="/admin/adminHome">
                       <a
                         className={
-                          router.pathname == "/admin/"
+                          router.pathname == "/admin/adminHome"
                             ? "text-white nav-link"
                             : "nav-link"
                         }
                       >
                         <b
                           className={
-                            router.pathname == "/admin/"
+                            router.pathname == "/admin/adminHome"
                               ? "border-bottom border-danger pb-0"
                               : null
                           }
